@@ -1,1 +1,180 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.nav-link {
+    font-weight: 400;
+    color      : #3d3d3d;
+    font-size  : 24px;
+}
+
+.heading {
+    font-weight: 300;
+    color      : #010101;
+}
+
+.btn-pink {
+    font-weight  : 300;
+    color        : #FFFFFF;
+    border-radius: 56px;
+    background   : #FF00AE;
+}
+
+.btn-white {
+    font-weight  : 300;
+    color        : #000000;
+    border-radius: 56px;
+    background   : white;
+    border-color : #010101;
+}
+
+.btn-pink:hover {
+    color     : #FFFFFF;
+    background: #D21295;
+}
+
+p {
+    font-weight: 100;
+    color      : #AAAAAA;
+}
+
+.carousel-indicators {
+    bottom: -45px;
+}
+
+.carousel-indicators li {
+    width        : 10px;
+    height       : 10px;
+    opacity      : 1.0;
+    border-radius: 50%;
+    border       : 1px solid #AAAAAA;
+}
+
+.carousel-indicators .active {
+    background-color: rgb(252, 1, 177);
+    border          : 0px;
+    height          : 12px;
+    width           : 12px;
+}
+
+#mainCarousel {
+    max-height: 978px;
+}
+
+.navbar {
+    z-index   : 1;
+    padding   : 0;
+    margin-top: 5px;
+}
+
+.navbar-brand {
+    padding-top: 0;
+}
+
+.navbar-nav {
+    padding-left: 50px;
+    margin-top  : 30px;
+}
+
+#search-form {
+    position  : relative;
+    margin-top: 10px;
+    width     : 300px;
+}
+
+#search_btn {
+    color   : #FF00AE;
+    float   : right;
+    position: absolute;
+    right   : 10px;
+    top     : 20%;
+    cursor  : pointer;
+}
+
+#search-form input {
+    border-radius: 50px;
+}
+
+.nav-right-btn {
+    color: rgba(0, 0, 0, .9);
+}
+
+#product-types-container,
+#new-arrivals-container,
+#footer {
+    margin-top: 100px;
+}
+
+.product-slider-container {
+    overflow-x: hidden;
+    margin-top: 20px;
+}
+
+.product-slider {
+    display   : flex;
+    transition: all 1s ease-in-out;
+}
+
+/* .product-slider div {
+    margin: 0 5px;
+  } */
+
+.indicators-container {
+    margin-top: 10px;
+    width     : 100%;
+}
+
+.indicators-btn {
+    margin-right: 10px;
+    color       : #AAAAAA;
+    cursor      : pointer;
+}
+
+#footer {
+    background-color: #dbdada;
+}
+
+#footer footer {
+    margin-top: 30px;
+}
+
+#footer p {
+    font-size: 16px;
+}
+
+.fav-btn {
+    display       : inline-block;
+    vertical-align: middle;
+    cursor        : pointer;
+    margin-left   : 10px;
+}
+
+.nav-overlap {
+    background: #EEEDF3;
+    height    : 105px;
+    width     : 100%;
+}
+
+.nav-negative-margin {
+    margin-top: -105px;
+}
+
+.card-body {
+    padding: 0.5rem;
+}
+
+.card {
+    padding   : 0;
+    max-height: 350px;
+    margin    : 0 4px;
+    margin-top: 5px;
+}
+
+.product-category-list {
+    list-style  : none;
+    padding-left: 0;
+}
+
+.product-category-list li {
+    cursor: pointer;
+}

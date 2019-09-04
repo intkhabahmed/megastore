@@ -1,0 +1,80 @@
+.order-title {
+    margin-top   : 5%;
+    margin-bottom: 2%;
+    color        : #AAAAAA;
+    font-weight  : normal;
+    font-family  : Roboto;
+    font-style   : normal;
+}
+
+.cart-items-container {
+    padding-bottom: 0;
+    border-radius : 5px;
+    border        : 1px solid #EEEEEE;
+    background    : #EEEEEE;
+}
+
+.cart-item {
+    margin       : 0 1px;
+    padding      : 1rem;
+    border-radius: 5px;
+    background   : white;
+}
+
+.order-heading {
+    font-family: Roboto;
+    font-style : normal;
+    font-weight: bold;
+    font-size  : 1.2rem;
+    line-height: 22px;
+    color      : #2F2F2F;
+}
+
+.order-sub-heading {
+    font-family: Roboto;
+    font-style : normal;
+    font-weight: normal;
+    font-size  : 0.8rem;
+    line-height: 2rem;
+    color      : #707070;
+}
+
+.quantity_btn {
+    width        : 50px;
+    border       : 1.5px solid #AAAAAA;
+    border-radius: 15px;
+    padding      : 0 .5rem;
+}
+
+.buy-btn {
+    width        : max-content;
+    margin-bottom: 2%;
+}
+
+.table td {
+    border-top: none;
+    padding   : 0;
+}
+
+.order-table td,
+.cart-actions {
+    font-family: Roboto;
+    font-style : normal;
+    font-weight: normal;
+    font-size  : 0.8rem;
+    line-height: 2rem;
+    color      : #707070;
+}
+
+.cart-actions a {
+    color: #707070;
+}
+
+.order-total {
+    padding: 3%;
+}
+
+.grand-total {
+    font-size  : 1.3rem;
+    font-weight: 700;
+}

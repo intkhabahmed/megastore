@@ -1,0 +1,111 @@
+.checkout-title {
+    margin-top   : 5%;
+    margin-bottom: 2%;
+    color        : #AAAAAA;
+    font-weight  : normal;
+    font-family  : Roboto;
+    font-style   : normal;
+}
+
+.form-fields {
+    display        : flex;
+    flex-flow      : row wrap;
+    justify-content: space-between;
+}
+
+#collapseShipping {
+    padding: 0.5rem;
+}
+
+.btn-link-white {
+    color           : white;
+    background-color: #FF00AE;
+    font-family     : Roboto;
+    text-transform  : uppercase;
+    width           : 100%;
+    text-align      : start;
+    padding         : 1rem;
+}
+
+.btn-link-white.collapsed {
+    color           : #2f2f2f;
+    background-color: #f7f7f7;
+}
+
+.btn:focus {
+    box-shadow: none;
+}
+
+.card-header {
+    padding: 0;
+}
+
+.card {
+    margin: 0;
+}
+
+.order-info,
+.cart-items {
+    padding         : 0.7rem;
+    background-color: #f7f7f7;
+    border-radius: .25rem;
+}
+
+.table td {
+    border-top: none;
+    padding   : 0.2rem;
+}
+
+.grand-total {
+    font-size  : 1.3rem;
+    font-weight: 700;
+}
+
+.order-heading {
+    font-size  : 18px;
+    font-weight: 400;
+}
+
+.cart-items {
+    margin-top: 1rem;
+}
+
+.item-heading {
+    font-family: Roboto;
+    font-style : normal;
+    font-weight: bold;
+    font-size  : 0.8rem;
+    line-height: 1.5rem;
+    color      : #2F2F2F;
+    margin-bottom: 0;
+}
+
+.item-sub-heading {
+    font-family: Roboto;
+    font-style : normal;
+    font-weight: normal;
+    font-size  : 0.8rem;
+    line-height: 1.5rem;
+    color      : #707070;
+    margin-bottom: 0;
+}
+
+.order-table td {
+    font-family: Roboto;
+    font-style : normal;
+    font-weight: normal;
+    font-size  : 0.8rem;
+    line-height: 1.5rem;
+    color      : #707070;
+    padding   : 0;
+}
+
+@media(max-width: 767px) {
+    .form-group input {
+        margin: 1% 0;
+    }
+
+    .order-info {
+        margin-top: 1rem;
+    }
+}

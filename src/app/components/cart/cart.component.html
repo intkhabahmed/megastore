@@ -1,0 +1,62 @@
+<div class="nav-negative-margin">
+    <div class="nav-overlap"></div>
+    <div class="container">
+        <h3 class="order-title">Order Summary</h3>
+        <div class="cart-items-container">
+            <div class="row cart-item" *ngFor="let item of [0,1]">
+                <div class="col-sm-4">
+                    <img src="/assets/images/download.png" class="w-100" alt="">
+                </div><!-- col-sm-4 -->
+                <div class="col-sm-8">
+                    <h5 class="order-heading">Cotton & Milk Fiber Super Soft Knitting Yarn</h5>
+                    <p class="order-sub-heading">Product code - 12345</p>
+                    <table class="table order-table">
+                        <tr>
+                            <td><b>QTY: </b> <input type="text" value="0" min="0" class="quantity_btn" />
+                            </td>
+                            <td>
+                                Weight - <b>1KG</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Subtotal -</b></td>
+                            <td class="accent-color"><b>Rs. 400</b></td>
+                        </tr>
+                        <tr>
+                            <td><b>Estimated Shipping -</b></td>
+                            <td class="accent-color"><b>Rs. 50</b></td>
+                        </tr>
+                    </table>
+                    <div class="float-right cart-actions">
+                        <a routerLink="">Remove</a> | <a routerLink="">Update</a>
+                    </div><!-- cart-actions -->
+                </div><!-- col-sm-8 -->
+                <hr class="w-100">
+            </div><!-- row cart-item-->
+            <div class="row order-total">
+                <div class="col-sm-6">
+                    <table class="table order-table">
+                        <tr>
+                            <td>Total weight</td>
+                            <td><b>3KG</b></td>
+                        </tr>
+                        <tr>
+                            <td>Subtotal -</td>
+                            <td><b>Rs. 600</b></td>
+                        </tr>
+                        <tr>
+                            <td>Estimated Shipping -</td>
+                            <td><b>Rs. 75</b></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-6"></div>
+            </div><!-- order-total -->
+            <div class="row">
+                <p class="col-8 offset-4 col-sm-5 offset-sm-7"><b>Grand total - </b><span class="accent-color grand-total">Rs.
+                        675</span></p>
+            </div>
+        </div><!-- cart-item -->
+        <br><a routerLink="/checkout" class="btn btn-pink buy-btn float-right">Proceed to Checkout</a>
+    </div><!-- container -->
+</div>

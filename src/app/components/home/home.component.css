@@ -1,0 +1,54 @@
+.carousel-indicators {
+    bottom: -45px;
+}
+
+.carousel-indicators li {
+    width        : 10px;
+    height       : 10px;
+    opacity      : 1.0;
+    border-radius: 50%;
+    border       : 1px solid #AAAAAA;
+}
+
+.carousel-indicators .active {
+    background-color: rgb(252, 1, 177);
+    border          : 0px;
+    height          : 12px;
+    width           : 12px;
+}
+
+#mainCarousel {
+    max-height: 978px;
+}
+
+.product-slider-container {
+    overflow-x: hidden;
+    margin-top: 20px;
+}
+
+.product-slider {
+    display        : flex;
+    flex-flow      : row;
+    justify-content: flex-start;
+    transition     : all 1s ease-in-out;
+}
+
+.indicators-container {
+    margin-top: 10px;
+    width     : 100%;
+}
+
+.indicators-btn {
+    margin-right: 10px;
+    color       : #AAAAAA;
+    cursor      : pointer;
+}
+
+.indicators-btn:hover {
+    color: #707070;
+}
+
+.card {
+    max-height: 350px;
+    padding: 0;
+}

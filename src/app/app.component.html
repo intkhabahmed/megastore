@@ -1,6 +1,6 @@
 <div class="container">
   <nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" routerLink="" align="center"><img src="/assets/images/logo.png" alt="Maa Taluja Creations"
+    <a class="navbar-brand" routerLink=""><img src="/assets/images/logo.png" alt="Maa Taluja Creations"
         height="100"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,21 +22,21 @@
           <a class="nav-link" href="#">CONTACT <span class="sr-only">(current)</span></a>
         </li>
       </ul>
-      <div class="navbar-right">
-        <div class="float-right">
-          <a href="#" class="nav-right-btn" id="cart-btn">
-            <fa-icon [icon]="['fas', 'shopping-cart']" class="mr-md-3"></fa-icon>
+      <div class="nav-right-container">
+        <div class="nav-top">
+          <a routerLink="cart" class="nav-right-btn" id="cart-btn">
+            <fa-icon [icon]="['fas', 'shopping-cart']" class="mr-3"></fa-icon>
           </a>
-          <a href="#" class="nav-right-btn" id="login-btn">LOGIN</a>
+          <a routerLink="/login" class="nav-right-btn" id="login-btn">LOGIN</a>
         </div>
         <br>
-        <form class="form-inline my-2 my-lg-0 float-left">
+        <form class="form-inline">
           <div id="search-form">
             <input class="form-control mr-sm-2 w-100" type="search" placeholder="Search for items" aria-label="Search">
             <fa-icon [icon]="['fas', 'search']" id="search_btn"></fa-icon>
           </div>
         </form>
-      </div>
+      </div><!-- nav-right-container -->
     </div>
   </nav>
 </div>
@@ -46,21 +46,20 @@
   <footer>
     <div class="container">
       <div class="row">
-        <div class="col-sm-3">
-          <p>Follow us on <a href="" target="_blank"><img src="/assets/images/fb.png" id="icon1"></a> <a href=""
-              target="_blank"><img src="/assets/images/insta.png" id="icon2"></a> <a href="" target="_blank"><img
-                src="/assets/images/yt.png" id="icon3"></a></p>
-          <p>&copy; 2019 Maa Tulja Creations. All rights reserved.</p>
-        </div>
-        <div class="col-sm-3 col-sm-offset-3">
-
-        </div>
-        <div class="col-sm-3">
-          <p class="heading"><b>Contact Us</b></p>
-          <p>Lorem ipsum dolor sit amet, <br>consectetur adipisicing elit, sed do eiusmod
+        <div class="col-sm-4">
+          <p class="content-text">Follow us on:
+            <a href="" target="_blank"><img src="/assets/images/fb.png" id="icon1" width="24"></a>&nbsp;<a href=""
+              target="_blank"><img src="/assets/images/insta.png" id="icon2" width="24"></a>&nbsp;<a href=""
+              target="_blank"><img src="/assets/images/yt.png" id="icon3" width="24"></a>
           </p>
-          <p><img src="/assets/images/mail.png"> recruitment@aargon.com</p>
-          <p><img src="/assets/images/phone.png"> 1234567</p>
+          <p class="content-text">&copy; 2019 Maa Tulja Creations. All rights reserved.</p>
+        </div>
+        <div class="col-sm-4 offset-sm-4">
+          <p class="content-heading"><b>Contact Us</b></p>
+          <p class="content-text">Lorem ipsum dolor sit amet, <br>consectetur adipisicing elit, sed do eiusmod
+          </p>
+          <p class="content-text"><img src="/assets/images/mail.png"> recruitment@aargon.com</p>
+          <p class="content-text"><img src="/assets/images/phone.png"> 1234567</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,9 @@
+.login-form-container {
+    margin-top: 10%;
+}
+
+.card {
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.136309);
+    max-height: max-content;
+    padding   : 2%;
+}

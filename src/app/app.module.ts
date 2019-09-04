@@ -10,13 +10,21 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { ProductsComponent } from './components/products/products.component';
 import { ProductdetailComponent } from './components/productdetail/productdetail.component';
+import { LoginComponent } from './components/login/login.component';
+import { CartComponent } from './components/cart/cart.component';
+import { SignupComponent } from './components/signup/signup.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ProductsComponent,
-    ProductdetailComponent
+    ProductdetailComponent,
+    LoginComponent,
+    CartComponent,
+    SignupComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,

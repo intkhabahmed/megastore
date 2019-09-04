@@ -1,5 +1,17 @@
+@font-face {
+    font-family: 'Roboto';
+    src        : url('/assets/fonts/Roboto-Regular.ttf'), url('/assets/fonts/Roboto-Bold.ttf'),
+        url('/assets/fonts/Roboto-Thin.ttf'), url('/assets/fonts/Roboto-Light.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto Slab';
+    src        : url('/assets/fonts/RobotoSlab-Regular.ttf'), url('/assets/fonts/RobotoSlab-Bold.ttf'),
+        url('/assets/fonts/RobotoSlab-Thin.ttf'), url('/assets/fonts/RobotoSlab-Light.ttf');
+}
+
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto';
 }
 
 .nav-link {
@@ -9,18 +21,49 @@ body {
 }
 
 .heading {
-    font-weight: 300;
-    color      : #010101;
+    font-family   : Roboto;
+    font-style    : normal;
+    font-weight   : 400;
+    font-size     : 24px;
+    line-height   : 32px;
+    opacity       : 1;
+    mix-blend-mode: normal;
+    margin-top    : 10vh;
+    color         : #707070;
+}
+
+.content-heading {
+    font-family: Roboto;
+    font-style : normal;
+    font-weight: 200;
+    font-size  : 24px;
+    line-height: 32px;
+}
+
+.content-text {
+    font-family: Roboto;
+    font-style : normal;
+    font-weight: normal;
+    font-size  : 15px;
+    line-height: 22px;
+    color      : #707070;
 }
 
 .btn-pink {
-    font-weight  : 300;
-    color        : #FFFFFF;
-    border-radius: 56px;
-    background   : #FF00AE;
+    font-weight   : 300;
+    color         : #FFFFFF;
+    border-radius : 56px;
+    background    : #FF00AE;
+    font-family   : Roboto;
+    font-style    : normal;
+    font-weight   : bold;
+    font-size     : 16px;
+    line-height   : 19px;
+    text-transform: uppercase;
 }
 
 .btn-white {
+    margin-top   : 2%;
     font-weight  : 300;
     color        : #000000;
     border-radius: 56px;
@@ -33,120 +76,16 @@ body {
     background: #D21295;
 }
 
-p {
-    font-weight: 100;
-    color      : #AAAAAA;
-}
-
-.carousel-indicators {
-    bottom: -45px;
-}
-
-.carousel-indicators li {
-    width        : 10px;
-    height       : 10px;
-    opacity      : 1.0;
-    border-radius: 50%;
-    border       : 1px solid #AAAAAA;
-}
-
-.carousel-indicators .active {
-    background-color: rgb(252, 1, 177);
-    border          : 0px;
-    height          : 12px;
-    width           : 12px;
-}
-
-#mainCarousel {
-    max-height: 978px;
-}
-
-.navbar {
-    z-index   : 1;
-    padding   : 0;
-    margin-top: 5px;
-}
-
-.navbar-brand {
-    padding-top: 0;
-}
-
-.navbar-nav {
-    padding-left: 50px;
-    margin-top  : 30px;
-}
-
-#search-form {
-    position  : relative;
-    margin-top: 10px;
-    width     : 300px;
-}
-
-#search_btn {
-    color   : #FF00AE;
-    float   : right;
-    position: absolute;
-    right   : 10px;
-    top     : 20%;
-    cursor  : pointer;
-}
-
-#search-form input {
-    border-radius: 50px;
-}
-
-.nav-right-btn {
-    color: rgba(0, 0, 0, .9);
-}
-
-#product-types-container,
-#new-arrivals-container,
-#footer {
-    margin-top: 100px;
-}
-
-.product-slider-container {
-    overflow-x: hidden;
-    margin-top: 20px;
-}
-
-.product-slider {
-    display   : flex;
-    transition: all 1s ease-in-out;
-}
-
-/* .product-slider div {
-    margin: 0 5px;
-  } */
-
-.indicators-container {
-    margin-top: 10px;
-    width     : 100%;
-}
-
-.indicators-btn {
-    margin-right: 10px;
-    color       : #AAAAAA;
-    cursor      : pointer;
-}
-
-#footer {
-    background-color: #dbdada;
-}
-
-#footer footer {
-    margin-top: 30px;
-}
-
-#footer p {
-    font-size: 16px;
-}
-
 .fav-btn {
     display       : inline-block;
     vertical-align: middle;
     cursor        : pointer;
     margin-left   : 10px;
+    color         : #707070;
+}
+
+.fav-btn:hover {
+    color: #2F2F2F;
 }
 
 .nav-overlap {
@@ -164,8 +103,6 @@ p {
 }
 
 .card {
-    padding   : 0;
-    max-height: 350px;
     margin    : 0 4px;
     margin-top: 5px;
 }
@@ -177,4 +114,37 @@ p {
 
 .product-category-list li {
     cursor: pointer;
+}
+
+.link {
+    color          : #2F2F2F;
+    font-weight    : 600;
+    text-decoration: underline;
+}
+
+.link:hover {
+    color: #000000;
+}
+
+.center {
+    display: block;
+    margin : 0 auto;
+}
+
+.accent-color {
+    color: #FF00AE !important;
+}
+
+.accent-color:hover {
+    color: #D21295;
+}
+
+.accent-bg {
+    background-color: #FF00AE;
+    color: white;
+}
+
+hr {
+    margin-right: 2%;
+    margin-left : 2%;
 }

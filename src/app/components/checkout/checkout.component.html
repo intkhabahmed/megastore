@@ -1,0 +1,139 @@
+<div class="nav-negative-margin">
+    <div class="nav-overlap"></div>
+    <div class="container">
+        <h3 class="checkout-title">Checkout</h3>
+        <div class="row">
+            <div class="col-md-7 col-sm-12">
+                <div class="accordion" id="checkout">
+                    <div class="card">
+                        <div class="card-header " id="shipping">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link-white" type="button" data-toggle="collapse"
+                                    data-target="#collapseShipping" aria-expanded="true"
+                                    aria-controls="collapseShipping">
+                                    Shipping Address
+                                </button>
+                            </h2>
+                        </div><!-- card-header -->
+
+                        <div id="collapseShipping" class="collapse show" aria-labelledby="shipping"
+                            data-parent="#checkout">
+                            <div class="card-body">
+                                <form action="" class="form-horizontal">
+                                    <div class="form-group form-fields">
+                                        <input type="text" class="form-control col-sm-5" name="firstname"
+                                            placeholder="First Name">
+                                        <input type="text" class="form-control col-sm-5" name="lastname"
+                                            placeholder="Last Name">
+                                    </div><!-- form-group -->
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="address" placeholder="Address">
+                                    </div><!-- form-group -->
+                                    <div class="form-group form-fields">
+                                        <input type="text" class="form-control col-sm-3" name="city" placeholder="City">
+                                        <select class="form-control col-sm-4" name="state">
+                                            <option value="">State</option>
+                                        </select>
+                                        <input type="text" class="form-control col-sm-3" name="postalCode"
+                                            placeholder="Postal Code">
+                                    </div><!-- form-group -->
+                                    <div class="form-group form-fields">
+                                        <input type="email" class="form-control col-sm-5" name="email"
+                                            placeholder="Email">
+                                        <input type="text" class="form-control col-sm-5" name="mobile"
+                                            placeholder="Mobile Number">
+                                    </div><!-- form-group -->
+                                </form>
+                                <span class="content-text">
+                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon> Your privavcy is important to us. We
+                                    will only
+                                    contact you if there is an issue with your order.
+                                </span>
+                                <br><br><a routerLink="/checkout" class="btn btn-pink buy-btn float-right">Save &amp;
+                                    Continue</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header" id="payment">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link-white collapsed" type="button" data-toggle="collapse"
+                                    data-target="#collapsePayment" aria-expanded="false"
+                                    aria-controls="collapsePayment">
+                                    Payment
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapsePayment" class="collapse" aria-labelledby="payment" data-parent="#checkout">
+                            <div class="card-body">
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
+                                squid.
+                                3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa
+                                nesciunt
+                                laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid
+                                single-origin
+                                coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
+                                wes
+                                anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
+                                Leggings
+                                occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably
+                                haven't heard
+                                of them accusamus labore sustainable VHS.
+                            </div>
+                        </div><!-- collapsePayment -->
+                    </div><!-- card -->
+                </div><!-- accordian -->
+            </div><!-- col-sm-7 -->
+            <div class="col-md-5 col-sm-12">
+                <div class="order-info">
+                    <table class="table">
+                        <tr>
+                            <td class="order-heading">ORDER INFO</td>
+                            <td class="content-text"><a href="" class="link float-right">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td class="content-text">Total weight -</td>
+                            <td class="content-text text-right">3KG</td>
+                        </tr>
+                        <tr>
+                            <td class="content-text">Subtotal -</td>
+                            <td class="content-text text-right">Rs. 600</td>
+                        </tr>
+                        <tr>
+                            <td class="content-text">Estimated Shipping -</td>
+                            <td class="content-text text-right">Rs. 75</td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <p class="text-right"><b>Grand total - </b><span class="accent-color grand-total">Rs.
+                            675</span></p>
+                </div>
+                <div class="cart-items">
+                    <h4 class="order-heading">IN YOUR CART</h4>
+                    <div class="cart-item" *ngFor="let j of [0,-1];index as i">
+                        <h5 class="item-heading">Cotton & Milk Fiber Super Soft Knitting Yarn</h5>
+                        <p class="item-sub-heading">Product code - 12345</p>
+                        <table class="table order-table">
+                            <tr>
+                                <td><b>QTY: </b> 2
+                                </td>
+                                <td class="text-right">
+                                    Weight - <b>1KG</b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Subtotal -</b></td>
+                                <td class="text-right"><b>Rs. 400</b></td>
+                            </tr>
+                            <tr>
+                                <td><b>Estimated Shipping -</b></td>
+                                <td class="text-right"><b>Rs. 50</b></td>
+                            </tr>
+                        </table>
+                        <hr *ngIf="i <= j">
+                    </div><!-- cart-item -->
+                </div>
+            </div>
+        </div><!-- row -->
+    </div><!-- container -->
+</div>

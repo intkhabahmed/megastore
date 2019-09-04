@@ -1,0 +1,64 @@
+.navbar {
+    z-index   : 1;
+    padding   : 0;
+    margin-top: 5px;
+}
+
+.navbar-brand {
+    padding-top: 0;
+}
+
+.navbar-nav {
+    margin-top  : 4vh;
+}
+
+#search-form {
+    position  : relative;
+    margin-top: 10px;
+    width     : 300px;
+}
+
+#search_btn {
+    color   : #FF00AE;
+    float   : right;
+    position: absolute;
+    right   : 10px;
+    top     : 20%;
+    cursor  : pointer;
+}
+
+#search-form input {
+    border-radius: 50px;
+    padding-right: 9%;
+}
+
+.nav-right-btn {
+    color: rgba(0, 0, 0, .9);
+}
+
+.nav-top {
+    float: right;
+}
+
+#footer {
+    background-color: #dbdada;
+    margin-top      : 5%;
+    clear: right;
+}
+
+#footer footer {
+    margin-top: 30px;
+}
+
+#footer p {
+    font-size: 16px;
+}
+
+@media(max-width: 992px) {
+    .nav-top {
+        float: left;
+    }
+    .nav-right-container {
+        padding-bottom: 18vh;
+    }
+}

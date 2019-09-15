@@ -32,7 +32,9 @@
                                     <div class="form-group form-fields">
                                         <input type="text" class="form-control col-sm-3" name="city" placeholder="City">
                                         <select class="form-control col-sm-4" name="state">
-                                            <option value="">State</option>
+                                            <option value="">Select State</option>
+                                            <option value="{{state}}" *ngFor="let state of utility.states">{{state}}
+                                            </option>
                                         </select>
                                         <input type="text" class="form-control col-sm-3" name="postalCode"
                                             placeholder="Postal Code">
@@ -45,7 +47,7 @@
                                     </div><!-- form-group -->
                                 </form>
                                 <span class="content-text">
-                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon> Your privavcy is important to us. We
+                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon> Your privacy is important to us. We
                                     will only
                                     contact you if there is an issue with your order.
                                 </span>
@@ -66,19 +68,7 @@
                         </div>
                         <div id="collapsePayment" class="collapse" aria-labelledby="payment" data-parent="#checkout">
                             <div class="card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid.
-                                3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa
-                                nesciunt
-                                laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid
-                                single-origin
-                                coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore
-                                wes
-                                anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo.
-                                Leggings
-                                occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably
-                                haven't heard
-                                of them accusamus labore sustainable VHS.
+                                <button class="btn btn-pink" (click)="completePurchase()">Pay</button>
                             </div>
                         </div><!-- collapsePayment -->
                     </div><!-- card -->
@@ -89,48 +79,44 @@
                     <table class="table">
                         <tr>
                             <td class="order-heading">ORDER INFO</td>
-                            <td class="content-text"><a href="" class="link float-right">Edit</a></td>
+                            <td class="content-text"><a routerLink="/cart" class="link float-right">Edit</a></td>
                         </tr>
                         <tr>
                             <td class="content-text">Total weight -</td>
-                            <td class="content-text text-right">3KG</td>
+                            <td class="content-text text-right">
+                                {{utility.getFormattedWeight(orderSummary.productNetWeight)}}</td>
                         </tr>
                         <tr>
                             <td class="content-text">Subtotal -</td>
-                            <td class="content-text text-right">Rs. 600</td>
+                            <td class="content-text text-right">Rs. {{orderSummary.totalProductCost}}</td>
                         </tr>
                         <tr>
                             <td class="content-text">Estimated Shipping -</td>
-                            <td class="content-text text-right">Rs. 75</td>
+                            <td class="content-text text-right">Rs. {{orderSummary.shippingCost}}</td>
                         </tr>
                     </table>
                     <hr>
                     <p class="text-right"><b>Grand total - </b><span class="accent-color grand-total">Rs.
-                            675</span></p>
+                            {{orderSummary.grandTotal}}</span></p>
                 </div>
                 <div class="cart-items">
                     <h4 class="order-heading">IN YOUR CART</h4>
-                    <div class="cart-item" *ngFor="let j of [0,-1];index as i">
-                        <h5 class="item-heading">Cotton & Milk Fiber Super Soft Knitting Yarn</h5>
-                        <p class="item-sub-heading">Product code - 12345</p>
+                    <div class="cart-item" *ngFor="let item of orderSummary.cartItems.values();index as i">
+                        <h5 class="item-heading">{{item.product.name}}</h5>
+                        <p class="item-sub-heading">Product code - {{item.product.productCode}}</p>
                         <table class="table order-table">
                             <tr>
-                                <td><b>QTY: </b> 2
+                                <td><b>QTY: </b> {{item.noOfItems}}
                                 </td>
                                 <td class="text-right">
-                                    Weight - <b>1KG</b>
+                                    <b>Weight: </b> {{utility.getFormattedWeight(item.itemsWeight)}}
                                 </td>
                             </tr>
                             <tr>
-                                <td><b>Subtotal -</b></td>
-                                <td class="text-right"><b>Rs. 400</b></td>
-                            </tr>
-                            <tr>
-                                <td><b>Estimated Shipping -</b></td>
-                                <td class="text-right"><b>Rs. 50</b></td>
+                                <td><b>Subtotal: </b> Rs. {{item.itemsCost}}</td>
                             </tr>
                         </table>
-                        <hr *ngIf="i <= j">
+                        <hr *ngIf="i < orderSummary.cartItems.size - 1">
                     </div><!-- cart-item -->
                 </div>
             </div>

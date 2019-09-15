@@ -1,62 +1,115 @@
 <div class="nav-negative-margin">
     <div class="nav-overlap"></div>
-    <div class="container">
+    <div class="container" *ngIf="orderSummary.cartItems.size > 0">
         <h3 class="order-title">Order Summary</h3>
         <div class="cart-items-container">
-            <div class="row cart-item" *ngFor="let item of [0,1]">
+            <div class="row cart-item" *ngFor="let item of orderSummary.cartItems.values()">
                 <div class="col-sm-4">
                     <img src="/assets/images/download.png" class="w-100" alt="">
                 </div><!-- col-sm-4 -->
                 <div class="col-sm-8">
-                    <h5 class="order-heading">Cotton & Milk Fiber Super Soft Knitting Yarn</h5>
-                    <p class="order-sub-heading">Product code - 12345</p>
+                    <h5 class="order-heading">{{item.product.name}}</h5>
+                    <p class="order-sub-heading">Product code - {{item.product.productCode}}</p>
                     <table class="table order-table">
                         <tr>
-                            <td><b>QTY: </b> <input type="text" value="0" min="0" class="quantity_btn" />
+                            <td><b>QTY: </b>
+                                <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity accent-color"
+                                    (click)="utility.decreaseProductQuantity(item, orderSummary, dataService)">
+                                </fa-icon> <span class="disabled-box">{{item.noOfItems}}</span>
+                                <fa-icon [icon]="['fas', 'plus']" class="increase_quantity accent-color"
+                                    (click)="utility.increaseProductQuantity(item, orderSummary, dataService)">
+                                </fa-icon>
                             </td>
                             <td>
-                                Weight - <b>1KG</b>
+                                Weight - <b>{{utility.getFormattedWeight(item.product.weight)}}</b>
                             </td>
                         </tr>
                         <tr>
-                            <td><b>Subtotal -</b></td>
-                            <td class="accent-color"><b>Rs. 400</b></td>
-                        </tr>
-                        <tr>
-                            <td><b>Estimated Shipping -</b></td>
-                            <td class="accent-color"><b>Rs. 50</b></td>
+                            <td><b>Product Cost -</b></td>
+                            <td class="accent-color"><b>Rs. {{item.product.price}}</b>
+                            </td>
                         </tr>
                     </table>
                     <div class="float-right cart-actions">
-                        <a routerLink="">Remove</a> | <a routerLink="">Update</a>
+                        <a (click)="removeItemFromCart(item.product)" class="link">Remove</a> | <a routerLink=""
+                            class="link">Update</a>
                     </div><!-- cart-actions -->
                 </div><!-- col-sm-8 -->
                 <hr class="w-100">
             </div><!-- row cart-item-->
             <div class="row order-total">
-                <div class="col-sm-6">
+                <div class="col-sm-12 col-md-6">
                     <table class="table order-table">
                         <tr>
-                            <td>Total weight</td>
-                            <td><b>3KG</b></td>
+                            <td>Product Net weight</td>
+                            <td><b>{{utility.getFormattedWeight(orderSummary.productNetWeight)}}</b></td>
                         </tr>
                         <tr>
-                            <td>Subtotal -</td>
-                            <td><b>Rs. 600</b></td>
+                            <td>Gross Weight -</td>
+                            <td><b>{{utility.getFormattedWeight(orderSummary.productGrossWeight)}}</b></td>
                         </tr>
                         <tr>
-                            <td>Estimated Shipping -</td>
-                            <td><b>Rs. 75</b></td>
+                            <td>Total Prodcut Cost -</td>
+                            <td><b>Rs. {{orderSummary.totalProductCost}}</b></td>
                         </tr>
                     </table>
                 </div>
-                <div class="col-sm-6"></div>
+                <div class="col-sm-12 col-md-6 shipping-calculator">
+                    <p class="content-heading accent-color">Shipping Charges Calculator</p>
+                    <p class="content-text">Select delivery type</p>
+                    <div class="shipping-options">
+                        <button class="btn btn-danger" (click)="changeDeliveryMethod('Register Post')">Register
+                            Post</button>
+                        <button class="btn btn-info" (click)="changeDeliveryMethod('Speed Post')">Speed Post</button>
+                        <button class="btn btn-warning" (click)="changeDeliveryMethod('Courier Post')">Courier
+                            Post</button>
+                        <button class="btn btn-primary" (click)="changeDeliveryMethod('DTDC')">DTDC</button>
+                    </div><!-- shipping options -->
+                    <div class="w-100">
+                        <p class="content-text text-right">Shipping Cost - Rs <span
+                                class="disabled-box">{{orderSummary.shippingCost}}</span>
+                        </p>
+                        <p class="content-text text-right" *ngIf="orderSummary.shippingMethod"><i>Selected delivery type
+                                is
+                                {{orderSummary.shippingMethod}}</i></p>
+                    </div><!-- float-right -->
+                    <div class="shipping-distance-dialog" *ngIf="showDistanceDialog">
+                        <fa-icon [icon]="['fas', 'times']" class="float-right" (click)="showDistanceDialog=false">
+                        </fa-icon>
+                        <p class="content-heading">{{orderSummary.shippingMethod}}</p>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <select name="distance" id="" class="form-control"
+                                    (change)="calculateShippingCost($event.target.value)">
+                                    <option value="">Select Distance</option>
+                                    <option value="{{distance}}" *ngFor="let distance of distances">{{distance}}
+                                    </option>
+                                </select>
+                            </div><!-- form-group -->
+                            <p class="text-right content-text">Shipping Cost- Rs {{orderSummary.shippingCost}}</p>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <button class="btn btn-pink float-right"
+                                        (click)="showDistanceDialog=false">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- shipping-distance-dialog -->
+                </div><!-- col-sm-12 col-md-6 shipping-calculator -->
             </div><!-- order-total -->
+            <hr>
             <div class="row">
-                <p class="col-8 offset-4 col-sm-5 offset-sm-7"><b>Grand total - </b><span class="accent-color grand-total">Rs.
-                        675</span></p>
+                <p class="col-12 text-right"><b>Grand total - </b><span class="accent-color grand-total">Rs.
+                        {{orderSummary.grandTotal}}</span></p>
             </div>
         </div><!-- cart-item -->
-        <br><a routerLink="/checkout" class="btn btn-pink buy-btn float-right">Proceed to Checkout</a>
+        <br><a routerLink="/checkout" class="btn btn-pink buy-btn float-right" *ngIf="orderSummary.shippingCost">Proceed
+            to Checkout</a>
     </div><!-- container -->
+    <div class="container empty-cart" *ngIf="orderSummary.cartItems.size == 0">
+        <h1 class="heading text-center">
+            <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon><br> No Items in Cart!! <br>
+            <a routerLink="/" class="btn btn-pink">Go Home</a>
+        </h1>
+    </div>
 </div>

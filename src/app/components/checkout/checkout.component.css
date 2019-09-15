@@ -25,6 +25,7 @@
     width           : 100%;
     text-align      : start;
     padding         : 1rem;
+    border-radius   : 0.25rem;
 }
 
 .btn-link-white.collapsed {
@@ -48,7 +49,7 @@
 .cart-items {
     padding         : 0.7rem;
     background-color: #f7f7f7;
-    border-radius: .25rem;
+    border-radius   : .25rem;
 }
 
 .table td {
@@ -71,22 +72,22 @@
 }
 
 .item-heading {
-    font-family: Roboto;
-    font-style : normal;
-    font-weight: bold;
-    font-size  : 0.8rem;
-    line-height: 1.5rem;
-    color      : #2F2F2F;
+    font-family  : Roboto;
+    font-style   : normal;
+    font-weight  : bold;
+    font-size    : 0.8rem;
+    line-height  : 1.5rem;
+    color        : #2F2F2F;
     margin-bottom: 0;
 }
 
 .item-sub-heading {
-    font-family: Roboto;
-    font-style : normal;
-    font-weight: normal;
-    font-size  : 0.8rem;
-    line-height: 1.5rem;
-    color      : #707070;
+    font-family  : Roboto;
+    font-style   : normal;
+    font-weight  : normal;
+    font-size    : 0.8rem;
+    line-height  : 1.5rem;
+    color        : #707070;
     margin-bottom: 0;
 }
 
@@ -97,7 +98,7 @@
     font-size  : 0.8rem;
     line-height: 1.5rem;
     color      : #707070;
-    padding   : 0;
+    padding    : 0;
 }
 
 @media(max-width: 767px) {

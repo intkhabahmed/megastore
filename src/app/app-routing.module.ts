@@ -19,8 +19,9 @@ const routes: Routes = [
     component: ProductsComponent
   },
   {
-    path: "productDetail",
-    component: ProductdetailComponent
+    path: "products/:id",
+    component: ProductdetailComponent,
+    pathMatch: "full"
   },
   {
     path: "login",

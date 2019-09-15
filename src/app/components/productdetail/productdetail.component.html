@@ -17,20 +17,21 @@
                     <li>Product 5</li>
                 </ul>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9" *ngIf="product$ | async; let product">
                 <h2>Product Name</h2>
                 <div class="row">
                     <div class="col-md-6">
                         <img src="/assets/images/download.png" class="img-responsive w-100" alt="product">
                     </div>
                     <div class="col-md-6">
-                        <h4>Cotton &amp; Milk Fiber Super Soft Knitting Yarn</h4>
-                        <p>Product code - 12345</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita
-                            mollitia quia sapiente incidunt, suscipit doloremque.</p>
-                        <p><b>Rs. 200</b> per pack</p>
-                        <p>QTY: <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity"></fa-icon> <input type="text" value="0" min="0"
-                                class="quantity_btn" /> <fa-icon [icon]="['fas', 'plus']" class="increase_quantity"></fa-icon></p>
+                        <h4>{{product.name}}</h4>
+                        <p>Product code - {{product.productCode}}</p>
+                        <p>{{product.description}}</p>
+                        <p><b>Rs. {{product.price}}</b> per pack</p>
+                        <p>QTY: <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity"></fa-icon> <span
+                                class="disabled-box">0</span>
+                            <fa-icon [icon]="['fas', 'plus']" class="increase_quantity"></fa-icon>
+                        </p>
                         <p>Total amount - <b>Rs. 400</b></p>
                         <a href="#" class="btn btn-pink">ADD TO CART</a> &nbsp;<a href="#" class="btn btn-white">ADD TO
                             WISHLIST</a>

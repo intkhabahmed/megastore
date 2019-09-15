@@ -9,7 +9,7 @@
 }
 
 .navbar-nav {
-    margin-top  : 4vh;
+    margin-top: 4vh;
 }
 
 #search-form {
@@ -33,7 +33,8 @@
 }
 
 .nav-right-btn {
-    color: rgba(0, 0, 0, .9);
+    color   : rgba(0, 0, 0, .9);
+    position: relative;
 }
 
 .nav-top {
@@ -43,7 +44,7 @@
 #footer {
     background-color: #dbdada;
     margin-top      : 5%;
-    clear: right;
+    clear           : right;
 }
 
 #footer footer {
@@ -54,10 +55,23 @@
     font-size: 16px;
 }
 
+.cart-item-count {
+    font-size       : 10px;
+    font-family     : 'Roboto';
+    background-color: #FF00AE;
+    color           : white;
+    position        : absolute;
+    top             : -35%;
+    right           : 0;
+    padding         : 1px 5px;
+    border-radius   : 55px;
+}
+
 @media(max-width: 992px) {
     .nav-top {
         float: left;
     }
+
     .nav-right-container {
         padding-bottom: 18vh;
     }

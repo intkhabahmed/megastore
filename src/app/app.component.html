@@ -26,8 +26,9 @@
         <div class="nav-top">
           <a routerLink="cart" class="nav-right-btn" id="cart-btn">
             <fa-icon [icon]="['fas', 'shopping-cart']" class="mr-3"></fa-icon>
+            <span class="cart-item-count" >{{cartItemCount}}</span>
           </a>
-          <a routerLink="/login" class="nav-right-btn" id="login-btn">LOGIN</a>
+          <a routerLink="/login" class="nav-right-btn" id="login-btn"> LOGIN</a>
         </div>
         <br>
         <form class="form-inline">

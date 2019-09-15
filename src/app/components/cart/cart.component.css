@@ -39,13 +39,6 @@
     color      : #707070;
 }
 
-.quantity_btn {
-    width        : 50px;
-    border       : 1.5px solid #AAAAAA;
-    border-radius: 15px;
-    padding      : 0 .5rem;
-}
-
 .buy-btn {
     width        : max-content;
     margin-bottom: 2%;
@@ -71,10 +64,55 @@
 }
 
 .order-total {
-    padding: 3%;
+    padding       : 3%;
+    padding-bottom: 0;
 }
 
 .grand-total {
-    font-size  : 1.3rem;
-    font-weight: 700;
+    font-size   : 1.3rem;
+    font-weight : 700;
+    margin-right: 2%;
+}
+
+.shipping-options {
+    display      : flex;
+    flex-flow    : row wrap;
+    margin-bottom: 2%;
+}
+
+.shipping-options button {
+    margin   : 2px;
+    min-width: 121px;
+}
+
+.shipping-calculator {
+    position: relative;
+}
+
+.shipping-distance-dialog {
+    background: #2F2F2F;
+    padding   : 2%;
+    position  : absolute;
+    top       : 0;
+    width     : 97%;
+    z-index   : 1;
+}
+
+.shipping-distance-dialog select {
+    background  : #2F2F2F;
+    border-color: #ffffff;
+    color       : white;
+}
+
+.shipping-distance-dialog p {
+    color: #EEEEEE;
+}
+
+.shipping-distance-dialog fa-icon {
+    color : #EEEEEE;
+    cursor: pointer;
+}
+
+.empty-cart {
+    padding: 10%;
 }

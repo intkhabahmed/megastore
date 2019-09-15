@@ -49,11 +49,9 @@ body {
     color      : #707070;
 }
 
-.btn-pink {
-    font-weight   : 300;
-    color         : #FFFFFF;
-    border-radius : 56px;
-    background    : #FF00AE;
+.btn {
+    border-radius: 56px;
+    color        : #FFFFFF;
     font-family   : Roboto;
     font-style    : normal;
     font-weight   : bold;
@@ -62,13 +60,26 @@ body {
     text-transform: uppercase;
 }
 
+.btn:hover {
+    color: #FFFFFF;
+}
+
+.btn-pink {
+    font-weight   : 300;
+    background    : #FF00AE;
+    
+}
+
 .btn-white {
-    margin-top   : 2%;
     font-weight  : 300;
     color        : #000000;
-    border-radius: 56px;
     background   : white;
     border-color : #010101;
+}
+
+.btn-white:hover {
+    color     : #2F2F2F;
+    background: #EEEEEE;
 }
 
 .btn-pink:hover {
@@ -119,10 +130,16 @@ body {
 .link {
     color          : #2F2F2F;
     font-weight    : 600;
-    text-decoration: underline;
+    text-decoration: underline !important;
+    cursor         : pointer;
 }
 
-.link:hover {
+.plain-link {
+    color          : #2F2F2F;
+    cursor         : pointer;
+}
+
+.link:hover, .plain-link:hover {
     color: #000000;
 }
 
@@ -141,10 +158,22 @@ body {
 
 .accent-bg {
     background-color: #FF00AE;
-    color: white;
+    color           : white;
 }
 
 hr {
     margin-right: 2%;
     margin-left : 2%;
+}
+
+.disabled-box {
+    border-radius: 15px;
+    padding      : 2px 10px;
+    border       : 1.5px solid #dbdada;
+}
+
+.decrease_quantity,
+.increase_quantity {
+    cursor: pointer;
+    margin: 0 10px;
 }

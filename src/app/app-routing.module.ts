@@ -1,3 +1,6 @@
+import { AdminComponent } from './components/admin/admin.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { AuthGuard } from './utils/auth.guard';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { CartComponent } from './components/cart/cart.component';
 import { ProductdetailComponent } from './components/productdetail/productdetail.component';
@@ -37,7 +40,20 @@ const routes: Routes = [
   },
   {
     path: "checkout",
-    component: CheckoutComponent
+    component: CheckoutComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "profile/:id",
+    component: ProfileComponent,
+    pathMatch: "full",
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "admin",//:id",
+    component: AdminComponent,
+    /* pathMatch: "full",
+    canActivate: [AuthGuard] */
   }
 ];
 

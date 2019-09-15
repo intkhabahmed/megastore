@@ -1,7 +1,9 @@
-import { DataService } from './services/data.service';
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import * as $ from 'jQuery';
-import { CartItem } from './models/cart-item';
+import { User } from './models/user';
+import { AuthenticationService } from './services/authentication.service';
+import { DataService } from './services/data.service';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +12,12 @@ import { CartItem } from './models/cart-item';
 })
 export class AppComponent {
   title = 'maa-taluja-creations';
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private authenticationService: AuthenticationService, private router: Router) {
+    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+  }
 
   cartItemCount: number;
+  currentUser: User
 
   ngOnInit(): void {
     this.dataService.orderSummary.subscribe(summary => this.cartItemCount = summary.cartItems.size);
@@ -24,5 +29,10 @@ export class AppComponent {
         $('.navbar-collapse').removeClass('show');
       });
     }
+  }
+
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/']);
   }
 }

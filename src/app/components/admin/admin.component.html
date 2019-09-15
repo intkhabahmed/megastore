@@ -1,0 +1,98 @@
+<div class="nav-negative-margin">
+    <div class="nav-overlap"></div>
+    <div class="container admin-container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <div class="left-nav">
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.NEW_PRODUCT_UPLOAD, 'btn-primary': currentTab !== adminTab.NEW_PRODUCT_UPLOAD}"
+                        (click)="showTab(adminTab.NEW_PRODUCT_UPLOAD)">New
+                        Product
+                        Upload</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.PRODUCT_LIST, 'btn-primary': currentTab !== adminTab.PRODUCT_LIST}"
+                        (click)="showTab(adminTab.PRODUCT_LIST)">Live
+                        Product List</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.POPULAR_PRODUCTS, 'btn-primary': currentTab !== adminTab.POPULAR_PRODUCTS}"
+                        (click)="showTab(adminTab.POPULAR_PRODUCTS)">Popular
+                        Products</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.NEW_ARRIVALS, 'btn-primary': currentTab !== adminTab.NEW_ARRIVALS}"
+                        (click)="showTab(adminTab.NEW_ARRIVALS)">New
+                        Arrivals</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.ORDER_INVOICE, 'btn-primary': currentTab !== adminTab.ORDER_INVOICE}"
+                        (click)="showTab(adminTab.ORDER_INVOICE)">Order
+                        / Invoice</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.SHIPPING_RATES, 'btn-primary': currentTab !== adminTab.SHIPPING_RATES}"
+                        (click)="showTab(adminTab.SHIPPING_RATES)">Shipping
+                        Rates</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.GROSS_WEIGHT_CALCULATOR, 'btn-primary': currentTab !== adminTab.GROSS_WEIGHT_CALCULATOR}"
+                        (click)="showTab(adminTab.GROSS_WEIGHT_CALCULATOR)">Gross
+                        Weight Calculator</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.REGISTERED_USERS, 'btn-primary': currentTab !== adminTab.REGISTERED_USERS}"
+                        (click)="showTab(adminTab.REGISTERED_USERS)">Registered
+                        Users</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.MESSAGES, 'btn-primary': currentTab !== adminTab.MESSAGES}"
+                        (click)="showTab(adminTab.MESSAGES)">Messages</button>
+                </div>
+            </div><!-- col-md-4 col-sm-12 -->
+            <div class="col-lg-9 col-md-9 col-sm-12">
+                <div class="card">
+                    <div *ngIf="currentTab == adminTab.NEW_PRODUCT_UPLOAD">
+                        <h4>Add New Product</h4>
+                        <form class="add-product-form">
+                            <div class="form-group">
+                                <select name="category" class="form-control col-4">
+                                    <option value="">Select Category</option>
+                                </select>
+                            </div>
+                            <table class="table table-bordered table-responsive">
+                                <tr class="table-primary">
+                                    <th>Upload Photo</th>
+                                    <th>Product Name</th>
+                                    <th>Product Code</th>
+                                    <th>Colors</th>
+                                    <th>Sizes <fa-icon [icon]="['fas', 'plus']" class="round-btn"></fa-icon>
+                                    </th>
+                                    <th>Price Rs <fa-icon [icon]="['fas', 'plus']" class="round-btn"></fa-icon>
+                                    </th>
+                                    <th>Net Weight <fa-icon [icon]="['fas', 'plus']" class="round-btn"></fa-icon>
+                                    </th>
+                                    <th>Quantity <fa-icon [icon]="['fas', 'plus']" class="round-btn"></fa-icon>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td><button class="btn btn-pink">Add Image</button></td>
+                                    <td><input type="text" name="productName" class="form-control"></td>
+                                    <td><input type="text" name="productCode" class="form-control"></td>
+                                    <td><input type="text" name="colors" class="form-control"></td>
+                                    <td><input type="text" name="size" class="form-control"></td>
+                                    <td><input type="text" name="price" class="form-control"></td>
+                                    <td><input type="text" name="netWeight" class="form-control"></td>
+                                    <td><input type="text" name="quantity" class="form-control"></td>
+                                </tr>
+                            </table>
+                            <div class="form-group">
+                                <button class="btn btn-pink float-right">Upload</button>
+                            </div>
+                        </form>
+                    </div><!-- add product -->
+                    <div *ngIf="currentTab == adminTab.PRODUCT_LIST"></div><!-- product list -->
+                    <div *ngIf="currentTab == adminTab.POPULAR_PRODUCTS"></div><!-- popular products -->
+                    <div *ngIf="currentTab == adminTab.NEW_ARRIVALS"></div><!-- new arrivals -->
+                    <div *ngIf="currentTab == adminTab.ORDER_INVOICE"></div><!-- order/invoice -->
+                    <div *ngIf="currentTab == adminTab.SHIPPING_RATES"></div><!-- shipping rates -->
+                    <div *ngIf="currentTab == adminTab.GROSS_WEIGHT_CALCULATOR"></div><!-- gross weight calculator -->
+                    <div *ngIf="currentTab == adminTab.REGISTERED_USERS"></div><!-- registered users -->
+                    <div *ngIf="currentTab == adminTab.MESSAGES"></div><!-- messages -->
+                </div><!-- card -->
+            </div><!-- col-md-8 col-sm-12 -->
+        </div><!-- ṛow -->
+    </div><!-- container -->
+</div><!-- nav-negative-margin -->

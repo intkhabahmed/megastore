@@ -12,4 +12,5 @@ export class User {
     billingAddress: Address
     orders: Order[]
     wishlist: number[]
+    token: string
 }

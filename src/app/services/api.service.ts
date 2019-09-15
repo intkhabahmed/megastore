@@ -1,13 +1,14 @@
+import { apiUrl } from './../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Product } from './../models/product';
+import { User } from '../models/user';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
-const apiUrl = "/api";
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +61,17 @@ export class ApiService {
       tap(_ => console.log(`deleted Product id=${id}`)),
       catchError(this.handleError<Product>('deleteProduct'))
     );
+  }
+
+  getAll() {
+    return this.http.get<User[]>(`${apiUrl}/users`);
+  }
+
+  register(user: User) {
+    return this.http.post(`${apiUrl}/users/register`, user);
+  }
+
+  delete(id: number) {
+    return this.http.delete(`${apiUrl}/users/${id}`);
   }
 }

@@ -26,11 +26,21 @@
         <div class="nav-top">
           <a routerLink="cart" class="nav-right-btn" id="cart-btn">
             <fa-icon [icon]="['fas', 'shopping-cart']" class="mr-3"></fa-icon>
-            <span class="cart-item-count" >{{cartItemCount}}</span>
+            <span class="cart-item-count">{{cartItemCount}}</span>
           </a>
-          <a routerLink="/login" class="nav-right-btn" id="login-btn"> LOGIN</a>
-        </div>
-        <br>
+          <a routerLink="/login" class="nav-right-btn" id="login-btn" *ngIf="!currentUser">&nbsp; LOGIN</a>
+          <li class="nav-item dropdown nav-right-btn" *ngIf="currentUser">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+              aria-expanded="false">
+              <fa-icon [icon]="['fas', 'user-circle']"></fa-icon> Intkhab
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">View Profile</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" (click)="logout()">Logout</a>
+            </div>
+          </li>
+        </div><!-- nav-top -->
         <form class="form-inline">
           <div id="search-form">
             <input class="form-control mr-sm-2 w-100" type="search" placeholder="Search for items" aria-label="Search">

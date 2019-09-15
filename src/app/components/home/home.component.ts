@@ -21,8 +21,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   productsLength: number
 
   ngOnInit() {
+    //Todo: Remove the below comment before checkin in the code
     this.products = this.service.getProducts()
     this.products.subscribe(products => this.productsLength = products.length)
+    //this.products = JSON.parse(this.productJson)
     this.dataService.orderSummary.subscribe(summary => this.orderSummary = summary)
   }
 

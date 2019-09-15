@@ -14,6 +14,10 @@ body {
     font-family: 'Roboto';
 }
 
+a {
+    cursor: pointer;
+}
+
 .nav-link {
     font-weight: 400;
     color      : #3d3d3d;
@@ -50,8 +54,8 @@ body {
 }
 
 .btn {
-    border-radius: 56px;
-    color        : #FFFFFF;
+    border-radius : 56px;
+    color         : #FFFFFF;
     font-family   : Roboto;
     font-style    : normal;
     font-weight   : bold;
@@ -65,16 +69,16 @@ body {
 }
 
 .btn-pink {
-    font-weight   : 300;
-    background    : #FF00AE;
-    
+    font-weight: 300;
+    background : #FF00AE;
+
 }
 
 .btn-white {
-    font-weight  : 300;
-    color        : #000000;
-    background   : white;
-    border-color : #010101;
+    font-weight : 300;
+    color       : #000000;
+    background  : white;
+    border-color: #010101;
 }
 
 .btn-white:hover {
@@ -131,15 +135,14 @@ body {
     color          : #2F2F2F;
     font-weight    : 600;
     text-decoration: underline !important;
-    cursor         : pointer;
 }
 
 .plain-link {
-    color          : #2F2F2F;
-    cursor         : pointer;
+    color: #2F2F2F;
 }
 
-.link:hover, .plain-link:hover {
+.link:hover,
+.plain-link:hover {
     color: #000000;
 }
 
@@ -176,4 +179,13 @@ hr {
 .increase_quantity {
     cursor: pointer;
     margin: 0 10px;
+}
+
+.round-btn {
+    color        : #000000;
+    border-radius: 56px;
+    padding      : 1px 3px;
+    background   : #FFFFFF;
+    font-size    : 0.7rem;
+    cursor       : pointer;
 }

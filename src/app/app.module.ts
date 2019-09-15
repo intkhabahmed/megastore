@@ -1,3 +1,6 @@
+import { AdminComponent } from './components/admin/admin.component';
+import { AlertComponent } from './components/alert/alert.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -14,8 +17,11 @@ import { LoginComponent } from './components/login/login.component';
 import { CartComponent } from './components/cart/cart.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { JwtInterceptor } from './utils/jwt-interceptor';
+import { ErrorInterceptor } from './utils/error.interceptor';
+import { fakeBackendProvider } from './utils/fake-backend';
 
 @NgModule({
   declarations: [
@@ -26,7 +32,10 @@ import { FormsModule } from '@angular/forms';
     LoginComponent,
     CartComponent,
     SignupComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    ProfileComponent,
+    AlertComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -34,8 +43,14 @@ import { FormsModule } from '@angular/forms';
     FontAwesomeModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    // provider used to create fake backend
+    fakeBackendProvider
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

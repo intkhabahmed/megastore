@@ -1,4 +1,5 @@
 export class Payment {
-    transactionId: number
+    transactionId: string
     paymentMethod: string
+    amount: number
 }

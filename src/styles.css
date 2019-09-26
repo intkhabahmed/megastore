@@ -69,16 +69,27 @@ a {
 }
 
 .btn-pink {
-    font-weight: 300;
+    font-weight: 700;
     background : #FF00AE;
 
 }
 
 .btn-white {
-    font-weight : 300;
+    font-weight : 700;
     color       : #000000;
     background  : white;
     border-color: #010101;
+}
+
+.btn-gray {
+    font-weight : 700;
+    background  : #6d6d6d;
+    border-color: #6d6d6d;
+}
+
+.btn-gray:hover {
+    background  : #7d7d7d;
+    border-color: #7d7d7d;
 }
 
 .btn-white:hover {
@@ -188,4 +199,18 @@ hr {
     background   : #FFFFFF;
     font-size    : 0.7rem;
     cursor       : pointer;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.no-resize {
+    resize: none;
+}
+
+@media(max-width: 992px) {
+    .overflow-scroll {
+        overflow-x: auto;
+    }
 }

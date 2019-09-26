@@ -2,7 +2,7 @@ import { Address } from './address';
 import { Order } from './order'
 
 export class User {
-    _id: number
+    _id: string
     firstName: string
     lastName: string
     email: string
@@ -13,4 +13,5 @@ export class User {
     orders: Order[]
     wishlist: number[]
     token: string
+    registedOn: Date
 }

@@ -1,27 +1,27 @@
-import { AdminComponent } from './components/admin/admin.component';
-import { AlertComponent } from './components/alert/alert.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { ProductsComponent } from './components/products/products.component';
-import { ProductdetailComponent } from './components/productdetail/productdetail.component';
-import { LoginComponent } from './components/login/login.component';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { AlertComponent } from './components/alert/alert.component';
 import { CartComponent } from './components/cart/cart.component';
-import { SignupComponent } from './components/signup/signup.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { JwtInterceptor } from './utils/jwt-interceptor';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { ProductdetailComponent } from './components/productdetail/productdetail.component';
+import { ProductsComponent } from './components/products/products.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SignupComponent } from './components/signup/signup.component';
 import { ErrorInterceptor } from './utils/error.interceptor';
 import { fakeBackendProvider } from './utils/fake-backend';
+import { JwtInterceptor } from './utils/jwt-interceptor';
+
 
 @NgModule({
   declarations: [

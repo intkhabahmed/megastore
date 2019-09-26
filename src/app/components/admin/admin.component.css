@@ -17,6 +17,36 @@
     margin-top: 10px;
 }
 
+.overlay {
+    background: black;
+    opacity   : 0.7;
+    width     : 100%;
+    min-height: 100%;
+    position  : fixed;
+    top       : 0;
+    z-index   : 99;
+}
+
+.overlay-body {
+    background: white;
+    width     : 75%;
+    max-height: 80%;
+    position  : fixed;
+    top       : 0;
+    left      : 12%;
+    z-index   : 100;
+    display   : block;
+    margin    : 5% auto;
+    padding   : 5%;
+    overflow  : auto;
+}
+
+.close-btn {
+    position: absolute;
+    right   : 5%;
+    top     : 5%;
+}
+
 @media(max-width: 767px) {
     .left-nav {
         flex-flow: row wrap;

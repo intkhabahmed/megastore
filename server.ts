@@ -23,9 +23,13 @@ import { join } from 'path';
 import * as mongoose from 'mongoose';
 import bodyParser from "body-parser";
 import { ProductsRoute } from './routes/products-routes';
+import 'localstorage-polyfill'
 
 // Express server
 const app = express();
+
+//Global Local Storage
+global['localStorage'] = localStorage
 
 // Products Route
 const productsRoute: ProductsRoute = new ProductsRoute();

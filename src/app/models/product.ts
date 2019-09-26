@@ -3,12 +3,14 @@ export class Product {
     name: string
     productCode: String
     description: String
+    imageUrl: string
     category: String
     price: number
     productStatus: Boolean
     quantity: number
-    availableColors: String[]
+    color: String
     weight: number
+    size: number
     createdAt: Date
     updatedAt: Date
 }

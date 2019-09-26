@@ -63,7 +63,7 @@ export class ApiService {
     );
   }
 
-  getAll() {
+  getRegisteredUsers() {
     return this.http.get<User[]>(`${apiUrl}/users`);
   }
 
@@ -71,7 +71,7 @@ export class ApiService {
     return this.http.post(`${apiUrl}/users/register`, user);
   }
 
-  delete(id: number) {
+  deleteUser(id: number) {
     return this.http.delete(`${apiUrl}/users/${id}`);
   }
 }

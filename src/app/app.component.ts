@@ -24,11 +24,11 @@ export class AppComponent {
   }
 
   ngAfterViewInit(): void {
-    if ($(window).width() < 992) {
+    /* if ($(window).width() < 992) {
       $('.nav-link, .nav-right-btn').on('click', () => {
         $('.navbar-collapse').removeClass('show');
       });
-    }
+    } */
   }
 
   logout() {

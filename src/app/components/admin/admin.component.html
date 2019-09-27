@@ -234,7 +234,7 @@
                                     <td>{{order.quantity}} </td>
                                     <td>{{order.quantity}} </td>
                                     <td>{{order.quantity}} </td>
-                                    <td><a class="link" (click)="isEditing=true;populateEditForm(product)">
+                                    <td><a class="link" (click)="isEditing=true;populateEditForm(order)">
                                             <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
                                             </fa-icon>
                                         </a></td>
@@ -254,8 +254,8 @@
                                     <td>{{rate.ratePerKm}} </td>
                                     <td>{{rate.shippingMethod}} </td>
                                     <td><a class="link"
-                                            (click)="isEditing=true;editing='shippingRates';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="deleteProduct(product._id)">Delete</a></td>
+                                            (click)="isEditing=true;editing='shippingRates';populateEditForm(rate)">Edit</a>&nbsp;&nbsp;<a
+                                            class="link">Delete</a></td>
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
@@ -273,7 +273,7 @@
                                     <th>To be added</th>
                                     <th>Operation</th>
                                 </tr>
-                                <tr *ngFor="let grossWeight of mapping | async;index as i">
+                                <tr *ngFor="let grossWeight of grossWeightMapping | async;index as i">
                                     <td>{{grossWeight.minWeight}}</td>
                                     <td>{{grossWeight.maxWeight}}</td>
                                     <td>{{grossWeight.toBeAdded}}</td>
@@ -337,7 +337,7 @@
 <div class="overlay-body" *ngIf="isEditing">
     <fa-icon [icon]="['fas', 'times']" size="2x" class="round-btn close-btn" (click)="isEditing=false"></fa-icon>
     <div *ngIf="editing == 'product'">
-        <form class="add-product-form" [formGroup]="updateProductForm" (ngSubmit)="updateProduct()">
+        <form class="add-product-form" [formGroup]="updateProductForm">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="name">Product Name</label>
@@ -447,7 +447,7 @@
     </div><!-- update product form -->
 
     <div *ngIf="editing == 'grossWeight'">
-        <form class="add-product-form" [formGroup]="grossWeightForm" (ngSubmit)="updateProduct()">
+        <form class="add-product-form" [formGroup]="grossWeightForm">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="minWeight">Min Weight</label>

@@ -7,6 +7,10 @@ import { AdminTab } from './../../utils/enums';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Order } from 'src/app/models/order';
+import { ShippingRate } from 'src/app/models/shipping-rate';
+import { GrossWeight } from 'src/app/models/gross-weight';
+import { Message } from 'src/app/models/message';
 
 @Component({
   selector: 'app-admin',
@@ -26,6 +30,10 @@ export class AdminComponent implements OnInit {
   loading = false
   submitted = false;
   editing: string
+  orders: Observable<Order[]>
+  shippingRates: Observable<ShippingRate[]>
+  grossWeightMapping: Observable<GrossWeight[]>
+  messages: Observable<Message[]>
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private alertService: AlertService) { }
 

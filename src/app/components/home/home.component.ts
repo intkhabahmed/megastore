@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    var pp_positionX = 0
+    /* var pp_positionX = 0
     $('#pp_next_btn').on('click', () => {
       if (pp_positionX < $("#popular-product-slider div").width() * this.productsLength) {
         pp_positionX += $("#popular-product-slider div").width() + 10;
@@ -79,6 +79,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       console.log(na_positionX)
       $('#new-arrivals-slider').css({ 'transform': 'translate(-' + na_positionX + 'px, 0px)' });
-    });
+    }); */
   }
 }

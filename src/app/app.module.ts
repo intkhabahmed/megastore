@@ -19,7 +19,6 @@ import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ErrorInterceptor } from './utils/error.interceptor';
-import { fakeBackendProvider } from './utils/fake-backend';
 import { JwtInterceptor } from './utils/jwt-interceptor';
 
 
@@ -43,13 +42,13 @@ import { JwtInterceptor } from './utils/jwt-interceptor';
     FontAwesomeModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     // provider used to create fake backend
-    fakeBackendProvider
+    //fakeBackendProvider
   ],
   bootstrap: [AppComponent]
 })

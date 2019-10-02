@@ -1,3 +1,7 @@
+import { Utility } from './../../utils/utils';
+import { ApiService } from './../../services/api.service';
+import { Product } from './../../models/product';
+import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +11,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProductsComponent implements OnInit {
 
-  constructor() { }
+  products$: Observable<Product[]>
+  constructor(private api: ApiService, public utility: Utility) {
+    this.products$ = api.getProducts()
+  }
 
   ngOnInit() {
   }

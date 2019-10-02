@@ -15,15 +15,18 @@
  * import for `ngExpressEngine`.
  */
 
-import 'zone.js/dist/zone-node';
-
-import * as express from 'express';
-import { join } from 'path';
-
-import * as mongoose from 'mongoose';
 import bodyParser from "body-parser";
+import * as express from 'express';
+import 'localstorage-polyfill';
+import * as mongoose from 'mongoose';
+import { join } from 'path';
+import 'zone.js/dist/zone-node';
+import { GrossWeightsRoute } from './routes/gross-weight-routes';
+import { MessagesRoute } from './routes/message-routes';
+import { OrdersRoute } from './routes/order-routes';
 import { ProductsRoute } from './routes/products-routes';
-import 'localstorage-polyfill'
+import { ShippingRatesRoute } from './routes/shipping-rate-routes';
+import { UsersRoute } from './routes/users-routes';
 
 // Express server
 const app = express();
@@ -31,8 +34,13 @@ const app = express();
 //Global Local Storage
 global['localStorage'] = localStorage
 
-// Products Route
+// api Routes
 const productsRoute: ProductsRoute = new ProductsRoute();
+const usersRoute: UsersRoute = new UsersRoute();
+const shippingRoute: ShippingRatesRoute = new ShippingRatesRoute();
+const ordersRoute: OrdersRoute = new OrdersRoute();
+const grossWeightsRoute: GrossWeightsRoute = new GrossWeightsRoute();
+const messagesRoute: MessagesRoute = new MessagesRoute();
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
@@ -54,8 +62,13 @@ app.set('views', DIST_FOLDER);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//adding product route
+//adding api routes
 productsRoute.productRoute(app);
+usersRoute.userRoute(app);
+shippingRoute.shippingRoute(app);
+ordersRoute.orderRoute(app);
+grossWeightsRoute.grossWeightRoute(app);
+messagesRoute.orderRoute(app);
 
 // Example Express Rest API endpoints
 // app.get('/api/**', (req, res) => { });

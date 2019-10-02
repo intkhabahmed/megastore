@@ -23,7 +23,7 @@ export class CheckoutComponent implements OnInit {
 
   completePurchase() {
     this.orderSummary.cartItems.forEach(cartItem => {
-      cartItem.product.quantity -= cartItem.noOfItems
+      cartItem.product.quantity[cartItem.product.selectedIndex] -= cartItem.noOfItems
       this.service.updateProduct(cartItem.product._id, cartItem.product).subscribe(() => { })
     })
     this.dataService.changeOrderDetails(new OrderSummary())

@@ -62,6 +62,7 @@ a {
     font-size     : 16px;
     line-height   : 19px;
     text-transform: uppercase;
+    margin-right  : 5px;
 }
 
 .btn:hover {
@@ -167,12 +168,12 @@ a {
 }
 
 .accent-color:hover {
-    color: #D21295;
+    color: #D21295 !important;
 }
 
 .accent-bg {
-    background-color: #FF00AE;
-    color           : white;
+    background-color: #FF00AE !important;
+    color           : white !important;
 }
 
 hr {
@@ -195,7 +196,7 @@ hr {
 .round-btn {
     color        : #000000;
     border-radius: 56px;
-    padding      : 1px 3px;
+    padding      : 6px 8px;
     background   : #FFFFFF;
     font-size    : 0.7rem;
     cursor       : pointer;
@@ -207,6 +208,25 @@ hr {
 
 .no-resize {
     resize: none;
+}
+
+.v-center {
+    display        : flex;
+    flex-flow      : column wrap;
+    justify-content: space-evenly;
+}
+
+.muted-item {
+    background-color: #ececec;
+    color           : #b9b9b9;
+}
+
+.card-img-top {
+    overflow: hidden;
+}
+
+.w-max-content {
+    width: max-content;
 }
 
 @media(max-width: 992px) {

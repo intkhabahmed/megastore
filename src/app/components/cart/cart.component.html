@@ -1,9 +1,9 @@
 <div class="nav-negative-margin">
     <div class="nav-overlap"></div>
-    <div class="container" *ngIf="orderSummary.cartItems.size > 0">
+    <div class="container" *ngIf="utility.orderSummary.cartItems.size > 0">
         <h3 class="order-title">Order Summary</h3>
         <div class="cart-items-container">
-            <div class="row cart-item" *ngFor="let item of orderSummary.cartItems.values()">
+            <div class="row cart-item" *ngFor="let item of utility.orderSummary.cartItems.values()">
                 <div class="col-sm-4">
                     <img src="/assets/images/download.png" class="w-100" alt="">
                 </div><!-- col-sm-4 -->
@@ -14,25 +14,26 @@
                         <tr>
                             <td><b>QTY: </b>
                                 <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity accent-color"
-                                    (click)="utility.decreaseProductQuantity(item, orderSummary, dataService)">
+                                    (click)="utility.decreaseProductQuantity(item)">
                                 </fa-icon> <span class="disabled-box">{{item.noOfItems}}</span>
                                 <fa-icon [icon]="['fas', 'plus']" class="increase_quantity accent-color"
-                                    (click)="utility.increaseProductQuantity(item, orderSummary, dataService)">
+                                    (click)="utility.increaseProductQuantity(item)">
                                 </fa-icon>
                             </td>
                             <td>
-                                Weight - <b>{{utility.getFormattedWeight(item.product.weight)}}</b>
+                                Weight -
+                                <b>{{utility.getFormattedWeight(item.product.weight[item.product.selectedIndex])}}</b>
                             </td>
                         </tr>
                         <tr>
                             <td><b>Product Cost -</b></td>
-                            <td class="accent-color"><b>Rs. {{item.product.price}}</b>
+                            <td class="accent-color"><b>Rs. {{item.product.price[item.product.selectedIndex]}}</b>
                             </td>
                         </tr>
                     </table>
                     <div class="float-right cart-actions">
-                        <a (click)="removeItemFromCart(item.product)" class="link">Remove</a> | <a routerLink=""
-                            class="link">Update</a>
+                        <a (click)="utility.removeItemFromCart(item.product)" class="link">Remove</a> | <a
+                            (click)="editCartItem(item.product._id)" class="link">Update</a>
                     </div><!-- cart-actions -->
                 </div><!-- col-sm-8 -->
                 <hr class="w-100">
@@ -42,15 +43,16 @@
                     <table class="table order-table">
                         <tr>
                             <td>Product Net weight</td>
-                            <td><b>{{utility.getFormattedWeight(orderSummary.productNetWeight)}}</b></td>
+                            <td><b>{{utility.getFormattedWeight(utility.orderSummary.productNetWeight)}}</b></td>
                         </tr>
                         <tr>
                             <td>Gross Weight -</td>
-                            <td><b>{{utility.getFormattedWeight(orderSummary.productGrossWeight)}}</b></td>
+                            <td><b>{{utility.getFormattedWeight(utility.orderSummary.productGrossWeight)}}</b>
+                            </td>
                         </tr>
                         <tr>
                             <td>Total Prodcut Cost -</td>
-                            <td><b>Rs. {{orderSummary.totalProductCost}}</b></td>
+                            <td><b>Rs. {{utility.orderSummary.totalProductCost}}</b></td>
                         </tr>
                     </table>
                 </div>
@@ -67,16 +69,17 @@
                     </div><!-- shipping options -->
                     <div class="w-100">
                         <p class="content-text text-right">Shipping Cost - Rs <span
-                                class="disabled-box">{{orderSummary.shippingCost}}</span>
+                                class="disabled-box">{{utility.orderSummary.shippingCost}}</span>
                         </p>
-                        <p class="content-text text-right" *ngIf="orderSummary.shippingMethod"><i>Selected delivery type
+                        <p class="content-text text-right" *ngIf="utility.orderSummary.shippingMethod"><i>Selected
+                                delivery type
                                 is
-                                {{orderSummary.shippingMethod}}</i></p>
+                                {{utility.orderSummary.shippingMethod}}</i></p>
                     </div><!-- float-right -->
                     <div class="shipping-distance-dialog" *ngIf="showDistanceDialog">
                         <fa-icon [icon]="['fas', 'times']" class="float-right" (click)="showDistanceDialog=false">
                         </fa-icon>
-                        <p class="content-heading">{{orderSummary.shippingMethod}}</p>
+                        <p class="content-heading">{{utility.orderSummary.shippingMethod}}</p>
                         <form class="form-horizontal">
                             <div class="form-group">
                                 <select name="distance" id="" class="form-control"
@@ -86,7 +89,8 @@
                                     </option>
                                 </select>
                             </div><!-- form-group -->
-                            <p class="text-right content-text">Shipping Cost- Rs {{orderSummary.shippingCost}}</p>
+                            <p class="text-right content-text">Shipping Cost- Rs {{utility.orderSummary.shippingCost}}
+                            </p>
                             <div class="form-group row">
                                 <div class="col-12">
                                     <button class="btn btn-pink float-right"
@@ -100,13 +104,14 @@
             <hr>
             <div class="row">
                 <p class="col-12 text-right"><b>Grand total - </b><span class="accent-color grand-total">Rs.
-                        {{orderSummary.grandTotal}}</span></p>
+                        {{utility.orderSummary.grandTotal}}</span></p>
             </div>
         </div><!-- cart-item -->
-        <br><a routerLink="/checkout" class="btn btn-pink buy-btn float-right" *ngIf="orderSummary.shippingCost">Proceed
+        <br><a routerLink="/checkout" class="btn btn-pink buy-btn float-right"
+            *ngIf="utility.orderSummary.shippingCost">Proceed
             to Checkout</a>
     </div><!-- container -->
-    <div class="container empty-cart" *ngIf="orderSummary.cartItems.size == 0">
+    <div class="container empty-cart" *ngIf="utility.orderSummary.cartItems.size == 0">
         <h1 class="heading text-center">
             <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon><br> No Items in Cart!! <br>
             <a routerLink="/" class="btn btn-pink">Go Home</a>

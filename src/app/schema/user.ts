@@ -9,9 +9,10 @@ const UserSchema: Schema = new Schema({
     token: { type: String },
     shippingAddress: { type: String },
     billingAddress: { type: String },
-    orders: { type: String },
-    wishlist: { type: String },
+    messageIds: { type: [String] },
+    orderIds: { type: [String] },
+    wishedProductIds: { type: [String] },
     createdAt: { type: Date, default: Date.now }
-});
+}, { strict: false });
 
 export default mongoose.model('User', UserSchema);

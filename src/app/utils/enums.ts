@@ -8,3 +8,11 @@ export enum AdminTab {
     REGISTERED_USERS,
     MESSAGES
 }
+
+export enum ShippingMethod {
+    REGISTERED_POST,
+    SPEED_POST,
+    DTDC,
+    PROFESSIONAL,
+    SHREE_MAHAVIR
+}

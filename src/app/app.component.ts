@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-// import * as $ from 'jQuery';
+import * as $ from 'jQuery';
 import { User } from './models/user';
 import { AuthenticationService } from './services/authentication.service';
 import { DataService } from './services/data.service';
@@ -24,11 +24,11 @@ export class AppComponent {
   }
 
   ngAfterViewInit(): void {
-    /* if ($(window).width() < 992) {
+    if ($(window).width() < 992) {
       $('.nav-link, .nav-right-btn').on('click', () => {
         $('.navbar-collapse').removeClass('show');
       });
-    } */
+    }
   }
 
   logout() {

@@ -35,34 +35,23 @@
 
             <div class="product-slider-container w-100">
                 <div class="product-slider" id="popular-product-slider">
-                    <div class="card col-lg-2 col-md-4 col-sm-5 col-6" *ngFor="let product of products | async">
-                        <img src="/assets/images/download.png" class="card-img-top" alt="...">
+                    <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let product of products | async">
+                        <div class="card-img-top">
+                            <img src="{{product.imageUrl}}" class="img img-responsive w-100" alt="...">
+                        </div>
                         <div class="card-body">
-                            <a [routerLink]="['/products', product._id]" class="plain-link">
-                                <h4 class="card-title content-heading">{{product.name}}</h4>
-                            </a>
+                            <h4 class="card-title content-heading">{{product.name}}</h4>
                             <p class="content-text">Product code - {{product.productCode}}</p>
-                            <p class="content-text">Rs. {{product.price}}</p>
-                            <div class="float-right pp-card-btn w-100">
-                                <div *ngIf="product.quantity > 0">
-                                    <button class="btn btn-pink"
-                                        (click)="orderSummary.cartItems.has(product._id) ? '' : addProductToCart(product)"
-                                        *ngIf="!orderSummary.cartItems.has(product._id)">Add to cart</button>
-                                    <div class="quantity-button-container"
-                                        *ngIf="orderSummary.cartItems.has(product._id)">
-                                        <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity accent-color"
-                                            (click)="utility.decreaseProductQuantity(orderSummary.cartItems.get(product._id), orderSummary, dataService)">
-                                        </fa-icon> <span
-                                            class="disabled-box">{{orderSummary.cartItems.get(product._id).noOfItems}}</span>
-                                        <fa-icon [icon]="['fas', 'plus']" class="increase_quantity accent-color"
-                                            (click)="utility.increaseProductQuantity(orderSummary.cartItems.get(product._id), orderSummary, dataService)">
-                                        </fa-icon>
-                                    </div>
-                                    <fa-icon [icon]="['far', 'heart']" size="2x" class="fav-btn"></fa-icon>
-                                </div><!-- show when quantity > 0 -->
-                                <div *ngIf="product.quantity == 0">
-                                    <button class="btn btn-warning">Out of Stock</button>
-                                </div><!-- showing out of stock -->
+                            <p class="content-text">Avialable from Rs. {{utility.getMinPrice(product.price)}}</p>
+                            <p class="content-text text-danger font-weight-bold"
+                                *ngIf="utility.checkForOutOfStock(product)">Out of
+                                Stock</p>
+                            <div class="w-max-content center">
+                                <!-- show when quantity > 0 -->
+                                <a [routerLink]="['/products', product._id]" class="btn btn-pink">
+                                    View Product
+                                </a>
+                                <fa-icon [icon]="['far', 'heart']" size="2x" class="fav-btn"></fa-icon>
                             </div>
                         </div>
                     </div><!-- card -->

@@ -1,16 +1,18 @@
 export class Product {
     _id: string
     name: string
-    productCode: String
-    description: String
+    productCode: string
+    description: string
     imageUrl: string
-    category: String
-    price: number
+    category: string
+    price: number[]
     productStatus: Boolean
-    quantity: number
-    color: String
-    weight: number
-    size: number
+    quantity: number[]
+    colors: string[]
+    weight: number[]
+    size: string[]
+    selectedIndex: number
+    selectedSize: string
     createdAt: Date
     updatedAt: Date
 }

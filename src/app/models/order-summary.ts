@@ -2,7 +2,7 @@ import { CartItem } from './cart-item'
 
 export class OrderSummary {
     productNetWeight: number = 0
-    productGrossWeight: number = 0
+    productGrossWeight: number
     totalProductCost: number = 0
     grandTotal: number = 0
     shippingCost: number = 0

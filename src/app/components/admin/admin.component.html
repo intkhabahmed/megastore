@@ -43,7 +43,7 @@
                     <app-alert></app-alert>
                     <div *ngIf="currentTab == adminTab.NEW_PRODUCT_UPLOAD">
                         <h4>Add New Product</h4>
-                        <form class="add-product-form" [formGroup]="newProductForm" (ngSubmit)="addProduct()">
+                        <form class="add-product-form" [formGroup]="productForm" (ngSubmit)="addOrUpdateProduct()">
                             <div class="form-row">
                                 <div class="form-group col-md-4 col-lg-2 no-padding">
                                     <select formControlName="category" class="form-control"
@@ -69,7 +69,9 @@
                                     <th>Product Name</th>
                                     <th>Product Code</th>
                                     <th>Product Description</th>
-                                    <th>Colors</th>
+                                    <th>Colors <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('colors')"></fa-icon>
+                                    </th>
                                 </tr>
                                 <tr>
                                     <td><input type="text" formControlName="imageUrl" class="form-control"
@@ -96,44 +98,106 @@
                                             <div *ngIf="f.description.errors.required">Description is required</div>
                                         </div>
                                     </td>
-                                    <td><input type="text" formControlName="color" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.color.errors }" />
-                                        <div *ngIf="submitted && f.color.errors" class="invalid-feedback">
-                                            <div *ngIf="f.color.errors.required">Color is required</div>
+                                    <td>
+                                        <div class="form-group" formArrayName="colors"
+                                            *ngFor="let color of formArray('colors').controls; index as i">
+                                            <div class="form-row"><input type="text" [formControlName]="i"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && color.errors }" />
+                                                <a (click)="removeField('colors', i)" class="col-md-1 v-center"
+                                                    *ngIf="i != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && color.errors" class="invalid-feedback">
+                                                    <div *ngIf="color.errors.required">Color is required</div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </td>
                                 </tr>
                             </table>
                             <table class="table table-bordered">
                                 <tr class="table-primary">
-                                    <th>Size</th>
-                                    <th>Price Rs</th>
-                                    <th>Net Weight</th>
-                                    <th>Quantity</th>
+                                    <th>Sizes <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('size')"></fa-icon>
+                                    </th>
+                                    <th>Prices (Rs) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('price')">
+                                        </fa-icon>
+                                    </th>
+                                    <th>Net Weights (Gm) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('weight')">
+                                        </fa-icon>
+                                    </th>
+                                    <th>Quantities <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('quantity')">
+                                        </fa-icon>
+                                    </th>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" formControlName="size" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.size.errors }" />
-                                        <div *ngIf="submitted && f.size.errors" class="invalid-feedback">
-                                            <div *ngIf="f.size.errors.required">Size is required</div>
+                                    <td>
+                                        <div class="form-group" formArrayName="size"
+                                            *ngFor="let size of formArray('size').controls; index as i">
+                                            <div class="form-row"><input type="text" [formControlName]="i"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && size.errors }" />
+                                                <a (click)="removeField('size', i)" class="col-md-1 v-center"
+                                                    *ngIf="i != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && size.errors" class="invalid-feedback">
+                                                    <div *ngIf="size.errors.required">Size is required</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td><input type="text" formControlName="price" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
-                                        <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
-                                            <div *ngIf="f.price.errors.required">Price is required</div>
+                                    <td>
+                                        <div class="form-group" formArrayName="price"
+                                            *ngFor="let price of formArray('price').controls; index as i">
+                                            <div class="form-row"><input type="text" [formControlName]="i"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && price.errors }" />
+                                                <a (click)="removeField('price', i)" class="col-md-1 v-center"
+                                                    *ngIf="i != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && price.errors" class="invalid-feedback">
+                                                    <div *ngIf="price.errors.required">Price is required</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td><input type="text" formControlName="weight" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.weight.errors }" />
-                                        <div *ngIf="submitted && f.weight.errors" class="invalid-feedback">
-                                            <div *ngIf="f.weight.errors.required">Weight is required</div>
+                                    <td>
+                                        <div class="form-group" formArrayName="weight"
+                                            *ngFor="let weight of formArray('weight').controls; index as i">
+                                            <div class="form-row"><input type="text" [formControlName]="i"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
+                                                <a (click)="removeField('weight', i)" class="col-md-1 v-center"
+                                                    *ngIf="i != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && weight.errors" class="invalid-feedback">
+                                                    <div *ngIf="weight.errors.required">Weight is required</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td><input type="text" formControlName="quantity" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }" />
-                                        <div *ngIf="submitted && f.quantity.errors" class="invalid-feedback">
-                                            <div *ngIf="f.quantity.errors.required">Quantity is required</div>
+                                    <td>
+                                        <div class="form-group" formArrayName="quantity"
+                                            *ngFor="let quantity of formArray('quantity').controls; index as i">
+                                            <div class="form-row"><input type="text" [formControlName]="i"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
+                                                <a (click)="removeField('quantity', i)" class="col-md-1 v-center"
+                                                    *ngIf="i != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
+                                                    <div *ngIf="quantity.errors.required">Quantity is required</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -160,16 +224,17 @@
                                     <th>Quantity</th>
                                     <th>Operations</th>
                                 </tr>
-                                <tr *ngFor="let product of products | async;index as i">
+                                <tr *ngFor="let product of products | async;index as i"
+                                    [ngClass]="{'muted-item': !product.productStatus}">
                                     <td>{{product.name}} </td>
                                     <td>{{product.productCode}} </td>
                                     <td>{{product.category}} </td>
-                                    <td>{{product.color}} </td>
+                                    <td>{{product.colors}}</td>
                                     <td>{{product.price}} </td>
                                     <td>{{product.productStatus ? 'Active': 'Inactive'}} </td>
                                     <td>{{product.quantity}} </td>
                                     <td><a class="link"
-                                            (click)="isEditing=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
+                                            (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
                                             class="link" (click)="deleteProduct(product._id)">Delete</a></td>
                                 </tr>
                             </table>
@@ -198,7 +263,7 @@
                                     <td>{{product.status}} </td>
                                     <td>{{product.quantity}} </td>
                                     <td><a class="link"
-                                            (click)="isEditing=true;populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
+                                            (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
                                             class="link" (click)="deleteProduct(product._id)">Delete</a></td>
                                 </tr>
                             </table>
@@ -234,7 +299,8 @@
                                     <td>{{order.quantity}} </td>
                                     <td>{{order.quantity}} </td>
                                     <td>{{order.quantity}} </td>
-                                    <td><a class="link" (click)="isEditing=true;populateEditForm(order)">
+                                    <td><a class="link"
+                                            (click)="isEditing=true;showOverlay=true;populateEditForm(order)">
                                             <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
                                             </fa-icon>
                                         </a></td>
@@ -243,18 +309,50 @@
                         </div><!-- overflow-scroll -->
                     </div><!-- order/invoice -->
                     <div *ngIf="currentTab == adminTab.SHIPPING_RATES">
-                        <h4>Popular Product List</h4>
+                        <h4>Shipping Rates</h4>
+                        <div class="form-group">
+                            <button (click)="showOverlay=true;editing='shippingRate'" class="btn btn-pink">Add
+                                New</button>
+                        </div>
+                        <div class="form-group col-md-4 col-lg-5 no-padding">
+                            <select (change)="filterShippingRates($event.srcElement.value)"
+                                class="form-control col-md-6">
+                                <option value="" selected>Filter By</option>
+                                <option [value]="courierType.REGISTERED_POST">Registered Post</option>
+                                <option [value]="courierType.SPEED_POST">Speed Post</option>
+                                <option [value]="courierType.DTDC">DTDC</option>
+                                <option [value]="courierType.PROFESSIONAL">Professional</option>
+                                <option [value]="courierType.SHREE_MAHAVIR">Shree Mahavir</option>
+                            </select>
+                        </div>
                         <div class="overflow-scroll">
                             <table class="table table-bordered">
                                 <tr class="table-primary">
-                                    <th>Rate/km</th>
                                     <th>Shipping Method</th>
+                                    <th>Min Weight</th>
+                                    <th>Max Weight</th>
+                                    <th>Min Distance</th>
+                                    <th>Max Distance</th>
+                                    <th>Rate</th>
+                                    <th>Local Rate (Goa)</th>
+                                    <th>Per KG Rate</th>
+                                    <th>Upto Half KG Rate</th>
+                                    <th>Area</th>
+                                    <th>Operations</th>
                                 </tr>
-                                <tr *ngFor="let rate of shippingRates | async;index as i">
-                                    <td>{{rate.ratePerKm}} </td>
-                                    <td>{{rate.shippingMethod}} </td>
+                                <tr *ngFor="let shippingRate of shippingRates | async;index as i">
+                                    <td>{{courierType[shippingRate.shippingMethod]}} </td>
+                                    <td>{{shippingRate.minWeight}} </td>
+                                    <td>{{shippingRate.maxWeight}} </td>
+                                    <td>{{shippingRate.minDistance}} </td>
+                                    <td>{{shippingRate.maxDistance}} </td>
+                                    <td>{{shippingRate.rate}} </td>
+                                    <td>{{shippingRate.localRate}} </td>
+                                    <td>{{shippingRate.perKgRate}} </td>
+                                    <td>{{shippingRate.halfKgRate}} </td>
+                                    <td>{{shippingRate.area}} </td>
                                     <td><a class="link"
-                                            (click)="isEditing=true;editing='shippingRates';populateEditForm(rate)">Edit</a>&nbsp;&nbsp;<a
+                                            (click)="isEditing=true;showOverlay=true;editing='shippingRate';populateEditForm(shippingRate)">Edit</a>&nbsp;&nbsp;<a
                                             class="link">Delete</a></td>
                                 </tr>
                             </table>
@@ -263,7 +361,8 @@
                     <div *ngIf="currentTab == adminTab.GROSS_WEIGHT_CALCULATOR">
                         <h4>Gross Weight Mapping</h4>
                         <div class="form-group">
-                            <button (click)="isEditing=true;editing='grossWeight'" class="btn btn-pink">Add New</button>
+                            <button (click)="showOverlay=true;editing='grossWeight'" class="btn btn-pink">Add
+                                New</button>
                         </div>
                         <div class="overflow-scroll">
                             <table class="table table-bordered">
@@ -273,12 +372,13 @@
                                     <th>To be added</th>
                                     <th>Operation</th>
                                 </tr>
-                                <tr *ngFor="let grossWeight of grossWeightMapping | async;index as i">
+                                <tr *ngFor="let grossWeight of grossWeights | async;index as i">
                                     <td>{{grossWeight.minWeight}}</td>
                                     <td>{{grossWeight.maxWeight}}</td>
                                     <td>{{grossWeight.toBeAdded}}</td>
                                     <td><a class="link"
-                                            (click)="isEditing=true;editing='product';populateEditForm(grossWeight)">Edit</a>
+                                            (click)="isEditing=true;showOverlay=true;editing='grossWeight';populateEditForm(grossWeight)">Edit</a>&nbsp;&nbsp;<a
+                                            class="link">Delete</a>
                                     </td>
                                 </tr>
                             </table>
@@ -333,11 +433,12 @@
         </div><!-- ṛow -->
     </div><!-- container -->
 </div><!-- nav-negative-margin -->
-<div class="overlay" *ngIf="isEditing"></div>
-<div class="overlay-body" *ngIf="isEditing">
-    <fa-icon [icon]="['fas', 'times']" size="2x" class="round-btn close-btn" (click)="isEditing=false"></fa-icon>
+<div class="overlay" *ngIf="showOverlay"></div>
+<div class="overlay-body" *ngIf="showOverlay">
+    <fa-icon [icon]="['fas', 'times']" size="2x" class="round-btn close-btn"
+        (click)="showOverlay=false;isEditing=false"></fa-icon>
     <div *ngIf="editing == 'product'">
-        <form class="add-product-form" [formGroup]="updateProductForm">
+        <form class="add-product-form" [formGroup]="productForm" (ngSubmit)="addOrUpdateProduct()">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="name">Product Name</label>
@@ -388,19 +489,36 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="color">Color</label>
-                    <input type="text" formControlName="color" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.color.errors }" />
-                    <div *ngIf="submitted && f.color.errors" class="invalid-feedback">
-                        <div *ngIf="f.color.errors.required">Color is required</div>
+                    <label for="colors">Colors</label>&nbsp;
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('colors')">
+                    </fa-icon>
+                    <div class="form-group" formArrayName="colors"
+                        *ngFor="let color of formArray('colors').controls; index as i">
+                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
+                                [ngClass]="{ 'is-invalid': submitted && color.errors }" />
+                            <a (click)="removeField('colors', i)" class="col-md-1 v-center" *ngIf="i != 0">
+                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                            </a>
+                            <div *ngIf="submitted && color.errors" class="invalid-feedback">
+                                <div *ngIf="color.errors.required">Color is required</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="size">Size</label>
-                    <input type="text" formControlName="size" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.size.errors }" />
-                    <div *ngIf="submitted && f.size.errors" class="invalid-feedback">
-                        <div *ngIf="f.size.errors.required">Size is required</div>
+                    <label for="size">Sizes</label>&nbsp;
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('size')"></fa-icon>
+                    <div class="form-group" formArrayName="size"
+                        *ngFor="let size of formArray('size').controls; index as i">
+                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
+                                [ngClass]="{ 'is-invalid': submitted && size.errors }" />
+                            <a (click)="removeField('size', i)" class="col-md-1 v-center" *ngIf="i != 0">
+                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                            </a>
+                            <div *ngIf="submitted && size.errors" class="invalid-feedback">
+                                <div *ngIf="size.errors.required">Size is required</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
@@ -413,27 +531,54 @@
             </div><!-- form-row -->
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="price">Price</label>
-                    <input type="text" formControlName="price" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
-                    <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
-                        <div *ngIf="f.price.errors.required">Price is required</div>
+                    <label for="price">Price</label>&nbsp;
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('price')">
+                    </fa-icon>
+                    <div class="form-group" formArrayName="price"
+                        *ngFor="let price of formArray('price').controls; index as i">
+                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
+                                [ngClass]="{ 'is-invalid': submitted && price.errors }" />
+                            <a (click)="removeField('price', i)" class="col-md-1 v-center" *ngIf="i != 0">
+                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                            </a>
+                            <div *ngIf="submitted && price.errors" class="invalid-feedback">
+                                <div *ngIf="price.errors.required">Price is required</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="weight">Weight</label>
-                    <input type="text" formControlName="weight" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.weight.errors }" />
-                    <div *ngIf="submitted && f.weight.errors" class="invalid-feedback">
-                        <div *ngIf="f.weight.errors.required">Weight is required</div>
+                    <label for="weight">Weight</label>&nbsp;
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('weight')">
+                    </fa-icon>
+                    <div class="form-group" formArrayName="weight"
+                        *ngFor="let weight of formArray('weight').controls; index as i">
+                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
+                                [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
+                            <a (click)="removeField('weight', i)" class="col-md-1 v-center" *ngIf="i != 0">
+                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                            </a>
+                            <div *ngIf="submitted && weight.errors" class="invalid-feedback">
+                                <div *ngIf="weight.errors.required">Weight is required</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="quantity">Quantity</label>
-                    <input type="text" formControlName="quantity" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }" />
-                    <div *ngIf="submitted && f.quantity.errors" class="invalid-feedback">
-                        <div *ngIf="f.quantity.errors.required">Quantity is required</div>
+                    <label for="quantity">Quantity</label>&nbsp;
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('quantity')">
+                    </fa-icon>
+                    <div class="form-group" formArrayName="quantity"
+                        *ngFor="let quantity of formArray('quantity').controls; index as i">
+                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
+                                [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
+                            <a (click)="removeField('quantity', i)" class="col-md-1 v-center" *ngIf="i != 0">
+                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                            </a>
+                            <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
+                                <div *ngIf="quantity.errors.required">Quantity is required</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -447,7 +592,7 @@
     </div><!-- update product form -->
 
     <div *ngIf="editing == 'grossWeight'">
-        <form class="add-product-form" [formGroup]="grossWeightForm">
+        <form class="add-product-form" [formGroup]="grossWeightForm" (ngSubmit)="addOrUpdateGrossWeight()">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="minWeight">Min Weight</label>
@@ -484,4 +629,91 @@
             </div>
         </form>
     </div><!-- add or edit gross weight -->
+
+    <div *ngIf="editing == 'shippingRate'">
+        <form class="add-product-form" [formGroup]="shippingRateForm" (ngSubmit)="addOrUpdateShippingRate()">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="shippingMethod">Shipping Method</label>
+                    <select formControlName="shippingMethod" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.shippingMethod.errors }">
+                        <option value="">Select Shipping Method</option>
+                        <option [value]="courierType.REGISTERED_POST">Registered Post</option>
+                        <option [value]="courierType.SPEED_POST">Speed Post</option>
+                        <option [value]="courierType.DTDC">DTDC</option>
+                        <option [value]="courierType.PROFESSIONAL">Professional</option>
+                        <option [value]="courierType.SHREE_MAHAVIR">Shree Mahavir</option>
+                    </select>
+                    <div *ngIf="submitted && f.shippingMethod.errors" class="invalid-feedback">
+                        <div *ngIf="f.shippingMethod.errors.required">Shipping Method is required</div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="localRate">Local Rate (within Goa)</label>
+                    <input type="number" formControlName="localRate" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.localRate.errors }" />
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="minDistance">Min Distance</label>
+                    <input type="number" formControlName="minDistance" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.minDistance.errors }" />
+                    <div *ngIf="submitted && f.minDistance.errors" class="invalid-feedback">
+                        <div *ngIf="f.minDistance.errors.required">Min Distance should be 1</div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="maxDistance">Max Distance</label>
+                    <input type="number" formControlName="maxDistance" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.maxDistance.errors }" />
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="minWeight">Min Weight</label>
+                    <input type="number" formControlName="minWeight" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.minWeight.errors }" />
+                    <div *ngIf="submitted && f.minWeight.errors" class="invalid-feedback">
+                        <div *ngIf="f.minWeight.errors.required">Min Weight should be 1</div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="maxWeight">Max Weight</label>
+                    <input type="number" formControlName="maxWeight" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.maxWeight.errors }" />
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="perKgRate">Per KG Rate</label>
+                    <input type="number" formControlName="perKgRate" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.perKgRate.errors }" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="halfKgRate">Half KG Rate</label>
+                    <input type="number" formControlName="halfKgRate" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.halfKgRate.errors }" />
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="rate">Rate</label>
+                    <input type="number" formControlName="rate" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.rate.errors }" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="area">Area</label>
+                    <input type="text" formControlName="area" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.area.errors }" />
+                </div>
+            </div><!-- form-row -->
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-pink center">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div><!-- add or edit shipping charges -->
 </div>

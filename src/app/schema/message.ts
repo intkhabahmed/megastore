@@ -5,6 +5,6 @@ const MessageSchema: Schema = new Schema({
     message: { type: String, required: true },
     reply: { type: String },
     sentAt: { type: Date, default: Date.now }
-});
+}, { strict: false });
 
 export default mongoose.model('Message', MessageSchema);

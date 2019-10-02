@@ -51,9 +51,5 @@
 .card {
     max-height: 350px;
     padding: 0;
-}
-
-.quantity-button-container {
-    width: 75%;
-    float: left;
+    margin: 1rem;
 }

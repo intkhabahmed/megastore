@@ -1,11 +1,6 @@
 <div class="nav-negative-margin">
     <div class="nav-overlap"></div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-9 offset-md-3">
-                <p>Prodcuts >> Crafts</p>
-            </div>
-        </div>
+    <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-md-2 offset-md-1">
                 <h4>All Products</h4>
@@ -20,80 +15,28 @@
             <div class="col-md-9">
                 <h2>Crafts</h2>
                 <div class="row product-list">
-                    <div class="card col-lg-2 col-sm-3 col-5">
-                        <img src="/assets/images/download.png" class="card-img-top" alt="...">
+                    <div class="card col-lg-3 col-md-5 col-sm-5 col-10" *ngFor="let product of products$ | async">
+                        <div class="card-img-top">
+                            <img [src]="product.imageUrl" class="img img-responsive w-100" alt="...">
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title">Product Name</h5>
-                            <p class="card-text">Product code - 12345</p>
-                            <p class="card-text">Rs. 200</p>
-                            <div class="float-right pp-card-btn">
-                                <a href="#" class="btn btn-pink">Add to cart</a>
+                            <h5 class="card-title">{{product.name}}</h5>
+                            <p class="content-text">Product code - {{product.productCode}}</p>
+                            <p class="content-text">Avialable from Rs. {{utility.getMinPrice(product.price)}}</p>
+                            <p class="content-text text-danger font-weight-bold"
+                                *ngIf="utility.checkForOutOfStock(product)">Out of
+                                Stock</p>
+                            <div class="w-max-content center">
+                                <!-- show when quantity > 0 -->
+                                <a [routerLink]="['/products', product._id]" class="btn btn-pink">
+                                    View Product
+                                </a>
                                 <fa-icon [icon]="['far', 'heart']" size="2x" class="fav-btn"></fa-icon>
                             </div>
                         </div>
                     </div><!-- card -->
-                    <div class="card col-lg-2 col-sm-3 col-5">
-                        <img src="/assets/images/download.png" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Product Name</h5>
-                            <p class="card-text">Product code - 12345</p>
-                            <p class="card-text">Rs. 200</p>
-                            <div class="float-right pp-card-btn">
-                                <a href="#" class="btn btn-pink">Add to cart</a>
-                                <fa-icon [icon]="['far', 'heart']" size="2x" class="fav-btn"></fa-icon>
-                            </div>
-                        </div>
-                    </div><!-- card -->
-                    <div class="card col-lg-2 col-sm-3 col-5">
-                        <img src="/assets/images/download.png" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Product Name</h5>
-                            <p class="card-text">Product code - 12345</p>
-                            <p class="card-text">Rs. 200</p>
-                            <div class="float-right pp-card-btn">
-                                <a href="#" class="btn btn-pink">Add to cart</a>
-                                <fa-icon [icon]="['far', 'heart']" size="2x" class="fav-btn"></fa-icon>
-                            </div>
-                        </div>
-                    </div><!-- card -->
-                    <div class="card col-lg-2 col-sm-3 col-5">
-                        <img src="/assets/images/download.png" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Product Name</h5>
-                            <p class="card-text">Product code - 12345</p>
-                            <p class="card-text">Rs. 200</p>
-                            <div class="float-right pp-card-btn">
-                                <a href="#" class="btn btn-pink">Add to cart</a>
-                                <fa-icon [icon]="['far', 'heart']" size="2x" class="fav-btn"></fa-icon>
-                            </div>
-                        </div>
-                    </div><!-- card -->
-                    <div class="card col-lg-2 col-sm-3 col-5">
-                        <img src="/assets/images/download.png" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Product Name</h5>
-                            <p class="card-text">Product code - 12345</p>
-                            <p class="card-text">Rs. 200</p>
-                            <div class="float-right pp-card-btn">
-                                <a href="#" class="btn btn-pink">Add to cart</a>
-                                <fa-icon [icon]="['far', 'heart']" size="2x" class="fav-btn"></fa-icon>
-                            </div>
-                        </div>
-                    </div><!-- card -->
-                    <div class="card col-lg-2 col-sm-3 col-5">
-                        <img src="/assets/images/download.png" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title">Product Name</h5>
-                            <p class="card-text">Product code - 12345</p>
-                            <p class="card-text">Rs. 200</p>
-                            <div class="float-right pp-card-btn">
-                                <a href="#" class="btn btn-pink">Add to cart</a>
-                                <fa-icon [icon]="['far', 'heart']" size="2x" class="fav-btn"></fa-icon>
-                            </div>
-                        </div>
-                    </div><!-- card -->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                </div><!-- row product-list -->
+            </div><!-- col-md-9 -->
+        </div><!-- row -->
+    </div><!-- container-fluid -->
+</div><!-- nav-negative-margin -->

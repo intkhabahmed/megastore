@@ -1,17 +1,16 @@
 import mongoose, { Schema } from 'mongoose';
 
-const UserSchema: Schema = new Schema({
+export const UserSchema: Schema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true },
     mobile: { type: Number },
     password: { type: String, required: true },
     token: { type: String },
-    shippingAddress: { type: String },
-    billingAddress: { type: String },
-    messageIds: { type: [String] },
-    orderIds: { type: [String] },
-    wishedProductIds: { type: [String] },
+    addresses: [{ type: mongoose.Schema.ObjectId, ref: 'Address' }],
+    messages: [{ type: mongoose.Schema.ObjectId, ref: 'Message' }],
+    orders: [{ type: mongoose.Schema.ObjectId, ref: 'Order' }],
+    wishlist: [{ type: mongoose.Schema.ObjectId, ref: 'Product' }],
     createdAt: { type: Date, default: Date.now }
 }, { strict: false });
 

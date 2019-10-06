@@ -224,7 +224,7 @@
                                     <th>Quantity</th>
                                     <th>Operations</th>
                                 </tr>
-                                <tr *ngFor="let product of products | async;index as i"
+                                <tr *ngFor="let product of products$ | async;index as i"
                                     [ngClass]="{'muted-item': !product.productStatus}">
                                     <td>{{product.name}} </td>
                                     <td>{{product.productCode}} </td>
@@ -235,7 +235,7 @@
                                     <td>{{product.quantity}} </td>
                                     <td><a class="link"
                                             (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="deleteProduct(product._id)">Delete</a></td>
+                                            class="link" (click)="delete(product._id, 'product')">Delete</a></td>
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
@@ -254,7 +254,7 @@
                                     <th>Quantity</th>
                                     <th>Operations</th>
                                 </tr>
-                                <tr *ngFor="let product of products | async;index as i">
+                                <tr *ngFor="let product of products$ | async;index as i">
                                     <td>{{product.name}} </td>
                                     <td>{{product.productCode}} </td>
                                     <td>{{product.category}} </td>
@@ -264,7 +264,7 @@
                                     <td>{{product.quantity}} </td>
                                     <td><a class="link"
                                             (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="deleteProduct(product._id)">Delete</a></td>
+                                            class="link" (click)="delete(product._id, 'product')">Delete</a></td>
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
@@ -275,32 +275,17 @@
                             <table class="table table-bordered">
                                 <tr class="table-primary">
                                     <th>User Name</th>
-                                    <th>Product Name</th>
-                                    <th>Product Code</th>
-                                    <th>Category</th>
-                                    <th>Color</th>
-                                    <th>Quantity</th>
-                                    <th>Weight</th>
                                     <th>Paid Rs.</th>
                                     <th>Order date</th>
                                     <th>Courier Type</th>
-                                    <th>Status</th>
                                     <th>Invoice</th>
                                 </tr>
-                                <tr *ngFor="let order of orders | async;index as i">
-                                    <td>{{order.name}} </td>
-                                    <td>{{order.productCode}} </td>
-                                    <td>{{order.category}} </td>
-                                    <td>{{order.color}} </td>
-                                    <td>{{order.price}} </td>
-                                    <td>{{order.status}} </td>
-                                    <td>{{order.quantity}} </td>
-                                    <td>{{order.quantity}} </td>
-                                    <td>{{order.quantity}} </td>
-                                    <td>{{order.quantity}} </td>
-                                    <td>{{order.quantity}} </td>
-                                    <td><a class="link"
-                                            (click)="isEditing=true;showOverlay=true;populateEditForm(order)">
+                                <tr *ngFor="let order of orders$ | async;index as i">
+                                    <td>{{order.user.firstName}} {{order.user.lastName}} </td>
+                                    <td>{{order.orderSummary.grandTotal}} </td>
+                                    <td>{{order.orderDate}} </td>
+                                    <td>{{courierType[order.orderSummary.shippingMethod]}} </td>
+                                    <td><a class="link" (click)="generateInvoice()">
                                             <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
                                             </fa-icon>
                                         </a></td>
@@ -340,20 +325,21 @@
                                     <th>Area</th>
                                     <th>Operations</th>
                                 </tr>
-                                <tr *ngFor="let shippingRate of shippingRates | async;index as i">
+                                <tr *ngFor="let shippingRate of shippingRates$ | async;index as i">
                                     <td>{{courierType[shippingRate.shippingMethod]}} </td>
                                     <td>{{shippingRate.minWeight}} </td>
                                     <td>{{shippingRate.maxWeight}} </td>
                                     <td>{{shippingRate.minDistance}} </td>
                                     <td>{{shippingRate.maxDistance}} </td>
                                     <td>{{shippingRate.rate}} </td>
-                                    <td>{{shippingRate.localRate}} </td>
+                                    <td>{{shippingRate.isLocal}} </td>
                                     <td>{{shippingRate.perKgRate}} </td>
                                     <td>{{shippingRate.halfKgRate}} </td>
                                     <td>{{shippingRate.area}} </td>
                                     <td><a class="link"
                                             (click)="isEditing=true;showOverlay=true;editing='shippingRate';populateEditForm(shippingRate)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link">Delete</a></td>
+                                            class="link" (click)="delete(shippingRate._id, 'shippingRate')">Delete</a>
+                                    </td>
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
@@ -372,7 +358,7 @@
                                     <th>To be added</th>
                                     <th>Operation</th>
                                 </tr>
-                                <tr *ngFor="let grossWeight of grossWeights | async;index as i">
+                                <tr *ngFor="let grossWeight of grossWeights$ | async;index as i">
                                     <td>{{grossWeight.minWeight}}</td>
                                     <td>{{grossWeight.maxWeight}}</td>
                                     <td>{{grossWeight.toBeAdded}}</td>
@@ -392,19 +378,17 @@
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Email</th>
-                                    <th>Mobile</th>
-                                    <th>Shipping Address</th>
-                                    <th>Billing Address</th>
+                                    <th>Address</th>
                                     <th>Registered On</th>
                                 </tr>
-                                <tr *ngFor="let user of users | async;index as i">
+                                <tr *ngFor="let user of users$ | async;index as i">
                                     <td>{{user.firstName}} </td>
                                     <td>{{user.lastName}} </td>
                                     <td>{{user.email}} </td>
-                                    <td>{{user.mobile}} </td>
-                                    <td>{{user.shippingAddress}} </td>
-                                    <td>{{user.billingAddress}} </td>
-                                    <td>{{user.registeredOn}} </td>
+                                    <td>
+                                        <p *ngFor="let address of user.addresses">{{address.address}}</p>
+                                    </td>
+                                    <td>{{user.createdAt | date:'dd-MM-yyyy'}}</td>
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
@@ -419,7 +403,7 @@
                                     <th>Reply</th>
                                     <th>Sent At</th>
                                 </tr>
-                                <tr *ngFor="let message of messages | async;index as i">
+                                <tr *ngFor="let message of messages$ | async;index as i">
                                     <td>{{message.from}}</td>
                                     <td>{{message.message}}</td>
                                     <td>{{message.reply}}</td>
@@ -436,7 +420,7 @@
 <div class="overlay" *ngIf="showOverlay"></div>
 <div class="overlay-body" *ngIf="showOverlay">
     <fa-icon [icon]="['fas', 'times']" size="2x" class="round-btn close-btn"
-        (click)="showOverlay=false;isEditing=false"></fa-icon>
+        (click)="cancel()"></fa-icon>
     <div *ngIf="editing == 'product'">
         <form class="add-product-form" [formGroup]="productForm" (ngSubmit)="addOrUpdateProduct()">
             <div class="form-row">
@@ -649,9 +633,13 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="localRate">Local Rate (within Goa)</label>
-                    <input type="number" formControlName="localRate" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.localRate.errors }" />
+                    <label for="isLocal">Location within Goa/Maharashtra?</label>
+                    <select formControlName="isLocal" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.isLocal.errors }">
+                        <option [value]="null">Select</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
                 </div>
             </div><!-- form-row -->
             <div class="form-row">

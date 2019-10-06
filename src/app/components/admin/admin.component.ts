@@ -1,6 +1,8 @@
+import { PdfGeneratorService } from './../../services/pdf-generator.service';
+import { JsonUtils } from './../../utils/json-utils';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { GrossWeight } from 'src/app/models/gross-weight';
 import { Message } from 'src/app/models/message';
 import { Order } from 'src/app/models/order';
@@ -23,8 +25,8 @@ export class AdminComponent implements OnInit {
   courierType = ShippingMethod
   row: number
   isEditing = false
-  products: Observable<Product[]>
-  users: Observable<User[]>
+  products$: Observable<Product[]>
+  users$: Observable<User[]>
   productForm: FormGroup
   updateProductForm: FormGroup
   grossWeightForm: FormGroup
@@ -32,14 +34,14 @@ export class AdminComponent implements OnInit {
   loading = false
   submitted = false;
   editing: string
-  orders: Observable<Order[]>
-  shippingRates: Observable<ShippingRate[]>
-  grossWeights: Observable<GrossWeight[]>
-  messages: Observable<Message[]>
+  orders$: Observable<Order[]>
+  shippingRates$: Observable<ShippingRate[]>
+  grossWeights$: Observable<GrossWeight[]>
+  messages$: Observable<Message[]>
   showOverlay = false
   id: string
 
-  constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService) { }
+  constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils, public pdf: PdfGeneratorService) { }
 
   get adminTab() {
     return AdminTab
@@ -48,6 +50,12 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
     this.currentTab = this.adminTab.NEW_PRODUCT_UPLOAD
 
+    this.initializeFormGroups()
+  }
+
+  cancel() {
+    this.isEditing = false
+    this.showOverlay = false
     this.initializeFormGroups()
   }
 
@@ -80,7 +88,7 @@ export class AdminComponent implements OnInit {
 
     this.shippingRateForm = this.fb.group({
       rate: [''],
-      localRate: [''],
+      isLocal: null,
       minDistance: [''],
       maxDistance: [''],
       minWeight: [''],
@@ -88,7 +96,7 @@ export class AdminComponent implements OnInit {
       perKgRate: [''],
       halfKgRate: [''],
       area: [''],
-      shippingMethod: ['']
+      shippingMethod: ['', Validators.required]
     })
   }
   get f() {
@@ -104,6 +112,10 @@ export class AdminComponent implements OnInit {
     return this.productForm.controls
   }
 
+  generateInvoice() {
+    this.pdf.printPdf()
+  }
+
   showTab(selectedTab) {
     this.alertService.clear()
     switch (selectedTab) {
@@ -114,25 +126,32 @@ export class AdminComponent implements OnInit {
         this.currentTab = this.adminTab.NEW_PRODUCT_UPLOAD
         break;
       case this.adminTab.PRODUCT_LIST:
-        this.products = this.api.getProducts()
+        this.products$ = this.api.getProducts()
         this.currentTab = this.adminTab.PRODUCT_LIST
         break;
       case this.adminTab.POPULAR_PRODUCTS:
         this.currentTab = this.adminTab.POPULAR_PRODUCTS
         break;
       case this.adminTab.ORDER_INVOICE:
+        this.api.getOrders().subscribe(orders => {
+          orders.forEach(order => {
+            order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
+            order.payment = this.jsonUtils.parseJson(order.payment)
+          })
+          this.orders$ = of(orders)
+        })
         this.currentTab = this.adminTab.ORDER_INVOICE
         break;
       case this.adminTab.SHIPPING_RATES:
-        this.shippingRates = this.api.getShippingRates()
+        this.shippingRates$ = this.api.getShippingRates("")
         this.currentTab = this.adminTab.SHIPPING_RATES
         break;
       case this.adminTab.GROSS_WEIGHT_CALCULATOR:
-        this.grossWeights = this.api.getGrossWeights()
+        this.grossWeights$ = this.api.getGrossWeights()
         this.currentTab = this.adminTab.GROSS_WEIGHT_CALCULATOR
         break;
       case this.adminTab.REGISTERED_USERS:
-        this.users = this.api.getRegisteredUsers()
+        this.users$ = this.api.getRegisteredUsers()
         this.currentTab = this.adminTab.REGISTERED_USERS
         break;
       case this.adminTab.MESSAGES:
@@ -158,7 +177,6 @@ export class AdminComponent implements OnInit {
           this.alertService.success("Product added", true)
           this.loading = false
           this.submitted = false
-          // this.productForm.reset({})
           this.initializeFormGroups()
         },
         error => {
@@ -170,7 +188,7 @@ export class AdminComponent implements OnInit {
       this.api.updateProduct(this.id, this.productForm.value).pipe().subscribe(
         data => {
           this.alertService.success("Product updated")
-          this.products = this.api.getProducts()
+          this.products$ = this.api.getProducts()
           this.showOverlay = false
           this.loading = false
           this.submitted = false
@@ -180,17 +198,32 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  deleteProduct(id) {
+  delete(id, type) {
     this.alertService.clear()
-    this.api.deleteProduct(id).pipe().subscribe(
-      data => {
-        this.alertService.success("Product Deleted", true)
-        this.products = this.api.getProducts()
-      },
-      error => {
-        this.alertService.error("Error deleting product", true)
-      }
-    )
+    switch (type) {
+      case 'product':
+        this.api.deleteProduct(id).pipe().subscribe(
+          data => {
+            this.alertService.success("Product Deleted", true)
+            this.products$ = this.api.getProducts()
+          },
+          error => {
+            this.alertService.error("Error deleting product", true)
+          }
+        )
+        break;
+      case 'shippingRate':
+        this.api.deleteShippingRate(id).pipe().subscribe(
+          data => {
+            this.alertService.success("Shipping Rate Deleted", true)
+            this.shippingRates$ = this.api.getShippingRates('')
+          },
+          error => {
+            this.alertService.error("Error deleting Shipping Rate", true)
+          }
+        )
+        break;
+    }
   }
 
   updateProduct(id, product: Product) {
@@ -218,7 +251,7 @@ export class AdminComponent implements OnInit {
       this.api.insertGrossWeight(this.grossWeightForm.value).pipe().subscribe(
         grossWeight => {
           this.alertService.success("Gross Weight added")
-          this.grossWeights = this.api.getGrossWeights()
+          this.grossWeights$ = this.api.getGrossWeights()
           this.showOverlay = false
           this.loading = false
           this.submitted = false
@@ -234,7 +267,7 @@ export class AdminComponent implements OnInit {
       this.api.updateGrossWeight(this.id, this.grossWeightForm.value).pipe().subscribe(
         data => {
           this.alertService.success("Gross Weight updated")
-          this.grossWeights = this.api.getGrossWeights()
+          this.grossWeights$ = this.api.getGrossWeights()
           this.showOverlay = false
           this.loading = false
           this.submitted = false
@@ -256,11 +289,12 @@ export class AdminComponent implements OnInit {
       this.api.insertShippingRate(this.shippingRateForm.value).pipe().subscribe(
         shippingRate => {
           this.alertService.success("Shipping Rate added")
-          this.shippingRates = this.api.getShippingRates()
+          this.shippingRates$ = this.api.getShippingRates("")
           this.showOverlay = false
           this.loading = false
           this.submitted = false
           this.shippingRateForm.reset({})
+          this.shippingRateForm.patchValue({ isLocal: null, shippingMethod: [''] })
         },
         error => {
           this.alertService.error("Some error occurred while adding shipping rate", true)
@@ -272,7 +306,7 @@ export class AdminComponent implements OnInit {
       this.api.updateShippingRate(this.id, this.shippingRateForm.value).pipe().subscribe(
         data => {
           this.alertService.success("Shipping Rate updated")
-          this.shippingRates = this.api.getShippingRates()
+          this.shippingRates$ = this.api.getShippingRates("")
           this.showOverlay = false
           this.loading = false
           this.submitted = false
@@ -320,7 +354,7 @@ export class AdminComponent implements OnInit {
   }
 
   filterShippingRates(value) {
-    this.shippingRates = this.api.getShippingRatesByCourierType(value)
+    this.shippingRates$ = this.api.getShippingRates(value)
   }
 
 }

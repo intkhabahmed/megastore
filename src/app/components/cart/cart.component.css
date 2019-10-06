@@ -116,3 +116,7 @@
 .empty-cart {
     padding: 10%;
 }
+
+.card-img-top {
+    max-height: 200px;
+}

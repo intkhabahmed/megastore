@@ -2,15 +2,22 @@
     <div class="nav-overlap"></div>
     <div class="container" *ngIf="utility.orderSummary.cartItems.size > 0">
         <h3 class="order-title">Order Summary</h3>
+        <app-alert class="alert-window"></app-alert>
         <div class="cart-items-container">
             <div class="row cart-item" *ngFor="let item of utility.orderSummary.cartItems.values()">
                 <div class="col-sm-4">
-                    <img src="/assets/images/download.png" class="w-100" alt="">
+                    <div class="card-img-top">
+                        <img [src]="item.product.imageUrl" class="img img-responsive center" height="250" alt="...">
+                    </div>
                 </div><!-- col-sm-4 -->
                 <div class="col-sm-8">
                     <h5 class="order-heading">{{item.product.name}}</h5>
-                    <p class="order-sub-heading">Product code - {{item.product.productCode}}</p>
+                    <p class="order-sub-heading">Product code - <b>{{item.product.productCode}}</b></p>
                     <table class="table order-table">
+                        <tr>
+                            <td>Selected Color - <b>{{item.product.colors[item.product.selectedIndex]}}</b></td>
+                            <td>Selected Size - <b>{{item.product.selectedSize}}</b></td>
+                        </tr>
                         <tr>
                             <td><b>QTY: </b>
                                 <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity accent-color"
@@ -26,14 +33,15 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><b>Product Cost -</b></td>
-                            <td class="accent-color"><b>Rs. {{item.product.price[item.product.selectedIndex]}}</b>
-                            </td>
+                            <td><b>Product Cost - </b><span class="accent-color"><b>Rs.
+                                        {{item.product.price[item.product.selectedIndex]}}</b>
+                                </span></td>
+
                         </tr>
                     </table>
                     <div class="float-right cart-actions">
                         <a (click)="utility.removeItemFromCart(item.product)" class="link">Remove</a> | <a
-                            (click)="editCartItem(item.product._id)" class="link">Update</a>
+                            (click)="editCartItem(item.product._id)" class="link">Edit</a>
                     </div><!-- cart-actions -->
                 </div><!-- col-sm-8 -->
                 <hr class="w-100">
@@ -60,44 +68,80 @@
                     <p class="content-heading accent-color">Shipping Charges Calculator</p>
                     <p class="content-text">Select delivery type</p>
                     <div class="shipping-options">
-                        <button class="btn btn-danger" (click)="changeDeliveryMethod('Register Post')">Register
+                        <button class="btn btn-danger"
+                            (click)="changeDeliveryMethod(shippingMethod.REGISTERED_POST);deliveryMethodSelected=true;calculateShippingCost()">Register
                             Post</button>
-                        <button class="btn btn-info" (click)="changeDeliveryMethod('Speed Post')">Speed Post</button>
-                        <button class="btn btn-warning" (click)="changeDeliveryMethod('Courier Post')">Courier
+                        <button class="btn btn-info"
+                            (click)="changeDeliveryMethod(shippingMethod.SPEED_POST);deliveryMethodSelected=true">Speed
                             Post</button>
-                        <button class="btn btn-primary" (click)="changeDeliveryMethod('DTDC')">DTDC</button>
+                        <button class="btn btn-primary"
+                            (click)="changeDeliveryMethod(shippingMethod.DTDC);deliveryMethodSelected=true;getDTDCDetails()">DTDC</button>
+                        <button class="btn btn-warning"
+                            (click)="changeDeliveryMethod(shippingMethod.PROFESSIONAL);deliveryMethodSelected=true">Professional</button>
+                        <button class="btn btn-success"
+                            (click)="changeDeliveryMethod(shippingMethod.SHREE_MAHAVIR);deliveryMethodSelected=true">Shree
+                            Mahavir</button>
                     </div><!-- shipping options -->
                     <div class="w-100">
                         <p class="content-text text-right">Shipping Cost - Rs <span
                                 class="disabled-box">{{utility.orderSummary.shippingCost}}</span>
                         </p>
-                        <p class="content-text text-right" *ngIf="utility.orderSummary.shippingMethod"><i>Selected
-                                delivery type
-                                is
-                                {{utility.orderSummary.shippingMethod}}</i></p>
-                    </div><!-- float-right -->
+                        <p class="content-text text-right"
+                            *ngIf="deliveryMethodSelected && ( utility.orderSummary.shippingMethod || utility.orderSummary.shippingMethod === 0)">
+                            <i>Selected delivery type is {{shippingMethod[utility.orderSummary.shippingMethod]}}</i></p>
+                    </div><!-- w-100 -->
                     <div class="shipping-distance-dialog" *ngIf="showDistanceDialog">
-                        <fa-icon [icon]="['fas', 'times']" class="float-right" (click)="showDistanceDialog=false">
+                        <fa-icon [icon]="['fas', 'times']" class="float-right" (click)="cancelledShippingMethod()">
                         </fa-icon>
-                        <p class="content-heading">{{utility.orderSummary.shippingMethod}}</p>
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <select name="distance" id="" class="form-control"
-                                    (change)="calculateShippingCost($event.target.value)">
-                                    <option value="">Select Distance</option>
-                                    <option value="{{distance}}" *ngFor="let distance of distances">{{distance}}
-                                    </option>
-                                </select>
-                            </div><!-- form-group -->
-                            <p class="text-right content-text">Shipping Cost- Rs {{utility.orderSummary.shippingCost}}
-                            </p>
-                            <div class="form-group row">
-                                <div class="col-12">
-                                    <button class="btn btn-pink float-right"
-                                        (click)="showDistanceDialog=false">Submit</button>
-                                </div>
+                        <p class="content-heading accent-color">
+                            {{shippingMethod[utility.orderSummary.shippingMethod]}}
+                        </p>
+                        <div class="form-group"
+                            *ngIf="utility.orderSummary.shippingMethod === shippingMethod.SPEED_POST">
+                            <select name="distance" class="form-control"
+                                (change)="calculateShippingCost($event.target.value)">
+                                <option value="">Select Distance</option>
+                                <option value="-1">Within Goa</option>
+                                <option value="0-200">Upto 200 kms</option>
+                                <option value="201-1000">201 to 1000 kms</option>
+                                <option value="1001-2000">1001 to 2000 kms</option>
+                                <option value="2000">Above 2000 kms</option>
+                            </select>
+                        </div><!-- form-group -->
+                        <div class="form-group" *ngIf="utility.orderSummary.shippingMethod === shippingMethod.PROFESSIONAL || 
+                            utility.orderSummary.shippingMethod === shippingMethod.SHREE_MAHAVIR">
+                            <select name="distance" class="form-control"
+                                (change)="calculateShippingCost($event.target.value)">
+                                <option value="">Select Delivery Location</option>
+                                <option value="true">Maharashtra</option>
+                                <option value="false">Rest Of India</option>
+                            </select>
+                        </div><!-- form-group -->
+                        <div class="form-group" *ngIf="utility.orderSummary.shippingMethod === shippingMethod.DTDC">
+                            <select name="distance" class="form-control"
+                                (change)="calculateShippingCost($event.target.value)">
+                                <option value="">Select Delivery Location</option>
+                                <option [value]="shippingRate.area" *ngFor="let shippingRate of shippingRates$ | async">
+                                    {{shippingRate.area}}</option>
+                            </select>
+                        </div><!-- form-group -->
+                        <p *ngIf="loading"><span class="spinner-border spinner-border-sm mr-1 accent-color"></span>
+                            Calculating</p>
+                        <p class="content-text-lg mb-1" *ngIf="utility.orderSummary.shippingCost !== 0">Your
+                            calculated Shipping Charge is Rs
+                            <span class="accent-color content-heading">{{utility.orderSummary.shippingCost}}</span></p>
+                        <p class="content-text-sm"
+                            *ngIf="utility.orderSummary.shippingMethod === shippingMethod.REGISTERED_POST">
+                            Shipping Charge calculated on Gross Weight
+                        </p>
+                        <p class="content-text-sm"
+                            *ngIf="utility.orderSummary.shippingMethod === shippingMethod.SPEED_POST">Select
+                            Delivery Location distance from Panaji</p>
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <button class="btn btn-pink float-right" (click)="showDistanceDialog=false">OK</button>
                             </div>
-                        </form>
+                        </div>
                     </div><!-- shipping-distance-dialog -->
                 </div><!-- col-sm-12 col-md-6 shipping-calculator -->
             </div><!-- order-total -->
@@ -107,7 +151,7 @@
                         {{utility.orderSummary.grandTotal}}</span></p>
             </div>
         </div><!-- cart-item -->
-        <br><a routerLink="/checkout" class="btn btn-pink buy-btn float-right"
+        <br><a (click)="goToCheckout()" class="btn btn-pink buy-btn float-right"
             *ngIf="utility.orderSummary.shippingCost">Proceed
             to Checkout</a>
     </div><!-- container -->

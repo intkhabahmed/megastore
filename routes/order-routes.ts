@@ -4,7 +4,7 @@ import Order from '../src/app/schema/order'
 export class OrdersRoute {
     public orderRoute(app) {
         app.route('/api/orders/all').get((req: Request, res: Response, next: NextFunction) => {
-            Order.find((err, orders) => {
+            Order.find().populate('user').populate('address').exec((err, orders) => {
                 if (err) {
                     return next(err)
                 }
@@ -22,21 +22,21 @@ export class OrdersRoute {
         })
 
         app.route('/api/orders/user/:id').get((req: Request, res: Response, next: NextFunction) => {
-            Order.find({ userId: req.params.id }, (err, order) => {
+            Order.find({ userId: req.params.id }).populate('user').populate('address').exec((err, order) => {
                 if (err) { return next(err); }
                 res.json(order);
             });
         });
 
         app.route('/api/orders/:id').put((req: Request, res: Response, next: NextFunction) => {
-            Order.findByIdAndUpdate(req.params.id, req.body, (err, order) => {
+            Order.findByIdAndUpdate(req.params.id, req.body).populate('user').populate('address').exec((err, order) => {
                 if (err) { return next(err); }
                 res.json(order);
             });
         });
 
         app.route('/api/orders/:id').delete((req: Request, res: Response, next: NextFunction) => {
-            Order.findByIdAndRemove(req.params.id, req.body, (err, order) => {
+            Order.findByIdAndRemove(req.params.id, req.body).populate('user').populate('address').exec((err, order) => {
                 if (err) { return next(err); }
                 res.json(order);
             });

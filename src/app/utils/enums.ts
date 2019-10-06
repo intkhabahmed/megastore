@@ -16,3 +16,9 @@ export enum ShippingMethod {
     PROFESSIONAL,
     SHREE_MAHAVIR
 }
+
+export enum OrderStatus {
+    PROCESSING,
+    SHIPPED,
+    DELIVERED
+}

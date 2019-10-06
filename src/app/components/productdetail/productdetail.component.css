@@ -1,0 +1,15 @@
+.card-img-top img {
+    max-width: 100%;
+}
+
+@media(max-width: 992px) {
+    .btn {
+        margin-top: 5px;
+    }
+}
+
+@media(max-width: 767px) {
+    .card-img-top img {
+        max-width: 60%;
+    }
+}

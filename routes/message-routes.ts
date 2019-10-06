@@ -13,7 +13,7 @@ export class MessagesRoute {
         })
 
         app.route('/api/messages/all').get((req: Request, res: Response, next: NextFunction) => {
-            Message.find((err, messages) => {
+            Message.find().populate('user').exec((err, messages) => {
                 if (err) {
                     return next(err)
                 }
@@ -22,21 +22,21 @@ export class MessagesRoute {
         })
 
         app.route('/api/orders/user/:id').get((req: Request, res: Response, next: NextFunction) => {
-            Message.find({ userId: req.params.id }, (err, message) => {
+            Message.find({ userId: req.params.id }).populate('user').exec((err, message) => {
                 if (err) { return next(err); }
                 res.json(message);
             });
         });
 
         app.route('/api/messages/:id').put((req: Request, res: Response, next: NextFunction) => {
-            Message.findByIdAndUpdate(req.params.id, req.body, (err, message) => {
+            Message.findByIdAndUpdate(req.params.id, req.body).populate('user').exec((err, message) => {
                 if (err) { return next(err); }
                 res.json(message);
             });
         });
 
         app.route('/api/messages/:id').delete((req: Request, res: Response, next: NextFunction) => {
-            Message.findByIdAndRemove(req.params.id, req.body, (err, message) => {
+            Message.findByIdAndRemove(req.params.id, req.body).populate('user').exec((err, message) => {
                 if (err) { return next(err); }
                 res.json(message);
             });

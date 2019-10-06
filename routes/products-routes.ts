@@ -4,8 +4,8 @@ import Product from '../src/app/schema/product'
 export class ProductsRoute {
 
     public productRoute(app): void {
-        app.route('/api/').get((req: Request, res: Response, next: NextFunction) => {
-            Product.find((err, products) => {
+        app.route('/api/products').post((req: Request, res: Response, next: NextFunction) => {
+            Product.find(req.body, (err, products) => {
                 if (err) { return next(err); }
                 res.json(products);
             });
@@ -19,7 +19,6 @@ export class ProductsRoute {
         });
 
         app.route('/api/').post((req: Request, res: Response, next: NextFunction) => {
-            console.log(req.body);
             Product.create(req.body, (err, product) => {
                 if (err) { return next(err); }
                 res.json(product);

@@ -21,12 +21,16 @@ export class ShippingRatesRoute {
             })
         })
 
-        app.route('/api/shippingRates/all').get((req: Request, res: Response, next: NextFunction) => {
-            ShippingRate.find((err, shippingRates) => {
+        app.route('/api/shippingRates/calculate').post((req: Request, res: Response, next: NextFunction) => {
+            ShippingRate.findOne(req.body, (err, shippingRate) => {
                 if (err) {
                     return next(err)
                 }
-                res.json(shippingRates)
+                if (shippingRate) {
+                    res.json(shippingRate)
+                } else {
+                    res.status(404).send({ message: "Invalid value" })
+                }
             })
         })
 

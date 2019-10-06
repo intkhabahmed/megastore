@@ -8,9 +8,9 @@ const ShippingRateSchema: Schema = new Schema({
     maxWeight: { type: Number },
     perKgRate: { type: Number },
     halfKgRate: { type: Number },
-    localRate: { type: Number },
+    isLocal: { type: Boolean },
     area: { type: String },
-    shippingMethod: { type: String },
+    shippingMethod: { type: Number },
     createdAt: { type: Date, default: Date.now }
 });
 

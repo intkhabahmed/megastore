@@ -20,6 +20,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ErrorInterceptor } from './utils/error.interceptor';
 import { JwtInterceptor } from './utils/jwt-interceptor';
+import { OrderSuccessComponent } from './components/order-success/order-success.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { JwtInterceptor } from './utils/jwt-interceptor';
     CheckoutComponent,
     ProfileComponent,
     AlertComponent,
-    AdminComponent
+    AdminComponent,
+    OrderSuccessComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

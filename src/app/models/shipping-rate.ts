@@ -7,7 +7,7 @@ export class ShippingRate {
     maxWeight: number
     perKgRate: number
     halfKgRate: number
-    localRate: number
+    isLocal: boolean
     area: string
-    shippingMethod: string
+    shippingMethod: number
 }

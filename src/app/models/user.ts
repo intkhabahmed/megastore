@@ -1,5 +1,3 @@
-import { Address } from './address';
-import { Order } from './order'
 
 export class User {
     _id: string
@@ -8,10 +6,10 @@ export class User {
     email: string
     mobile: number
     password: string
-    shippingAddress: Address
-    billingAddress: Address
-    orders: Order[]
-    wishlist: number[]
+    addresses: any
+    messages: any
+    orders: any
+    wishlist: any
     token: string
-    registedOn: Date
+    createdAt: Date
 }

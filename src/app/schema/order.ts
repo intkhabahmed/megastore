@@ -1,12 +1,13 @@
 import mongoose, { Schema } from 'mongoose';
 
 const OrderSchema: Schema = new Schema({
-    userId: { type: String, required: true },
+    user: { type: mongoose.Schema.ObjectId, ref: 'User' },
     orderSummary: { type: String, required: true },
-    orderStatus: { type: String, required: true },
+    orderStatus: { type: Number, required: true },
     trackingDetails: { type: String },
     invoiceId: { type: String, required: true },
-    payment: { type: String, default: true },
+    payment: { type: String, required: true },
+    address: { type: mongoose.Schema.ObjectId, ref: 'Address' },
     orderDate: { type: Date, default: Date.now }
 });
 

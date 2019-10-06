@@ -1,3 +1,4 @@
+import { Address } from './../models/address';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -30,8 +31,8 @@ export class ApiService {
 
   // Product methods
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(apiUrl)
+  getProducts(filter: any = {}): Observable<Product[]> {
+    return this.http.post<Product[]>(`${apiUrl}/products`, filter, httpOptions)
       .pipe(
         tap(Products => console.log('fetched Products')),
         catchError(this.handleError('getProducts', []))
@@ -78,10 +79,23 @@ export class ApiService {
     )
   }
 
+  getUserById(id: any): Observable<User> {
+    return this.http.get<User>(`${apiUrl}/users/${id}`).pipe(
+      tap(users => console.log('fetched user')),
+      catchError(this.handleError<User>('getUserById'))
+    )
+  }
+
+  updateUser(id: any, user: User): Observable<User> {
+    return this.http.put(`${apiUrl}/users/${id}`, user, httpOptions).pipe(
+      tap((user: User) => console.log(`updated user`),
+        catchError(this.handleError<User>('updateUser')))
+    )
+  }
+
   register(user: User): Observable<User> {
     return this.http.post<User>(`${apiUrl}/users/register`, user, httpOptions).pipe(
-      tap((user: User) => console.log('Registered User')),
-      catchError(this.handleError<User>('register')))
+      tap((user: User) => console.log('Registered User')))
   }
 
   deleteUser(id: number) {
@@ -90,24 +104,18 @@ export class ApiService {
       catchError(this.handleError<User>('deleteUser')))
   }
 
-  login(email: string, password: string): Observable<User> {
-    return this.http.post<User>(`${apiUrl}/users/authenticate`, { email, password }, httpOptions).pipe(
-      tap((user: User) => console.log('User Authenticated')),
-      catchError(this.handleError<User>('login')))
-  }
-
   // Shipping Rate methods
-  getShippingRates(): Observable<ShippingRate[]> {
-    return this.http.get<ShippingRate[]>(`${apiUrl}/shippingRates/all`).pipe(
+
+  getShippingRates(type: any): Observable<ShippingRate[]> {
+    return this.http.post<ShippingRate[]>(`${apiUrl}/shippingRates/filter`, type == "" ? {} : { shippingMethod: type }, httpOptions).pipe(
       tap(shippingRates => console.log('fetched shippingRates')),
-      catchError(this.handleError('getShippingRates', []))
+      catchError(this.handleError('getShippingRatesByCourierType', []))
     )
   }
 
-  getShippingRatesByCourierType(type: any): Observable<ShippingRate[]> {
-    return this.http.post<ShippingRate[]>(`${apiUrl}/shippingRates/filter`, type == "" ? {} : { shippingMethod: type }, httpOptions).pipe(
-      tap(shippingRates => console.log('fetched shippingRates')),
-      catchError(this.handleError('getShippingRates', []))
+  calculateShippingCharge(filter: any): Observable<ShippingRate> {
+    return this.http.post<ShippingRate>(`${apiUrl}/shippingRates/calculate`, filter, httpOptions).pipe(
+      tap(shippingRate => console.log('fetched shippingRate'))
     )
   }
 
@@ -218,6 +226,37 @@ export class ApiService {
     return this.http.put(`${apiUrl}/messages/${id}`, message, httpOptions).pipe(
       tap((rate: Message) => console.log(`updated message`),
         catchError(this.handleError<Message>('updateMessage')))
+    )
+  }
+
+  //Address methods
+
+  getAddresses(): Observable<Address[]> {
+    return this.http.get<Address[]>(`${apiUrl}/addresses/all`).pipe(
+      tap(addresses => console.log('fetched addresses')),
+      catchError(this.handleError('getAddresses', []))
+    )
+  }
+
+  insertAddress(address: Address): Observable<Address> {
+    return this.http.post(`${apiUrl}/addresses`, address, httpOptions).pipe(
+      tap((address: Address) => console.log(`added address w/ id=${address._id}`)),
+      catchError(this.handleError<Address>('insertAddress'))
+    );
+  }
+
+  updateAddress(id: any, address: Address): Observable<Address> {
+    return this.http.put(`${apiUrl}/addresses/${id}`, address, httpOptions).pipe(
+      tap((rate: Address) => console.log(`updated gross weight`),
+        catchError(this.handleError<Address>('updateGrossWeight')))
+    )
+  }
+
+  deleteAddress(id: any): Observable<Address> {
+    return this.http.delete(`${apiUrl}/addresses/${id}`, httpOptions).pipe(
+      tap((address: Address) => console.log("address deleted"),
+        catchError(this.handleError<Address>('deleteAddress'))
+      )
     )
   }
 

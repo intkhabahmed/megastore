@@ -14,13 +14,13 @@
  * from your application's main.server.ts file, as seen below with the
  * import for `ngExpressEngine`.
  */
-
 import bodyParser from "body-parser";
 import * as express from 'express';
 import 'localstorage-polyfill';
 import * as mongoose from 'mongoose';
 import { join } from 'path';
 import 'zone.js/dist/zone-node';
+import { AddressesRoute } from './routes/address-routes';
 import { GrossWeightsRoute } from './routes/gross-weight-routes';
 import { MessagesRoute } from './routes/message-routes';
 import { OrdersRoute } from './routes/order-routes';
@@ -41,6 +41,7 @@ const shippingRoute: ShippingRatesRoute = new ShippingRatesRoute();
 const ordersRoute: OrdersRoute = new OrdersRoute();
 const grossWeightsRoute: GrossWeightsRoute = new GrossWeightsRoute();
 const messagesRoute: MessagesRoute = new MessagesRoute();
+const addressesRoute: AddressesRoute = new AddressesRoute()
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
@@ -69,6 +70,7 @@ shippingRoute.shippingRoute(app);
 ordersRoute.orderRoute(app);
 grossWeightsRoute.grossWeightRoute(app);
 messagesRoute.orderRoute(app);
+addressesRoute.addressRoute(app)
 
 // Example Express Rest API endpoints
 // app.get('/api/**', (req, res) => { });

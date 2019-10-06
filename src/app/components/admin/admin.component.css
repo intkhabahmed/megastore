@@ -43,8 +43,8 @@
 
 .close-btn {
     position: absolute;
-    right   : 5%;
-    top     : 5%;
+    right   : 3%;
+    top     : 3%;
 }
 
 @media(max-width: 767px) {

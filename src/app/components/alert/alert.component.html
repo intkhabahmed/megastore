@@ -1,1 +1,4 @@
-<div *ngIf="message" [ngClass]="message.cssClass">{{message.text}}</div>
+<div *ngIf="message" [ngClass]="message.cssClass">{{message.text}} <a>
+        <fa-icon [icon]="['fas','times']" class="float-right" (click)="clear()"></fa-icon>
+    </a>
+</div>

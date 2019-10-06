@@ -1,13 +1,16 @@
+import { User } from './user';
+import { Address } from './address';
 import { OrderSummary } from './order-summary';
 import { Payment } from './payment';
 import { Tracking } from './tracking';
 export class Order {
-    _id: number
-    userId: string
+    _id: string
+    user: any //User Model
     orderDate: Date
-    orderSummary: OrderSummary
-    orderStatus: string
-    trackingDetails: Tracking
+    orderSummary: any = new OrderSummary() //OrderSummary Model
+    orderStatus: number
+    address: any = new Address() //Address Model
+    trackingDetails: any //Tracking model
     invoiceId: string
-    payment: Payment
+    payment: any // Payment Model
 }

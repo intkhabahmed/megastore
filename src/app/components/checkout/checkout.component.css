@@ -101,6 +101,29 @@
     padding    : 0;
 }
 
+.saved-addresses {
+    clear: both;
+}
+
+.address-item {
+    padding: 2%;
+    margin : 1% 0;
+}
+
+.selected-item {
+    background-color: lightpink;
+}
+
+.selected-item p,
+.selected-item td {
+    color: #000000;
+}
+
+.address-actions {
+    width: max-content;
+    float: right;
+}
+
 @media(max-width: 767px) {
     .form-group input {
         margin: 1% 0;

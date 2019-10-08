@@ -64,7 +64,7 @@ export class CheckoutComponent implements OnInit {
   completePurchase() {
     this.loading = true
     this.utility.orderSummary.cartItems.forEach(item => {
-      item.product.quantity[item.product.selectedIndex] -= item.noOfItems
+      item.product.quantity[item.product.selectedIndex][item.product.subIndex] -= item.noOfItems
       this.api.updateProduct(item.product._id, item.product).subscribe(() => { })
     })
     this.utility.order.orderStatus = OrderStatus.PROCESSING
@@ -100,7 +100,6 @@ export class CheckoutComponent implements OnInit {
     }
     this.loading = true
     this.user$.subscribe(user => {
-      // user.createdAt.toDateString
       this.addressForm.patchValue({ user: user._id })
       if (!this.isEditing) {
         this.api.insertAddress(this.addressForm.value).pipe().subscribe(

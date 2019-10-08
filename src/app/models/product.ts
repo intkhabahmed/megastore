@@ -5,14 +5,14 @@ export class Product {
     description: string
     imageUrl: string
     category: string
-    price: number[]
+    price: number[][] = []
     productStatus: Boolean
-    quantity: number[]
+    quantity: number[][] = []
     colors: string[]
-    weight: number[]
-    size: string[]
+    weight: number[][] = []
+    size: string[][] = []
     selectedIndex: number
-    selectedSize: string
+    subIndex: number
     createdAt: Date
     updatedAt: Date
 }

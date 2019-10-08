@@ -67,18 +67,12 @@ export class AdminComponent implements OnInit {
       productCode: ['', Validators.required],
       description: ['', Validators.required],
       colors: this.fb.array([]),
-      size: this.fb.array([]),
-      price: this.fb.array([]),
-      weight: this.fb.array([]),
-      quantity: this.fb.array([]),
+      properties: this.fb.array([this.addProperty(true)]),
       productStatus: [true]
     })
 
-    this.addField('colors')
-    this.addField('size')
-    this.addField('price')
-    this.addField('weight')
-    this.addField('quantity')
+    this.addField('colors', { isNotDeep: true })
+
 
     this.grossWeightForm = this.fb.group({
       minWeight: ['', Validators.required],
@@ -99,6 +93,7 @@ export class AdminComponent implements OnInit {
       shippingMethod: ['', Validators.required]
     })
   }
+
   get f() {
     if (this.editing == 'product') {
       return this.productForm.controls
@@ -171,6 +166,17 @@ export class AdminComponent implements OnInit {
       return
     }
     this.loading = true
+    this.productForm.addControl('size', this.fb.array([]))
+    this.productForm.addControl('price', this.fb.array([]))
+    this.productForm.addControl('weight', this.fb.array([]))
+    this.productForm.addControl('quantity', this.fb.array([]))
+    this.formArray('properties', { isNotDeep: true }).controls.forEach((property, i) => {
+      this.formArray('size', { isNotDeep: true }).push(this.fb.control(this.formArray('size', { index: i }).value, Validators.required));
+      this.formArray('price', { isNotDeep: true }).push(this.fb.control(this.formArray('price', { index: i }).value, Validators.required));
+      this.formArray('weight', { isNotDeep: true }).push(this.fb.control(this.formArray('weight', { index: i }).value, Validators.required));
+      this.formArray('quantity', { isNotDeep: true }).push(this.fb.control(this.formArray('quantity', { index: i }).value, Validators.required));
+    })
+    this.productForm.removeControl('properties')
     if (!this.isEditing) {
       this.api.addProduct(this.productForm.value).pipe().subscribe(
         product => {
@@ -196,6 +202,7 @@ export class AdminComponent implements OnInit {
         }
       )
     }
+    this.productForm.addControl('properties', this.fb.array([this.addProperty]))
   }
 
   delete(id, type) {
@@ -224,19 +231,6 @@ export class AdminComponent implements OnInit {
         )
         break;
     }
-  }
-
-  updateProduct(id, product: Product) {
-    this.submitted = true
-    if (this.updateProductForm.invalid) {
-      return
-    }
-    this.loading = true
-    this.api.updateProduct(id, product).pipe().subscribe(
-      data => {
-        this.alertService.success("Product updated")
-      }
-    )
   }
 
   addOrUpdateGrossWeight() {
@@ -320,16 +314,17 @@ export class AdminComponent implements OnInit {
     this.id = value._id
     if (this.editing == "product") {
       this.productForm.patchValue(value)
-      this.formArray('colors').clear()
-      this.formArray('size').clear()
-      this.formArray('price').clear()
-      this.formArray('weight').clear()
-      this.formArray('quantity').clear()
-      value.colors.map(color => this.formArray('colors').push(this.fb.control(color, Validators.required)))
-      value.size.map(size => this.formArray('size').push(this.fb.control(size, Validators.required)))
-      value.price.map(price => this.formArray('price').push(this.fb.control(price, Validators.required)))
-      value.weight.map(weight => this.formArray('weight').push(this.fb.control(weight, Validators.required)))
-      value.quantity.map(quantity => this.formArray('quantity').push(this.fb.control(quantity, Validators.required)))
+      this.formArray('properties', { isNotDeep: true }).clear()
+      this.formArray('colors', { isNotDeep: true }).clear()
+      value.colors.map(color => this.formArray('colors', { isNotDeep: true }).push(this.fb.control(color, Validators.required)))
+
+      value.colors.forEach((color, i) => {
+        this.formArray('properties', { isNotDeep: true }).push(this.addProperty(false))
+        value.size[i].forEach(size => this.formArray('size', { index: i }).push(this.fb.control(size, Validators.required)))
+        value.price[i].forEach(price => this.formArray('price', { index: i }).push(this.fb.control(price, Validators.required)))
+        value.weight[i].forEach(weight => this.formArray('weight', { index: i }).push(this.fb.control(weight, Validators.required)))
+        value.quantity[i].forEach(quantity => this.formArray('quantity', { index: i }).push(this.fb.control(quantity, Validators.required)))
+      });
     } else if (this.editing == "grossWeight") {
       this.grossWeightForm.patchValue(value)
     } else if (this.editing == "shippingRate") {
@@ -341,16 +336,44 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  formArray(type): FormArray {
-    return this.productForm.get(type) as FormArray
+  formArray(type, { isNotDeep = false, index = -1 }): FormArray {
+    if (isNotDeep) {
+      return this.productForm.get(type) as FormArray
+    }
+    return (this.productForm.get('properties') as FormArray).controls[index].get(type) as FormArray
   }
 
-  addField(fieldName) {
-    this.formArray(fieldName).push(this.fb.control('', Validators.required))
+  addField(fieldName, { isNotDeep = false, index = -1 }) {
+    if (fieldName === 'properties') {
+      this.formArray(fieldName, { isNotDeep: true }).push(this.addProperty(true))
+      return
+    }
+    this.formArray(fieldName, { isNotDeep, index }).push(this.fb.control('', Validators.required))
   }
 
-  removeField(fieldName, index) {
-    this.formArray(fieldName).removeAt(index)
+  removeField(fieldName, { isNotDeep = false, index = -1, index1 = -1 }) {
+    if (index1 === -1) {
+      this.formArray(fieldName, { isNotDeep: true }).removeAt(index)
+      return
+    }
+    this.formArray(fieldName, { isNotDeep, index }).removeAt(index1)
+  }
+
+  addProperty(withInit): FormGroup {
+    if (withInit) {
+      return this.fb.group({
+        size: this.fb.array([this.fb.control('', Validators.required)]),
+        price: this.fb.array([this.fb.control('', Validators.required)]),
+        weight: this.fb.array([this.fb.control('', Validators.required)]),
+        quantity: this.fb.array([this.fb.control('', Validators.required)])
+      })
+    }
+    return this.fb.group({
+      size: this.fb.array([]),
+      price: this.fb.array([]),
+      weight: this.fb.array([]),
+      quantity: this.fb.array([])
+    })
   }
 
   filterShippingRates(value) {

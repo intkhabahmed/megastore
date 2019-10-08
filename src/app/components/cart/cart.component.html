@@ -16,7 +16,8 @@
                     <table class="table order-table">
                         <tr>
                             <td>Selected Color - <b>{{item.product.colors[item.product.selectedIndex]}}</b></td>
-                            <td>Selected Size - <b>{{item.product.selectedSize}}</b></td>
+                            <td>Selected Size -
+                                <b>{{item.product.size[item.product.selectedIndex][item.product.subIndex]}}</b></td>
                         </tr>
                         <tr>
                             <td><b>QTY: </b>
@@ -29,12 +30,12 @@
                             </td>
                             <td>
                                 Weight -
-                                <b>{{utility.getFormattedWeight(item.product.weight[item.product.selectedIndex])}}</b>
+                                <b>{{utility.getFormattedWeight(item.product.weight[item.product.selectedIndex][item.product.subIndex])}}</b>
                             </td>
                         </tr>
                         <tr>
                             <td><b>Product Cost - </b><span class="accent-color"><b>Rs.
-                                        {{item.product.price[item.product.selectedIndex]}}</b>
+                                        {{item.product.price[item.product.selectedIndex][item.product.subIndex]}}</b>
                                 </span></td>
 
                         </tr>

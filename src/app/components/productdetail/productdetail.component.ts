@@ -20,7 +20,8 @@ export class ProductdetailComponent implements OnInit {
   isEditing: boolean
   loading = false
   id: any
-  cp: Product = new Product()
+  cp: Product
+  selectedImage
 
   constructor(private route: ActivatedRoute, private router: Router, private service: ApiService, public utility: Utility, private dataService: DataService,
     private alertService: AlertService) { }
@@ -42,6 +43,7 @@ export class ProductdetailComponent implements OnInit {
       } else {
         this.cp = product
         this.cp.selectedIndex = -1
+        this.cp.subIndex = -1
       }
     })
     this.isEditing = this.route.snapshot.queryParams['isEditing'] || false
@@ -49,8 +51,8 @@ export class ProductdetailComponent implements OnInit {
 
   redirectBack() {
     this.loading = true
-    if (this.utility.orderSummary.cartItems.get(this.cp._id).noOfItems > this.cp.quantity[this.cp.selectedIndex]) {
-      this.alertService.error(`Change quantity, Only ${this.cp.quantity[this.cp.selectedIndex]} available`, true)
+    if (this.utility.orderSummary.cartItems.get(this.cp._id).noOfItems > this.cp.quantity[this.cp.selectedIndex][this.cp.subIndex]) {
+      this.alertService.error(`Change quantity, Only ${this.cp.quantity[this.cp.selectedIndex][this.cp.subIndex]} available`, true)
       this.loading = false
       return
     }
@@ -58,5 +60,32 @@ export class ProductdetailComponent implements OnInit {
       this.router.navigate([this.route.snapshot.queryParams['returnUrl'] || 'cart'], { replaceUrl: this.isEditing || false })
       this.loading = false
     }, 300)
+  }
+
+  colorOptionChanged(value, product) {
+    this.cp.selectedIndex = product.colors.indexOf(value)
+    this.cp.subIndex = -1
+    if (this.cp.selectedIndex !== -1) {
+      this.cp.quantity[this.cp.selectedIndex].forEach((q, i) => {
+        debugger
+        if (this.cp.subIndex === -1 &&  q != 0) {
+          this.cp.subIndex = i
+          this.colorValueChanged = true
+        } else if(q == 0) {
+          this.cp.subIndex = -1
+        }
+      })
+    } else {
+      this.cp.subIndex = -1
+    }
+    if (this.cp.selectedIndex === -1 && this.cp.subIndex === -1 && this.utility.orderSummary.cartItems.has(product._id)) {
+      this.utility.removeItemFromCart(this.cp)
+    }
+  }
+
+  sizeValueChanged(value, product) {
+    this.cp.subIndex = product.size[this.cp.selectedIndex].indexOf(value)
+    this.utility.orderSummary.cartItems.has(product._id) ? this.utility.updateCartProduct(this.cp) : this.colorValueChanged = true;
+    (this.cp.selectedIndex === -1 && this.cp.subIndex === -1) ? this.utility.removeItemFromCart(this.cp) : ''
   }
 }

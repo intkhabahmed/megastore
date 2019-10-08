@@ -70,7 +70,8 @@
                                     <th>Product Code</th>
                                     <th>Product Description</th>
                                     <th>Colors <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                            (click)="addField('colors')"></fa-icon>
+                                            (click)="addField('colors', {isNotDeep: true});addField('properties',{})">
+                                        </fa-icon>
                                     </th>
                                 </tr>
                                 <tr>
@@ -100,108 +101,111 @@
                                     </td>
                                     <td>
                                         <div class="form-group" formArrayName="colors"
-                                            *ngFor="let color of formArray('colors').controls; index as i">
+                                            *ngFor="let color of formArray('colors', {isNotDeep: true}).controls; index as i">
                                             <div class="form-row"><input type="text" [formControlName]="i"
                                                     class="form-control col-md-10"
                                                     [ngClass]="{ 'is-invalid': submitted && color.errors }" />
-                                                <a (click)="removeField('colors', i)" class="col-md-1 v-center"
-                                                    *ngIf="i != 0">
+                                                <a (click)="removeField('colors', {isNotDeep: true, index: i});removeField('properties', {index: i})"
+                                                    class="col-md-1 v-center" *ngIf="i != 0">
                                                     <fa-icon [icon]="['fas','times']"></fa-icon>
                                                 </a>
                                                 <div *ngIf="submitted && color.errors" class="invalid-feedback">
                                                     <div *ngIf="color.errors.required">Color is required</div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </td>
                                 </tr>
                             </table>
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Sizes <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                            (click)="addField('size')"></fa-icon>
-                                    </th>
-                                    <th>Prices (Rs) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                            (click)="addField('price')">
-                                        </fa-icon>
-                                    </th>
-                                    <th>Net Weights (Gm) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                            (click)="addField('weight')">
-                                        </fa-icon>
-                                    </th>
-                                    <th>Quantities <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                            (click)="addField('quantity')">
-                                        </fa-icon>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-group" formArrayName="size"
-                                            *ngFor="let size of formArray('size').controls; index as i">
-                                            <div class="form-row"><input type="text" [formControlName]="i"
-                                                    class="form-control col-md-10"
-                                                    [ngClass]="{ 'is-invalid': submitted && size.errors }" />
-                                                <a (click)="removeField('size', i)" class="col-md-1 v-center"
-                                                    *ngIf="i != 0">
-                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                </a>
-                                                <div *ngIf="submitted && size.errors" class="invalid-feedback">
-                                                    <div *ngIf="size.errors.required">Size is required</div>
+                            <div formArrayName="properties"
+                                *ngFor="let property of formArray('properties', {isNotDeep: true}).controls;index as i">
+                                <table class="table table-bordered">
+                                    <tr class="table-primary">
+                                        <th>Sizes <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                                (click)="addField('size', {index: i})"></fa-icon>
+                                        </th>
+                                        <th>Prices (Rs) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                                (click)="addField('price', {index: i})">
+                                            </fa-icon>
+                                        </th>
+                                        <th>Net Weights (Gm) <fa-icon [icon]="['fas', 'plus']"
+                                                class="accent-bg round-btn" (click)="addField('weight', {index: i})">
+                                            </fa-icon>
+                                        </th>
+                                        <th>Quantities <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                                (click)="addField('quantity', {index: i})">
+                                            </fa-icon>
+                                        </th>
+                                    </tr>
+                                    <tr [formGroupName]="i">
+                                        <td>
+                                            <div class="form-group" formArrayName="size"
+                                                *ngFor="let size of formArray('size', {index: i}).controls; index as j">
+                                                <div class="form-row"><input type="text" [formControlName]="j"
+                                                        class="form-control col-md-10"
+                                                        [ngClass]="{ 'is-invalid': submitted && size.errors }" />
+                                                    <a (click)="removeField('size', {index: i, index1: j})"
+                                                        class="col-md-1 v-center" *ngIf="j != 0">
+                                                        <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                    </a>
+                                                    <div *ngIf="submitted && size.errors" class="invalid-feedback">
+                                                        <div *ngIf="size.errors.required">Size is required</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group" formArrayName="price"
-                                            *ngFor="let price of formArray('price').controls; index as i">
-                                            <div class="form-row"><input type="text" [formControlName]="i"
-                                                    class="form-control col-md-10"
-                                                    [ngClass]="{ 'is-invalid': submitted && price.errors }" />
-                                                <a (click)="removeField('price', i)" class="col-md-1 v-center"
-                                                    *ngIf="i != 0">
-                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                </a>
-                                                <div *ngIf="submitted && price.errors" class="invalid-feedback">
-                                                    <div *ngIf="price.errors.required">Price is required</div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group" formArrayName="price"
+                                                *ngFor="let price of formArray('price', {index: i}).controls; index as j">
+                                                <div class="form-row"><input type="text" [formControlName]="j"
+                                                        class="form-control col-md-10"
+                                                        [ngClass]="{ 'is-invalid': submitted && price.errors }" />
+                                                    <a (click)="removeField('price', {index: i, index1: j})"
+                                                        class="col-md-1 v-center" *ngIf="j != 0">
+                                                        <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                    </a>
+                                                    <div *ngIf="submitted && price.errors" class="invalid-feedback">
+                                                        <div *ngIf="price.errors.required">Price is required</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group" formArrayName="weight"
-                                            *ngFor="let weight of formArray('weight').controls; index as i">
-                                            <div class="form-row"><input type="text" [formControlName]="i"
-                                                    class="form-control col-md-10"
-                                                    [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
-                                                <a (click)="removeField('weight', i)" class="col-md-1 v-center"
-                                                    *ngIf="i != 0">
-                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                </a>
-                                                <div *ngIf="submitted && weight.errors" class="invalid-feedback">
-                                                    <div *ngIf="weight.errors.required">Weight is required</div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group" formArrayName="weight"
+                                                *ngFor="let weight of formArray('weight', {index: i}).controls; index as j">
+                                                <div class="form-row"><input type="text" [formControlName]="j"
+                                                        class="form-control col-md-10"
+                                                        [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
+                                                    <a (click)="removeField('weight', {index: i, index1: j})"
+                                                        class="col-md-1 v-center" *ngIf="j != 0">
+                                                        <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                    </a>
+                                                    <div *ngIf="submitted && weight.errors" class="invalid-feedback">
+                                                        <div *ngIf="weight.errors.required">Weight is required</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group" formArrayName="quantity"
-                                            *ngFor="let quantity of formArray('quantity').controls; index as i">
-                                            <div class="form-row"><input type="text" [formControlName]="i"
-                                                    class="form-control col-md-10"
-                                                    [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
-                                                <a (click)="removeField('quantity', i)" class="col-md-1 v-center"
-                                                    *ngIf="i != 0">
-                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                </a>
-                                                <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
-                                                    <div *ngIf="quantity.errors.required">Quantity is required</div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group" formArrayName="quantity"
+                                                *ngFor="let quantity of formArray('quantity', {index: i}).controls; index as j">
+                                                <div class="form-row"><input type="text" [formControlName]="j"
+                                                        class="form-control col-md-10"
+                                                        [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
+                                                    <a (click)="removeField('quantity', {index: i, index1: j})"
+                                                        class="col-md-1 v-center" *ngIf="j != 0">
+                                                        <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                    </a>
+                                                    <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
+                                                        <div *ngIf="quantity.errors.required">Quantity is required
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                             <div class="form-group">
                                 <button [disabled]="loading" class="btn btn-pink float-right">
                                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
@@ -218,9 +222,11 @@
                                     <th>Product Name</th>
                                     <th>Product Code</th>
                                     <th>Category</th>
+                                    <th>Status</th>
                                     <th>Colors</th>
                                     <th>Price</th>
-                                    <th>Status</th>
+                                    <th>Weight</th>
+                                    <th>Size</th>
                                     <th>Quantity</th>
                                     <th>Operations</th>
                                 </tr>
@@ -229,10 +235,22 @@
                                     <td>{{product.name}} </td>
                                     <td>{{product.productCode}} </td>
                                     <td>{{product.category}} </td>
-                                    <td>{{product.colors}}</td>
-                                    <td>{{product.price}} </td>
-                                    <td>{{product.productStatus ? 'Active': 'Inactive'}} </td>
-                                    <td>{{product.quantity}} </td>
+                                    <td>{{product.productStatus ? 'Active': 'Inactive'}}</td>
+                                    <td>
+                                        <p *ngFor="let color of product.colors">{{color}}
+                                    </td>
+                                    <td>
+                                        <p *ngFor="let price of product.price">{{price}}</p>
+                                    </td>
+                                    <td>
+                                        <p *ngFor="let weight of product.weight">{{weight}}</p>
+                                    </td>
+                                    <td>
+                                        <p *ngFor="let size of product.size">{{size}}</p>
+                                    </td>
+                                    <td>
+                                        <p *ngFor="let quantity of product.quantity">{{quantity}}</p>
+                                    </td>
                                     <td><a class="link"
                                             (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
                                             class="link" (click)="delete(product._id, 'product')">Delete</a></td>
@@ -419,8 +437,7 @@
 </div><!-- nav-negative-margin -->
 <div class="overlay" *ngIf="showOverlay"></div>
 <div class="overlay-body" *ngIf="showOverlay">
-    <fa-icon [icon]="['fas', 'times']" size="2x" class="round-btn close-btn"
-        (click)="cancel()"></fa-icon>
+    <fa-icon [icon]="['fas', 'times']" size="2x" class="round-btn close-btn close" (click)="cancel()"></fa-icon>
     <div *ngIf="editing == 'product'">
         <form class="add-product-form" [formGroup]="productForm" (ngSubmit)="addOrUpdateProduct()">
             <div class="form-row">
@@ -472,15 +489,17 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     <label for="colors">Colors</label>&nbsp;
-                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('colors')">
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                        (click)="addField('colors', {isNotDeep: true});addField('properties',{})">
                     </fa-icon>
                     <div class="form-group" formArrayName="colors"
-                        *ngFor="let color of formArray('colors').controls; index as i">
+                        *ngFor="let color of formArray('colors', {isNotDeep: true}).controls; index as i">
                         <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
                                 [ngClass]="{ 'is-invalid': submitted && color.errors }" />
-                            <a (click)="removeField('colors', i)" class="col-md-1 v-center" *ngIf="i != 0">
+                            <a (click)="removeField('colors', {isNotDeep: true, index: i});removeField('properties', {index: i})"
+                                class="col-md-1 v-center" *ngIf="i != 0">
                                 <fa-icon [icon]="['fas','times']"></fa-icon>
                             </a>
                             <div *ngIf="submitted && color.errors" class="invalid-feedback">
@@ -489,23 +508,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="size">Sizes</label>&nbsp;
-                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('size')"></fa-icon>
-                    <div class="form-group" formArrayName="size"
-                        *ngFor="let size of formArray('size').controls; index as i">
-                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
-                                [ngClass]="{ 'is-invalid': submitted && size.errors }" />
-                            <a (click)="removeField('size', i)" class="col-md-1 v-center" *ngIf="i != 0">
-                                <fa-icon [icon]="['fas','times']"></fa-icon>
-                            </a>
-                            <div *ngIf="submitted && size.errors" class="invalid-feedback">
-                                <div *ngIf="size.errors.required">Size is required</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     <label for="productStatus">Status</label>
                     <select class="form-control" formControlName="productStatus">
                         <option value="false">Inactive</option>
@@ -513,59 +516,91 @@
                     </select>
                 </div>
             </div><!-- form-row -->
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="price">Price</label>&nbsp;
-                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('price')">
-                    </fa-icon>
-                    <div class="form-group" formArrayName="price"
-                        *ngFor="let price of formArray('price').controls; index as i">
-                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
-                                [ngClass]="{ 'is-invalid': submitted && price.errors }" />
-                            <a (click)="removeField('price', i)" class="col-md-1 v-center" *ngIf="i != 0">
-                                <fa-icon [icon]="['fas','times']"></fa-icon>
-                            </a>
-                            <div *ngIf="submitted && price.errors" class="invalid-feedback">
-                                <div *ngIf="price.errors.required">Price is required</div>
+            <div class="form-group" formArrayName="properties"
+                *ngFor="let property of formArray('properties', {isNotDeep: true}).controls;index as i">
+                <div class="form-row" [formGroupName]="i">
+                    <div class="form-group col-md-3">
+                        <label for="size">Sizes</label>&nbsp;
+                        <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                            (click)="addField('size', {index: i})"></fa-icon>
+                        <div class="form-group" formArrayName="size"
+                            *ngFor="let size of formArray('size', {index: i}).controls; index as j">
+                            <div class="form-row"><input type="text" [formControlName]="j"
+                                    class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && size.errors }" />
+                                <a (click)="removeField('size', {index: i, index1: j})" class="col-md-1 v-center"
+                                    *ngIf="j != 0">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && size.errors" class="invalid-feedback">
+                                    <div *ngIf="size.errors.required">Size is required</div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="weight">Weight</label>&nbsp;
-                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('weight')">
-                    </fa-icon>
-                    <div class="form-group" formArrayName="weight"
-                        *ngFor="let weight of formArray('weight').controls; index as i">
-                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
-                                [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
-                            <a (click)="removeField('weight', i)" class="col-md-1 v-center" *ngIf="i != 0">
-                                <fa-icon [icon]="['fas','times']"></fa-icon>
-                            </a>
-                            <div *ngIf="submitted && weight.errors" class="invalid-feedback">
-                                <div *ngIf="weight.errors.required">Weight is required</div>
+                        </div><!-- formArrayName = size -->
+                    </div><!-- form-group -->
+                    <div class="form-group col-md-3">
+                        <label for="price">Price</label>&nbsp;
+                        <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                            (click)="addField('price', {index: i})">
+                        </fa-icon>
+                        <div class="form-group" formArrayName="price"
+                            *ngFor="let price of formArray('price', {index: i}).controls; index as j">
+                            <div class="form-row"><input type="text" [formControlName]="j"
+                                    class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && price.errors }" />
+                                <a (click)="removeField('price', {index: i, index1: j})" class="col-md-1 v-center"
+                                    *ngIf="j != 0">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && price.errors" class="invalid-feedback">
+                                    <div *ngIf="price.errors.required">Price is required</div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="quantity">Quantity</label>&nbsp;
-                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn" (click)="addField('quantity')">
-                    </fa-icon>
-                    <div class="form-group" formArrayName="quantity"
-                        *ngFor="let quantity of formArray('quantity').controls; index as i">
-                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
-                                [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
-                            <a (click)="removeField('quantity', i)" class="col-md-1 v-center" *ngIf="i != 0">
-                                <fa-icon [icon]="['fas','times']"></fa-icon>
-                            </a>
-                            <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
-                                <div *ngIf="quantity.errors.required">Quantity is required</div>
+                        </div><!-- formArrayName = price -->
+                    </div><!-- form-group -->
+                    <div class="form-group col-md-3">
+                        <label for="weight">Weight</label>&nbsp;
+                        <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                            (click)="addField('weight', {index: i})">
+                        </fa-icon>
+                        <div class="form-group" formArrayName="weight"
+                            *ngFor="let weight of formArray('weight', {index: i}).controls; index as j">
+                            <div class="form-row"><input type="text" [formControlName]="j"
+                                    class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
+                                <a (click)="removeField('weight', {index: i, index1: j})" class="col-md-1 v-center"
+                                    *ngIf="j != 0">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && weight.errors" class="invalid-feedback">
+                                    <div *ngIf="weight.errors.required">Weight is required</div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </div><!-- formArrayName = weight -->
+                    </div><!-- form-group -->
+                    <div class="form-group col-md-3">
+                        <label for="quantity">Quantity</label>&nbsp;
+                        <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                            (click)="addField('quantity', {index: i})">
+                        </fa-icon>
+                        <div class="form-group" formArrayName="quantity"
+                            *ngFor="let quantity of formArray('quantity', {index: i}).controls; index as j">
+                            <div class="form-row"><input type="text" [formControlName]="j"
+                                    class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
+                                <a (click)="removeField('quantity', {index: i, index1: j})" class="col-md-1 v-center"
+                                    *ngIf="j != 0">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
+                                    <div *ngIf="quantity.errors.required">Quantity is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- formArrayName = quantity -->
+                    </div><!-- form-group -->
+                </div><!-- formGroup -->
+            </div><!-- formArray = properties -->
             <div class="form-group">
                 <button [disabled]="loading" class="btn btn-pink">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

@@ -73,7 +73,7 @@ a {
 
 .btn {
     border-radius : 56px;
-    color         : #FFFFFF!important;
+    color         : #FFFFFF !important;
     font-family   : Roboto;
     font-style    : normal;
     font-weight   : bold;
@@ -95,7 +95,7 @@ a {
 
 .btn-white {
     font-weight : 700;
-    color       : #000000!important;
+    color       : #000000 !important;
     background  : white;
     border-color: #010101;
 }
@@ -183,6 +183,11 @@ a {
 
 .accent-color {
     color: #FF00AE !important;
+}
+
+.light-accent-bg {
+    background: rgb(255, 154, 223) !important;
+    color: white !important;
 }
 
 .accent-bg {

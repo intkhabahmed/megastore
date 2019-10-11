@@ -65,7 +65,10 @@
                             </div>
                             <table class="table table-bordered">
                                 <tr class="table-primary">
-                                    <th>Image Link</th>
+                                    <th>Image Links <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('imageUrl', {isNotDeep: true})">
+                                        </fa-icon>
+                                    </th>
                                     <th>Product Name</th>
                                     <th>Product Code</th>
                                     <th>Product Description</th>
@@ -75,10 +78,20 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <td><input type="text" formControlName="imageUrl" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.imageUrl.errors }" />
-                                        <div *ngIf="submitted && f.imageUrl.errors" class="invalid-feedback">
-                                            <div *ngIf="f.imageUrl.errors.required">Image URL is required</div>
+                                    <td>
+                                        <div class="form-group" formArrayName="imageUrl"
+                                            *ngFor="let image of formArray('imageUrl', {isNotDeep: true}).controls; index as i">
+                                            <div class="form-row"><input type="text" [formControlName]="i"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && image.errors }" />
+                                                <a (click)="removeField('imageUrl', {isNotDeep: true, index: i})"
+                                                    class="col-md-1 v-center" *ngIf="i != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && image.errors" class="invalid-feedback">
+                                                    <div *ngIf="image.errors.required">Image Url is required</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
                                     <td><input type="text" formControlName="name" class="form-control"
@@ -303,7 +316,7 @@
                                     <td>{{order.orderSummary.grandTotal}} </td>
                                     <td>{{order.orderDate}} </td>
                                     <td>{{courierType[order.orderSummary.shippingMethod]}} </td>
-                                    <td><a class="link" (click)="generateInvoice()">
+                                    <td><a class="link" (click)="pdf.printPdf(order)">
                                             <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
                                             </fa-icon>
                                         </a></td>
@@ -404,9 +417,10 @@
                                     <td>{{user.lastName}} </td>
                                     <td>{{user.email}} </td>
                                     <td>
-                                        <p *ngFor="let address of user.addresses">{{address.address}}</p>
+                                        <p *ngFor="let address of user.addresses">{{address.address}}, {{address.city}},
+                                            {{address.state}}-{{address.postalCode}}</p>
                                     </td>
-                                    <td>{{user.createdAt | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{user.createdAt | date:'dd MMM yyyy'}}</td>
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
@@ -465,10 +479,21 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="imageUrl">Image Url</label>
-                    <input type="text" formControlName="imageUrl" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.imageUrl.errors }" />
-                    <div *ngIf="submitted && f.imageUrl.errors" class="invalid-feedback">
-                        <div *ngIf="f.imageUrl.errors.required">Image URL is required</div>
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                        (click)="addField('imageUrl', {isNotDeep: true})">
+                    </fa-icon>
+                    <div class="form-group" formArrayName="imageUrl"
+                        *ngFor="let image of formArray('imageUrl', {isNotDeep: true}).controls; index as i">
+                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
+                                [ngClass]="{ 'is-invalid': submitted && image.errors }" />
+                            <a (click)="removeField('imageUrl', {isNotDeep: true, index: i})" class="col-md-1 v-center"
+                                *ngIf="i != 0">
+                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                            </a>
+                            <div *ngIf="submitted && image.errors" class="invalid-feedback">
+                                <div *ngIf="image.errors.required">Image Url is required</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group col-md-6">

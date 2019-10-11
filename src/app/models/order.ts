@@ -6,6 +6,7 @@ import { Tracking } from './tracking';
 export class Order {
     _id: string
     user: any //User Model
+    orderNo: string
     orderDate: Date
     orderSummary: any = new OrderSummary() //OrderSummary Model
     orderStatus: number

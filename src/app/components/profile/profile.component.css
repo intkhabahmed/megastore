@@ -1,0 +1,43 @@
+.card {
+    padding: 2%;
+}
+
+.saved-addresses {
+    clear: both;
+}
+
+.address-item {
+    padding: 2%;
+    margin : 1% 0;
+}
+
+.address-actions {
+    width: max-content;
+    float: right;
+}
+
+figure {
+    position: relative;
+    margin  : 0;
+}
+
+figcaption {
+    position  : absolute;
+    bottom    : 0px;
+    left      : 0px;
+    padding   : 5px;
+    background: #0000007F;
+    width     : 150px;
+}
+
+.wishlist {
+    display      : flex;
+    flex-flow    : row;
+    align-content: space-between;
+    overflow     : auto;
+}
+
+.wishlist-item {
+    width: max-content;
+    margin: 5px;
+}

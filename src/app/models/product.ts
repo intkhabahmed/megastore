@@ -3,7 +3,7 @@ export class Product {
     name: string
     productCode: string
     description: string
-    imageUrl: string
+    imageUrl: string[]
     category: string
     price: number[][] = []
     productStatus: Boolean

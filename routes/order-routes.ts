@@ -22,9 +22,9 @@ export class OrdersRoute {
         })
 
         app.route('/api/orders/user/:id').get((req: Request, res: Response, next: NextFunction) => {
-            Order.find({ userId: req.params.id }).populate('user').populate('address').exec((err, order) => {
+            Order.find({ user: req.params.id }).populate('user').populate('address').exec((err, orders) => {
                 if (err) { return next(err); }
-                res.json(order);
+                res.json(orders);
             });
         });
 

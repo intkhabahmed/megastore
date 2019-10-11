@@ -2,6 +2,16 @@
     max-width: 100%;
 }
 
+.images-container {
+    display      : flex;
+    flex-flow    : row wrap;
+    align-content: space-between
+}
+
+.images-container a {
+    margin: 2px;
+}
+
 @media(max-width: 992px) {
     .btn {
         margin-top: 5px;

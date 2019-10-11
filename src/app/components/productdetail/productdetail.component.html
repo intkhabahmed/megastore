@@ -9,7 +9,14 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card-img-top">
-                    <img [src]="product.imageUrl" class="img img-responsive center" alt="product">
+                    <img [src]="product.imageUrl[imgIndex]" class="img img-responsive center" alt="product">
+                </div>
+                <div class="images-container">
+                    <!-- <div class="image-item" > -->
+                    <a (click)="imgIndex=i" *ngFor="let image of product.imageUrl;index as i"><img [src]="image"
+                            [alt]="product.name" class="img img-thumbnail" height="75" width="75"
+                            [ngClass]="{'border border-dark rounded-sm': imgIndex == i}"></a>
+                    <!-- </div> -->
                 </div>
             </div>
             <div class="col-md-8">
@@ -77,7 +84,8 @@
                     *ngIf="utility.orderSummary.cartItems.has(product._id)" title="First select size and color">Remove
                     from
                     cart</button>
-                <button class="btn btn-white">Add To Wishlist</button>
+                <button class="btn btn-white" (click)="addToWishList(product._id)" [disabled]="loading"><span
+                        *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Add To Wishlist</button>
                 <br><br>
                 <h5 class="content-heading">Product Details</h5>
                 <table class="table table-bordered overflow-scroll">

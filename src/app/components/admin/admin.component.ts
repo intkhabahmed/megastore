@@ -62,7 +62,7 @@ export class AdminComponent implements OnInit {
   initializeFormGroups() {
     this.productForm = this.fb.group({
       category: ['', Validators.required],
-      imageUrl: ['', Validators.required],
+      imageUrl: this.fb.array([]),
       name: ['', Validators.required],
       productCode: ['', Validators.required],
       description: ['', Validators.required],
@@ -72,7 +72,7 @@ export class AdminComponent implements OnInit {
     })
 
     this.addField('colors', { isNotDeep: true })
-
+    this.addField('imageUrl', { isNotDeep: true })
 
     this.grossWeightForm = this.fb.group({
       minWeight: ['', Validators.required],
@@ -105,10 +105,6 @@ export class AdminComponent implements OnInit {
       return this.shippingRateForm.controls
     }
     return this.productForm.controls
-  }
-
-  generateInvoice() {
-    this.pdf.printPdf()
   }
 
   showTab(selectedTab) {
@@ -316,7 +312,9 @@ export class AdminComponent implements OnInit {
       this.productForm.patchValue(value)
       this.formArray('properties', { isNotDeep: true }).clear()
       this.formArray('colors', { isNotDeep: true }).clear()
+      this.formArray('imageUrl', { isNotDeep: true }).clear()
       value.colors.map(color => this.formArray('colors', { isNotDeep: true }).push(this.fb.control(color, Validators.required)))
+      value.imageUrl.map(image => this.formArray('imageUrl', { isNotDeep: true }).push(this.fb.control(image, Validators.required)))
 
       value.colors.forEach((color, i) => {
         this.formArray('properties', { isNotDeep: true }).push(this.addProperty(false))

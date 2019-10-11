@@ -34,39 +34,34 @@ export class ApiService {
   getProducts(filter: any = {}): Observable<Product[]> {
     return this.http.post<Product[]>(`${apiUrl}/products`, filter, httpOptions)
       .pipe(
-        tap(Products => console.log('fetched Products')),
-        catchError(this.handleError('getProducts', []))
+        tap(Products => console.log('fetched Products'))
       );
   }
 
   getProduct(id: any): Observable<Product> {
     const url = `${apiUrl}/${id}`;
     return this.http.get<Product>(url).pipe(
-      tap(_ => console.log(`fetched Product id=${id}`)),
-      catchError(this.handleError<Product>(`getProduct id=${id}`))
+      tap(_ => console.log(`fetched Product id=${id}`))
     );
   }
 
   addProduct(product: Product): Observable<Product> {
     return this.http.post<Product>(apiUrl, product, httpOptions).pipe(
-      tap((art: Product) => console.log(`added Product w/ id=${art._id}`)),
-      catchError(this.handleError<Product>('addProduct'))
+      tap((art: Product) => console.log(`added Product w/ id=${art._id}`))
     );
   }
 
   updateProduct(id: any, product: Product): Observable<any> {
     const url = `${apiUrl}/${id}`;
     return this.http.put(url, product, httpOptions).pipe(
-      tap(_ => console.log(`updated Product id=${id}`)),
-      catchError(this.handleError<any>('updateProduct'))
+      tap(_ => console.log(`updated Product id=${id}`))
     );
   }
 
   deleteProduct(id: any): Observable<Product> {
     const url = `${apiUrl}/${id}`;
     return this.http.delete<Product>(url, httpOptions).pipe(
-      tap(_ => console.log(`deleted Product id=${id}`)),
-      catchError(this.handleError<Product>('deleteProduct'))
+      tap(_ => console.log(`deleted Product id=${id}`))
     );
   }
 
@@ -74,23 +69,19 @@ export class ApiService {
 
   getRegisteredUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${apiUrl}/users/all`).pipe(
-      tap(users => console.log('fetched users')),
-      catchError(this.handleError('getRegisteredUsers', []))
+      tap(users => console.log('fetched users'))
     )
   }
 
   getUserById(id: any): Observable<User> {
     return this.http.get<User>(`${apiUrl}/users/${id}`).pipe(
-      tap(users => console.log('fetched user')),
-      catchError(this.handleError<User>('getUserById'))
+      tap(users => console.log('fetched user'))
     )
   }
 
   updateUser(id: any, user: User): Observable<User> {
     return this.http.put(`${apiUrl}/users/${id}`, user, httpOptions).pipe(
-      tap((user: User) => console.log(`updated user`),
-        catchError(this.handleError<User>('updateUser')))
-    )
+      tap((user: User) => console.log(`updated user`)))
   }
 
   register(user: User): Observable<User> {
@@ -100,16 +91,20 @@ export class ApiService {
 
   deleteUser(id: number) {
     return this.http.delete<User>(`${apiUrl}/users/${id}`).pipe(
-      tap((user: User) => console.log('deleted user')),
-      catchError(this.handleError<User>('deleteUser')))
+      tap((user: User) => console.log('deleted user')))
+  }
+
+  changePassword(id: any, body: any): Observable<User> {
+    return this.http.put<User>(`${apiUrl}/users/changePassword/${id}`, body, httpOptions).pipe(
+      tap(user => console.log("Password updated"))
+    )
   }
 
   // Shipping Rate methods
 
   getShippingRates(type: any): Observable<ShippingRate[]> {
     return this.http.post<ShippingRate[]>(`${apiUrl}/shippingRates/filter`, type == "" ? {} : { shippingMethod: type }, httpOptions).pipe(
-      tap(shippingRates => console.log('fetched shippingRates')),
-      catchError(this.handleError('getShippingRatesByCourierType', []))
+      tap(shippingRates => console.log('fetched shippingRates'))
     )
   }
 
@@ -121,22 +116,19 @@ export class ApiService {
 
   insertShippingRate(shippingRate: ShippingRate): Observable<ShippingRate> {
     return this.http.post(`${apiUrl}/shippingRates`, shippingRate, httpOptions).pipe(
-      tap((rate: ShippingRate) => console.log(`added Shipping rate w/ id=${rate._id}`)),
-      catchError(this.handleError<ShippingRate>('insertShippingRate'))
+      tap((rate: ShippingRate) => console.log(`added Shipping rate w/ id=${rate._id}`))
     );
   }
 
   updateShippingRate(id: any, shippingRate: ShippingRate): Observable<ShippingRate> {
     return this.http.put(`${apiUrl}/shippingRates/${id}`, shippingRate, httpOptions).pipe(
-      tap((rate: ShippingRate) => console.log(`updated shipping rate`),
-        catchError(this.handleError<ShippingRate>('updateShippingRate')))
+      tap((rate: ShippingRate) => console.log(`updated shipping rate`))
     )
   }
 
   deleteShippingRate(id: any): Observable<ShippingRate> {
     return this.http.delete(`${apiUrl}/shippingRates/${id}`, httpOptions).pipe(
-      tap((rate: ShippingRate) => console.log("shipping rate deleted"),
-        catchError(this.handleError<ShippingRate>('deleteShippingRate'))
+      tap((rate: ShippingRate) => console.log("shipping rate deleted")
       )
     )
   }
@@ -144,29 +136,25 @@ export class ApiService {
   // Gross Weight methods
   getGrossWeights(): Observable<GrossWeight[]> {
     return this.http.get<GrossWeight[]>(`${apiUrl}/grossWeights/all`).pipe(
-      tap(grossWeights => console.log('fetched grossWeights')),
-      catchError(this.handleError('getGrossWeights', []))
+      tap(grossWeights => console.log('fetched grossWeights'))
     )
   }
 
   insertGrossWeight(grossWeight: GrossWeight): Observable<GrossWeight> {
     return this.http.post(`${apiUrl}/grossWeights`, grossWeight, httpOptions).pipe(
-      tap((weight: GrossWeight) => console.log(`added gross weight w/ id=${weight._id}`)),
-      catchError(this.handleError<GrossWeight>('insertGrossWeight'))
+      tap((weight: GrossWeight) => console.log(`added gross weight w/ id=${weight._id}`))
     );
   }
 
   updateGrossWeight(id: any, grossWeight: GrossWeight): Observable<GrossWeight> {
     return this.http.put(`${apiUrl}/grossWeights/${id}`, grossWeight, httpOptions).pipe(
-      tap((rate: GrossWeight) => console.log(`updated gross weight`),
-        catchError(this.handleError<GrossWeight>('updateGrossWeight')))
+      tap((rate: GrossWeight) => console.log(`updated gross weight`))
     )
   }
 
   deleteGrossWeight(id: any): Observable<GrossWeight> {
     return this.http.delete(`${apiUrl}/grossWeights/${id}`, httpOptions).pipe(
-      tap((rate: GrossWeight) => console.log("gross weight deleted"),
-        catchError(this.handleError<GrossWeight>('deleteGrossWeight'))
+      tap((rate: GrossWeight) => console.log("gross weight deleted")
       )
     )
   }
@@ -174,58 +162,50 @@ export class ApiService {
   //Product order methods
   getOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(`${apiUrl}/orders/all`).pipe(
-      tap(orders => console.log('fetched orders')),
-      catchError(this.handleError('getOrders', []))
+      tap(orders => console.log('fetched orders'))
     )
   }
 
   getOrdersByUserId(id: any): Observable<Order[]> {
     return this.http.get<Order[]>(`${apiUrl}/orders/user/${id}`).pipe(
-      tap(orders => console.log('fetched orders')),
-      catchError(this.handleError('getOrdersByUserId', []))
+      tap(orders => console.log('fetched orders'))
     )
   }
 
   insertOrder(order: Order): Observable<Order> {
     return this.http.post(`${apiUrl}/orders`, order, httpOptions).pipe(
-      tap((order: Order) => console.log(`added order w/ id=${order._id}`)),
-      catchError(this.handleError<Order>('insertOrder'))
+      tap((order: Order) => console.log(`added order w/ id=${order._id}`))
     );
   }
 
   updateOrder(id: any, order: Order): Observable<Order> {
     return this.http.put(`${apiUrl}/orders/${id}`, order, httpOptions).pipe(
-      tap((rate: Order) => console.log(`updated order`),
-        catchError(this.handleError<Order>('updateOrder')))
+      tap((rate: Order) => console.log(`updated order`))
     )
   }
 
   // Message methods
   getMessages(): Observable<Message[]> {
     return this.http.get<Message[]>(`${apiUrl}/messages/all`).pipe(
-      tap(messages => console.log('fetched messages')),
-      catchError(this.handleError('getMessages', []))
+      tap(messages => console.log('fetched messages'))
     )
   }
 
-  getMessagesByUserId(id: any): Observable<Message> {
-    return this.http.get<Message>(`${apiUrl}/messages/user/${id}`).pipe(
-      tap(message => console.log('fetched message')),
-      catchError(this.handleError<Message>('getMessageByUserId'))
+  getMessagesByUserId(id: any): Observable<Message[]> {
+    return this.http.get<Message[]>(`${apiUrl}/messages/user/${id}`).pipe(
+      tap(message => console.log('fetched messages'))
     )
   }
 
   insertMessage(message: Message): Observable<Message> {
     return this.http.post(`${apiUrl}/messages`, message, httpOptions).pipe(
-      tap((message: Message) => console.log(`added message w/ id=${message._id}`)),
-      catchError(this.handleError<Message>('insertMessage'))
-    );
+      tap((message: Message) => console.log(`added message w/ id=${message._id}`))
+    )
   }
 
   updateMessage(id: any, message: Message): Observable<Message> {
     return this.http.put(`${apiUrl}/messages/${id}`, message, httpOptions).pipe(
-      tap((rate: Message) => console.log(`updated message`),
-        catchError(this.handleError<Message>('updateMessage')))
+      tap((rate: Message) => console.log(`updated message`))
     )
   }
 
@@ -233,29 +213,25 @@ export class ApiService {
 
   getAddresses(): Observable<Address[]> {
     return this.http.get<Address[]>(`${apiUrl}/addresses/all`).pipe(
-      tap(addresses => console.log('fetched addresses')),
-      catchError(this.handleError('getAddresses', []))
+      tap(addresses => console.log('fetched addresses'))
     )
   }
 
   insertAddress(address: Address): Observable<Address> {
     return this.http.post(`${apiUrl}/addresses`, address, httpOptions).pipe(
-      tap((address: Address) => console.log(`added address w/ id=${address._id}`)),
-      catchError(this.handleError<Address>('insertAddress'))
+      tap((address: Address) => console.log(`added address w/ id=${address._id}`))
     );
   }
 
   updateAddress(id: any, address: Address): Observable<Address> {
     return this.http.put(`${apiUrl}/addresses/${id}`, address, httpOptions).pipe(
-      tap((rate: Address) => console.log(`updated gross weight`),
-        catchError(this.handleError<Address>('updateGrossWeight')))
+      tap((rate: Address) => console.log(`updated gross weight`))
     )
   }
 
   deleteAddress(id: any): Observable<Address> {
     return this.http.delete(`${apiUrl}/addresses/${id}`, httpOptions).pipe(
-      tap((address: Address) => console.log("address deleted"),
-        catchError(this.handleError<Address>('deleteAddress'))
+      tap((address: Address) => console.log("address deleted")
       )
     )
   }

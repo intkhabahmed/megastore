@@ -21,7 +21,7 @@ export class MessagesRoute {
             })
         })
 
-        app.route('/api/orders/user/:id').get((req: Request, res: Response, next: NextFunction) => {
+        app.route('/api/messages/user/:id').get((req: Request, res: Response, next: NextFunction) => {
             Message.find({ userId: req.params.id }).populate('user').exec((err, message) => {
                 if (err) { return next(err); }
                 res.json(message);

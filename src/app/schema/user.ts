@@ -5,7 +5,7 @@ export const UserSchema: Schema = new Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true },
     mobile: { type: Number },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: false },
     token: { type: String },
     addresses: [{ type: mongoose.Schema.ObjectId, ref: 'Address' }],
     messages: [{ type: mongoose.Schema.ObjectId, ref: 'Message' }],

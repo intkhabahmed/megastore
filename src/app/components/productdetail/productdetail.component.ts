@@ -1,3 +1,4 @@
+import { AuthenticationService } from './../../services/authentication.service';
 import { AlertService } from './../../services/alert.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -22,15 +23,16 @@ export class ProductdetailComponent implements OnInit {
   id: any
   cp: Product
   selectedImage
+  imgIndex = 0
 
-  constructor(private route: ActivatedRoute, private router: Router, private service: ApiService, public utility: Utility, private dataService: DataService,
-    private alertService: AlertService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, public utility: Utility, private dataService: DataService,
+    private alertService: AlertService, private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.product$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
         this.id = params.get('id')
-        return this.service.getProduct(this.id)
+        return this.api.getProduct(this.id)
       })
     )
     this.product$.subscribe(product => {
@@ -68,10 +70,10 @@ export class ProductdetailComponent implements OnInit {
     if (this.cp.selectedIndex !== -1) {
       this.cp.quantity[this.cp.selectedIndex].forEach((q, i) => {
         debugger
-        if (this.cp.subIndex === -1 &&  q != 0) {
+        if (this.cp.subIndex === -1 && q != 0) {
           this.cp.subIndex = i
           this.colorValueChanged = true
-        } else if(q == 0) {
+        } else if (q == 0) {
           this.cp.subIndex = -1
         }
       })
@@ -87,5 +89,20 @@ export class ProductdetailComponent implements OnInit {
     this.cp.subIndex = product.size[this.cp.selectedIndex].indexOf(value)
     this.utility.orderSummary.cartItems.has(product._id) ? this.utility.updateCartProduct(this.cp) : this.colorValueChanged = true;
     (this.cp.selectedIndex === -1 && this.cp.subIndex === -1) ? this.utility.removeItemFromCart(this.cp) : ''
+  }
+
+  addToWishList(id: any) {
+    this.loading = true
+    this.api.getUserById(this.authService.currentUserValue._id).subscribe(user => {
+      user.wishlist.push(id)
+      this.api.updateUser(user._id, user).subscribe(user => {
+        this.loading = false
+        this.alertService.success("Added to wishlist")
+      },
+        error => {
+          this.loading = false
+          this.alertService.error("Some error occurred while adding to wishlist")
+        })
+    })
   }
 }

@@ -57,7 +57,7 @@ export class CheckoutComponent implements OnInit {
       city: ['', Validators.required],
       state: ['', Validators.required],
       postalCode: ['', Validators.required],
-      mobile: ['', Validators.required]
+      mobile: ['', Validators.required, Validators.pattern("[0-9]")]
     })
   }
 
@@ -77,9 +77,16 @@ export class CheckoutComponent implements OnInit {
     payment.transactionId = Math.random().toString(36).substring(2, 15)
     this.utility.order.payment = this.jsonUtils.getJsonString(payment)
     this.utility.order.user = this.authService.currentUserValue._id
-
+    this.utility.order.orderNo = `${Math.random().toString(36).substring(3, 6)}-${Math.random().toString(36).substring(7, 15)}-${Math.random().toString(36).substring(9, 17)}`
     this.api.insertOrder(this.utility.order).subscribe(order => {
       this.loading = false
+      this.user$.subscribe(user => {
+        user.orders.push(order._id)
+        this.api.updateUser(user._id, user).subscribe(user => {
+          this.loading = false
+          this.submitted = false
+        })
+      })
       this.dataService.changeOrder(new Order())
       this.dataService.changeOrderDetails(new OrderSummary())
       this.router.navigate(['/success', order._id], { replaceUrl: true })
@@ -160,7 +167,7 @@ export class CheckoutComponent implements OnInit {
       address => {
         this.alertService.success("Address Deleted", true)
         this.user$.subscribe(user => {
-          user.messages = user.messages.filter(id => id != address._id)
+          user.addresses = user.addresses.filter(id => id != address._id)
           this.api.updateUser(user._id, user).subscribe(
             user => {
               this.user$ = this.api.getUserById(user._id)

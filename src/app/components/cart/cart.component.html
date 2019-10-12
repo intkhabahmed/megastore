@@ -7,11 +7,11 @@
             <div class="row cart-item" *ngFor="let item of utility.orderSummary.cartItems.values()">
                 <div class="col-sm-4">
                     <div class="card-img-top">
-                        <img [src]="item.product.imageUrl" class="img img-responsive center" height="250" alt="...">
+                        <img [src]="item.product.imageUrl[0]" class="img img-responsive center" height="250" alt="...">
                     </div>
                 </div><!-- col-sm-4 -->
                 <div class="col-sm-8">
-                    <h5 class="order-heading">{{item.product.name}}</h5>
+                    <a class="plain-link" [routerLink]="['/products', item.product._id]"><h5 class="order-heading">{{item.product.name}}</h5></a>
                     <p class="order-sub-heading">Product code - <b>{{item.product.productCode}}</b></p>
                     <table class="table order-table">
                         <tr>
@@ -41,8 +41,8 @@
                         </tr>
                     </table>
                     <div class="float-right cart-actions">
-                        <a (click)="utility.removeItemFromCart(item.product)" class="link">Remove</a> | <a
-                            (click)="editCartItem(item.product._id)" class="link">Edit</a>
+                        <a (click)="utility.removeItemFromCart(item)" class="link">Remove</a> | <a
+                            (click)="editCartItem(item)" class="link">Edit</a>
                     </div><!-- cart-actions -->
                 </div><!-- col-sm-8 -->
                 <hr class="w-100">

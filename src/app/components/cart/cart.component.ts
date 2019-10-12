@@ -1,3 +1,4 @@
+import { CartItem } from './../../models/cart-item';
 import { ShippingRate } from 'src/app/models/shipping-rate';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -132,8 +133,8 @@ export class CartComponent implements OnInit {
     }
   }
 
-  editCartItem(id: any) {
-    this.router.navigate(['products', id], { queryParams: { isEditing: true, returnUrl: this.router.routerState.snapshot.url } })
+  editCartItem(item: CartItem) {
+    this.router.navigate(['products', item.product._id], { queryParams: { isEditing: true, returnUrl: this.router.routerState.snapshot.url, itemId: item.id } })
   }
 
   getDTDCDetails() {

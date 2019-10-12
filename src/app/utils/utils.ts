@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Product } from 'src/app/models/product';
-import { CartItem } from '../models/cart-item';
 import { Order } from '../models/order';
 import { OrderSummary } from '../models/order-summary';
 import { DataService } from '../services/data.service';
+import { CartItem } from './../models/cart-item';
 import { GrossWeight } from './../models/gross-weight';
 import { AlertService } from './../services/alert.service';
 import { ApiService } from './../services/api.service';
@@ -33,10 +33,11 @@ export class Utility {
     decreaseProductQuantity(item: CartItem) {
         if (item.noOfItems > 0) {
             item.noOfItems--
-            // this.orderSummary.cartItems.set(item.product._id, item)
+            this.orderSummary.cartItems.set(item.id, item)
             this.orderSummary.productNetWeight -= item.product.weight[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.totalProductCost -= item.product.price[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.grandTotal -= item.product.price[item.product.selectedIndex][item.product.subIndex]
+            this.orderSummary.grandTotal -= this.orderSummary.shippingCost
             this.orderSummary.shippingCost = 0
             this.calculateGrossWeight(this.orderSummary.productNetWeight)
             if (item.noOfItems == 0) {
@@ -51,35 +52,48 @@ export class Utility {
     }
 
     increaseProductQuantity(item: CartItem) {
-        if (item.product.quantity[item.product.selectedIndex][item.product.subIndex] > item.noOfItems) {
+        if (item.product.quantity[item.product.selectedIndex][item.product.subIndex] > item.noOfItems && item.noOfItems < 100) {
             item.noOfItems++
             item.itemsWeight += item.product.weight[item.product.selectedIndex][item.product.subIndex]
             item.itemsCost += item.product.price[item.product.selectedIndex][item.product.subIndex]
+            this.orderSummary.cartItems.set(item.id, item)
             this.orderSummary.productNetWeight += item.product.weight[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.totalProductCost += item.product.price[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.grandTotal += item.product.price[item.product.selectedIndex][item.product.subIndex]
+            this.orderSummary.grandTotal -= this.orderSummary.shippingCost
             this.orderSummary.shippingCost = 0
             this.calculateGrossWeight(this.orderSummary.productNetWeight)
             this.dataService.changeOrderDetails(this.orderSummary)
         } else {
+            if (item.noOfItems == 100 && item.product.quantity[item.product.selectedIndex][item.product.subIndex] > item.noOfItems) {
+                this.alertService.error(`You can buy Only 100 items at a time of same kind`, true)
+                return
+            }
             this.alertService.error(`Only ${item.product.quantity[item.product.selectedIndex][item.product.subIndex]} available`, true)
         }
     }
 
     addProductToCart(product: Product) {
-        var item = new CartItem();
-        item.id = Math.random().toString(4)
-        item.product = product
-        item.noOfItems = 1
-        item.itemsWeight = product.weight[product.selectedIndex][product.subIndex]
-        item.itemsCost = product.price[product.selectedIndex][product.subIndex]
-        this.orderSummary.cartItems.set(item.id, item)
-        this.orderSummary.productNetWeight += product.weight[product.selectedIndex][product.subIndex]
-        this.orderSummary.totalProductCost += product.price[product.selectedIndex][product.subIndex]
-        this.orderSummary.shippingCost = 0
-        this.calculateGrossWeight(this.orderSummary.productNetWeight)
-        this.dataService.changeOrderDetails(this.orderSummary);
-        return item.id
+        var sameItem = this.findSameItemInCart(product)
+        if (sameItem) {
+            this.alertService.success(`Same product already added, increased it's quantity to ${sameItem.noOfItems + 1}`)
+            this.increaseProductQuantity(sameItem)
+        } else {
+            var item = new CartItem();
+            item.id = Math.random().toString(10).substring(2, 7)
+            item.product = product
+            item.noOfItems = 1
+            item.itemsWeight = product.weight[product.selectedIndex][product.subIndex]
+            item.itemsCost = product.price[product.selectedIndex][product.subIndex]
+            this.orderSummary.cartItems.set(item.id, item)
+            this.orderSummary.productNetWeight += product.weight[product.selectedIndex][product.subIndex]
+            this.orderSummary.totalProductCost += product.price[product.selectedIndex][product.subIndex]
+            this.orderSummary.grandTotal += item.product.price[item.product.selectedIndex][item.product.subIndex]
+            this.orderSummary.shippingCost = 0
+            this.calculateGrossWeight(this.orderSummary.productNetWeight)
+            this.dataService.changeOrderDetails(this.orderSummary);
+            return item.id
+        }
     }
 
     removeItemFromCart(item: CartItem) {
@@ -131,8 +145,14 @@ export class Utility {
         })
     }
 
-    prettyPrintCartItems(cartItems: Map<string, CartItem>) {
-
+    findSameItemInCart(product: Product): CartItem {
+        var sameItem = undefined
+        this.orderSummary.cartItems.forEach(item => {
+            if (product.selectedIndex === item.product.selectedIndex && product.subIndex === item.product.subIndex) {
+                sameItem = item
+            }
+        })
+        return sameItem
     }
 
     states = [

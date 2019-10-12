@@ -53,6 +53,8 @@
                                                 placeholder="Mobile number" />
                                             <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
                                                 <div *ngIf="f.mobile.errors.required">Mobile number is required</div>
+                                                <div *ngIf="f.mobile.errors.pattern">Enter 10
+                                                    digit Mobile number</div>
                                             </div>
                                         </div><!-- form-group -->
                                         <div class="form-group col-sm-6">
@@ -107,10 +109,7 @@
                                             Continue'}}
                                         </button>
                                         <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
-                                            (click)="cancel()">
-                                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                            Cancel
-                                        </button>
+                                            (click)="cancel()"> Cancel </button>
                                     </div>
                                 </form>
                                 <div *ngIf="user$ | async;let user" class="clearfix saved-addresses">
@@ -157,9 +156,14 @@
                             <td class="content-text"><a routerLink="/cart" class="link float-right">Edit</a></td>
                         </tr>
                         <tr>
-                            <td class="content-text">Total weight -</td>
+                            <td class="content-text">Total Net Weight -</td>
                             <td class="content-text text-right">
                                 {{utility.getFormattedWeight(utility.orderSummary.productNetWeight)}}</td>
+                        </tr>
+                        <tr>
+                            <td class="content-text">Total Gross Weight -</td>
+                            <td class="content-text text-right">
+                                {{utility.getFormattedWeight(utility.orderSummary.productGrossWeight)}}</td>
                         </tr>
                         <tr>
                             <td class="content-text">Subtotal -</td>

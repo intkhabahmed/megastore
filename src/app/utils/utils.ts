@@ -1,4 +1,3 @@
-import { AlertService } from './../services/alert.service';
 import { Injectable } from '@angular/core';
 import { Product } from 'src/app/models/product';
 import { CartItem } from '../models/cart-item';
@@ -6,6 +5,7 @@ import { Order } from '../models/order';
 import { OrderSummary } from '../models/order-summary';
 import { DataService } from '../services/data.service';
 import { GrossWeight } from './../models/gross-weight';
+import { AlertService } from './../services/alert.service';
 import { ApiService } from './../services/api.service';
 
 @Injectable({
@@ -33,14 +33,14 @@ export class Utility {
     decreaseProductQuantity(item: CartItem) {
         if (item.noOfItems > 0) {
             item.noOfItems--
-            this.orderSummary.cartItems.set(item.product._id, item)
+            // this.orderSummary.cartItems.set(item.product._id, item)
             this.orderSummary.productNetWeight -= item.product.weight[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.totalProductCost -= item.product.price[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.grandTotal -= item.product.price[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.shippingCost = 0
             this.calculateGrossWeight(this.orderSummary.productNetWeight)
             if (item.noOfItems == 0) {
-                this.orderSummary.cartItems.delete(item.product._id)
+                this.orderSummary.cartItems.delete(item.id)
             }
             if (this.orderSummary.cartItems.size == 0) {
                 this.dataService.changeOrderDetails(new OrderSummary())
@@ -62,32 +62,33 @@ export class Utility {
             this.calculateGrossWeight(this.orderSummary.productNetWeight)
             this.dataService.changeOrderDetails(this.orderSummary)
         } else {
-            this.alertService.error(`Only ${item.product.quantity[item.product.selectedIndex]} available`, true)
+            this.alertService.error(`Only ${item.product.quantity[item.product.selectedIndex][item.product.subIndex]} available`, true)
         }
     }
 
     addProductToCart(product: Product) {
         var item = new CartItem();
+        item.id = Math.random().toString(4)
         item.product = product
         item.noOfItems = 1
         item.itemsWeight = product.weight[product.selectedIndex][product.subIndex]
         item.itemsCost = product.price[product.selectedIndex][product.subIndex]
-        this.orderSummary.cartItems.set(product._id, item)
+        this.orderSummary.cartItems.set(item.id, item)
         this.orderSummary.productNetWeight += product.weight[product.selectedIndex][product.subIndex]
         this.orderSummary.totalProductCost += product.price[product.selectedIndex][product.subIndex]
         this.orderSummary.shippingCost = 0
         this.calculateGrossWeight(this.orderSummary.productNetWeight)
         this.dataService.changeOrderDetails(this.orderSummary);
+        return item.id
     }
 
-    removeItemFromCart(product: Product) {
-        var cartItem = this.orderSummary.cartItems.get(product._id)
-        this.orderSummary.productNetWeight -= product.weight[product.selectedIndex][product.subIndex]
-        this.orderSummary.totalProductCost -= cartItem.itemsCost
-        this.orderSummary.grandTotal -= cartItem.itemsCost * cartItem.noOfItems
+    removeItemFromCart(item: CartItem) {
+        this.orderSummary.productNetWeight -= item.itemsWeight
+        this.orderSummary.totalProductCost -= item.itemsCost
+        this.orderSummary.grandTotal -= item.itemsCost// * item.noOfItems
         this.calculateGrossWeight(this.orderSummary.productNetWeight)
         this.orderSummary.shippingCost = 0
-        this.orderSummary.cartItems.delete(product._id)
+        this.orderSummary.cartItems.delete(item.id)
         if (this.orderSummary.cartItems.size == 0) {
             this.dataService.changeOrderDetails(new OrderSummary())
         } else {
@@ -95,11 +96,10 @@ export class Utility {
         }
     }
 
-    updateCartProduct(product: Product) {
-        var item = this.orderSummary.cartItems.get(product._id)
+    updateCartProduct(item: CartItem) {
         item.itemsWeight = item.product.weight[item.product.selectedIndex][item.product.subIndex] * item.noOfItems
         item.itemsCost = item.product.price[item.product.selectedIndex][item.product.subIndex] * item.noOfItems
-        this.orderSummary.cartItems.set(product._id, item)
+        this.orderSummary.cartItems.set(item.id, item)
         this.orderSummary.productNetWeight = 0
         this.orderSummary.totalProductCost = 0
         //update for new price and weight

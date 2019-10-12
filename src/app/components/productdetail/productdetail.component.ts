@@ -1,11 +1,11 @@
-import { AuthenticationService } from './../../services/authentication.service';
-import { AlertService } from './../../services/alert.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Product } from './../../models/product';
+import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
+import { AuthenticationService } from './../../services/authentication.service';
 import { DataService } from './../../services/data.service';
 import { Utility } from './../../utils/utils';
 
@@ -20,10 +20,10 @@ export class ProductdetailComponent implements OnInit {
   colorValueChanged = false
   isEditing: boolean
   loading = false
-  id: any
   cp: Product
   selectedImage
   imgIndex = 0
+  itemId: any
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, public utility: Utility, private dataService: DataService,
     private alertService: AlertService, private authService: AuthenticationService) { }
@@ -31,16 +31,19 @@ export class ProductdetailComponent implements OnInit {
   ngOnInit() {
     this.product$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
-        this.id = params.get('id')
-        return this.api.getProduct(this.id)
+        return this.api.getProduct(params.get('id'))
       })
     )
+    this.isEditing = this.route.snapshot.queryParams['isEditing'] || false
+    this.itemId = this.route.snapshot.queryParams['itemId'] || -1
     this.product$.subscribe(product => {
-      if (this.utility.orderSummary.cartItems.has(this.id)) {
-        this.cp = this.utility.orderSummary.cartItems.get(this.id).product
+      if (this.isEditing && this.utility.orderSummary.cartItems.has(this.itemId)) {
+        var item = this.utility.orderSummary.cartItems.get(this.itemId)
+        this.cp = item.product
         this.cp.quantity = product.quantity
         this.cp.price = product.price
-        this.utility.updateCartProduct(this.cp)
+        item.product = this.cp
+        this.utility.updateCartProduct(item)
         this.colorValueChanged = true
       } else {
         this.cp = product
@@ -48,12 +51,11 @@ export class ProductdetailComponent implements OnInit {
         this.cp.subIndex = -1
       }
     })
-    this.isEditing = this.route.snapshot.queryParams['isEditing'] || false
   }
 
   redirectBack() {
     this.loading = true
-    if (this.utility.orderSummary.cartItems.get(this.cp._id).noOfItems > this.cp.quantity[this.cp.selectedIndex][this.cp.subIndex]) {
+    if (this.isEditing && this.utility.orderSummary.cartItems.get(this.itemId).noOfItems > this.cp.quantity[this.cp.selectedIndex][this.cp.subIndex]) {
       this.alertService.error(`Change quantity, Only ${this.cp.quantity[this.cp.selectedIndex][this.cp.subIndex]} available`, true)
       this.loading = false
       return
@@ -69,7 +71,6 @@ export class ProductdetailComponent implements OnInit {
     this.cp.subIndex = -1
     if (this.cp.selectedIndex !== -1) {
       this.cp.quantity[this.cp.selectedIndex].forEach((q, i) => {
-        debugger
         if (this.cp.subIndex === -1 && q != 0) {
           this.cp.subIndex = i
           this.colorValueChanged = true
@@ -80,15 +81,28 @@ export class ProductdetailComponent implements OnInit {
     } else {
       this.cp.subIndex = -1
     }
-    if (this.cp.selectedIndex === -1 && this.cp.subIndex === -1 && this.utility.orderSummary.cartItems.has(product._id)) {
-      this.utility.removeItemFromCart(this.cp)
+    if (this.cp.selectedIndex === -1 && this.cp.subIndex === -1 && this.utility.orderSummary.cartItems.has(this.itemId)) {
+      this.utility.removeItemFromCart(this.utility.orderSummary.cartItems.get(this.itemId))
     }
   }
 
   sizeValueChanged(value, product) {
     this.cp.subIndex = product.size[this.cp.selectedIndex].indexOf(value)
-    this.utility.orderSummary.cartItems.has(product._id) ? this.utility.updateCartProduct(this.cp) : this.colorValueChanged = true;
-    (this.cp.selectedIndex === -1 && this.cp.subIndex === -1) ? this.utility.removeItemFromCart(this.cp) : ''
+    if (this.utility.orderSummary.cartItems.has(this.itemId)) {
+      var item = this.utility.orderSummary.cartItems.get(this.itemId)
+      item.product = this.cp
+      if (this.cp.selectedIndex === -1 && this.cp.subIndex === -1) {
+        this.utility.removeItemFromCart(item)
+      } else {
+        if (item.noOfItems > this.cp.quantity[this.cp.selectedIndex][this.cp.subIndex]) {
+          item.noOfItems = 1
+        }
+        this.utility.updateCartProduct(item)
+      }
+    } else {
+      this.colorValueChanged = true
+    }
+
   }
 
   addToWishList(id: any) {

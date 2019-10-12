@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import * as pdfMake from 'pdfmake/build/pdfmake.js';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
 import { Order } from '../models/order';
+import { OrderSummary } from '../models/order-summary';
+import { JsonUtils } from '../utils/json-utils';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
@@ -9,14 +11,96 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class PdfGeneratorService {
 
-  constructor() {
+  constructor(private jsonUtils: JsonUtils) {
   }
+
+  header = [
+    {
+      text: 'S.No',
+      style: 'itemsHeader'
+    },
+    {
+      text: 'Product',
+      style: 'itemsHeader'
+    },
+    {
+      text: 'Qty',
+      style: ['itemsHeader', 'center']
+    },
+    {
+      text: 'Price',
+      style: ['itemsHeader', 'center']
+    },
+    {
+      text: 'Tax',
+      style: ['itemsHeader', 'center']
+    },
+    {
+      text: 'Discount',
+      style: ['itemsHeader', 'center']
+    },
+    {
+      text: 'Total',
+      style: ['itemsHeader', 'center']
+    }
+  ]
+
+  rows = []
 
   /* downloadPdf() {
     pdfMake.createPdf(this.dd()).download()
   } */
 
+  createRows(orderSummary: OrderSummary): any[] {
+    var dataRows = []
+    dataRows.push(this.header)
+    var index = 1
+    orderSummary.cartItems.forEach(item => {
+      dataRows.push([
+        {
+          text: index,
+          style: 'itemNumber'
+        },
+        [
+          {
+            text: item.product.name,
+            style: 'itemTitle'
+          },
+          {
+            text: item.product.category,
+            style: 'itemSubTitle'
+
+          }
+        ],
+        {
+          text: item.noOfItems,
+          style: 'itemNumber'
+        },
+        {
+          text: `Rs ${item.product.price[item.product.selectedIndex][item.product.subIndex]}`,
+          style: 'itemNumber'
+        },
+        {
+          text: '0%',
+          style: 'itemNumber'
+        },
+        {
+          text: '0%',
+          style: 'itemNumber'
+        },
+        {
+          text: `Rs ${item.itemsCost}`,
+          style: 'itemTotal'
+        }
+      ])
+      index++
+    })
+    return dataRows
+  }
+
   printPdf(order: Order) {
+    order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
+    this.rows = this.createRows(order.orderSummary)
     pdfMake.createPdf(this.dd(order)).open({}, window)
   }
 
@@ -138,7 +222,7 @@ export class PdfGeneratorService {
               style: 'invoiceBillingAddress'
             },
             {
-              text: `${order.address.address}, ${order.address.city}, ${order.address.state}-${order.address.postalCode}`,
+              text: `${order.address.address}, ${order.address.city}, ${order.address.state} - ${order.address.postalCode}`,
               style: 'invoiceBillingAddress'
             },
           ]
@@ -151,107 +235,9 @@ export class PdfGeneratorService {
             // headers are automatically repeated if the table spans over multiple pages
             // you can declare how many rows should be treated as headers
             headerRows: 1,
-            widths: ['*', 40, 'auto', 40, 'auto', 80],
+            widths: [30, '*', 40, 'auto', 40, 'auto', 80],
 
-            body: [
-              // Table Header
-              [
-                {
-                  text: 'Product',
-                  style: 'itemsHeader'
-                },
-                {
-                  text: 'Qty',
-                  style: ['itemsHeader', 'center']
-                },
-                {
-                  text: 'Price',
-                  style: ['itemsHeader', 'center']
-                },
-                {
-                  text: 'Tax',
-                  style: ['itemsHeader', 'center']
-                },
-                {
-                  text: 'Discount',
-                  style: ['itemsHeader', 'center']
-                },
-                {
-                  text: 'Total',
-                  style: ['itemsHeader', 'center']
-                }
-              ],
-              // Items
-              // Item 1
-              [
-                [
-                  {
-                    text: 'Item 1',
-                    style: 'itemTitle'
-                  },
-                  {
-                    text: 'Item Description',
-                    style: 'itemSubTitle'
-
-                  }
-                ],
-                {
-                  text: '1',
-                  style: 'itemNumber'
-                },
-                {
-                  text: '$999.99',
-                  style: 'itemNumber'
-                },
-                {
-                  text: '0%',
-                  style: 'itemNumber'
-                },
-                {
-                  text: '0%',
-                  style: 'itemNumber'
-                },
-                {
-                  text: '$999.99',
-                  style: 'itemTotal'
-                }
-              ],
-              // Item 2
-              [
-                [
-                  {
-                    text: 'Item 2',
-                    style: 'itemTitle'
-                  },
-                  {
-                    text: 'Item Description',
-                    style: 'itemSubTitle'
-
-                  }
-                ],
-                {
-                  text: '1',
-                  style: 'itemNumber'
-                },
-                {
-                  text: '$999.99',
-                  style: 'itemNumber'
-                },
-                {
-                  text: '0%',
-                  style: 'itemNumber'
-                },
-                {
-                  text: '0%',
-                  style: 'itemNumber'
-                },
-                {
-                  text: '$999.99',
-                  style: 'itemTotal'
-                }
-              ],
-              // END Items
-            ]
+            body: this.rows
           }, // table
           //  layout: 'lightHorizontalLines'
         },
@@ -271,17 +257,17 @@ export class PdfGeneratorService {
                   style: 'itemsFooterSubTitle'
                 },
                 {
-                  text: '$2000.00',
+                  text: `Rs ${order.orderSummary.totalProductCost}`,
                   style: 'itemsFooterSubValue'
                 }
               ],
               [
                 {
-                  text: 'Tax 21%',
+                  text: 'Shipping Cost',
                   style: 'itemsFooterSubTitle'
                 },
                 {
-                  text: '$523.13',
+                  text: `Rs ${order.orderSummary.shippingCost}`,
                   style: 'itemsFooterSubValue'
                 }
               ],
@@ -291,7 +277,7 @@ export class PdfGeneratorService {
                   style: 'itemsFooterTotalTitle'
                 },
                 {
-                  text: '$2523.93',
+                  text: `Rs ${order.orderSummary.grandTotal}`,
                   style: 'itemsFooterTotalValue'
                 }
               ],

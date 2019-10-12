@@ -1,20 +1,19 @@
-import { JsonUtils } from './../../utils/json-utils';
-import { Payment } from './../../models/payment';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { Order } from 'src/app/models/order';
+import { OrderSummary } from 'src/app/models/order-summary';
 import { Address } from './../../models/address';
+import { Payment } from './../../models/payment';
 import { User } from './../../models/user';
 import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
 import { AuthenticationService } from './../../services/authentication.service';
 import { DataService } from './../../services/data.service';
-import { PdfGeneratorService } from './../../services/pdf-generator.service';
 import { OrderStatus } from './../../utils/enums';
+import { JsonUtils } from './../../utils/json-utils';
 import { Utility } from './../../utils/utils';
-import { Order } from 'src/app/models/order';
-import { OrderSummary } from 'src/app/models/order-summary';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,7 +56,7 @@ export class CheckoutComponent implements OnInit {
       city: ['', Validators.required],
       state: ['', Validators.required],
       postalCode: ['', Validators.required],
-      mobile: ['', Validators.required, Validators.pattern("[0-9]")]
+      mobile: ['', [Validators.required, Validators.pattern("\\d{10}")]]
     })
   }
 

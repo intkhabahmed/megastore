@@ -1,8 +1,8 @@
-import { CartItem } from './../../models/cart-item';
-import { ShippingRate } from 'src/app/models/shipping-rate';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { ShippingRate } from 'src/app/models/shipping-rate';
+import { CartItem } from './../../models/cart-item';
 import { ApiService } from './../../services/api.service';
 import { DataService } from './../../services/data.service';
 import { ShippingMethod } from './../../utils/enums';
@@ -146,6 +146,8 @@ export class CartComponent implements OnInit {
     this.deliveryMethodSelected = false
     this.utility.orderSummary.grandTotal -= this.utility.orderSummary.shippingCost
     this.utility.orderSummary.shippingCost = 0
+    this.dataService.changeOrderDetails(this.utility.orderSummary)
+    this.cdr.detectChanges()
   }
 
   goToCheckout() {

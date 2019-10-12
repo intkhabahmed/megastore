@@ -256,6 +256,26 @@ hr {
     left    : 35%;
 }
 
+#search-form {
+    position  : relative;
+    margin-top: 10px;
+    width     : 300px;
+}
+
+#search_btn {
+    color   : #FF00AE;
+    float   : right;
+    position: absolute;
+    right   : 10px;
+    top     : 20%;
+    cursor  : pointer;
+}
+
+#search-form input {
+    border-radius: 50px;
+    padding-right: 9%;
+}
+
 @media(max-width: 992px) {
     .overflow-scroll {
         overflow-x: auto;

@@ -16,4 +16,6 @@ const ProductSchema: Schema = new Schema({
     updatedAt: { type: Date },
 }, { strict: false });
 
+ProductSchema.index({ '$**': 'text' });
+
 export default mongoose.model('Product', ProductSchema);

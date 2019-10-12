@@ -14,13 +14,14 @@ import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
+import { OrderSuccessComponent } from './components/order-success/order-success.component';
 import { ProductdetailComponent } from './components/productdetail/productdetail.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { SearchComponent } from './components/search/search.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { ErrorInterceptor } from './utils/error.interceptor';
 import { JwtInterceptor } from './utils/jwt-interceptor';
-import { OrderSuccessComponent } from './components/order-success/order-success.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { OrderSuccessComponent } from './components/order-success/order-success.
     ProfileComponent,
     AlertComponent,
     AdminComponent,
-    OrderSuccessComponent
+    OrderSuccessComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

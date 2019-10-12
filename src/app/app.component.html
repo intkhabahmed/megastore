@@ -41,10 +41,11 @@
             </div>
           </li>
         </div><!-- nav-top -->
-        <form class="form-inline">
+        <form class="form-inline" [formGroup]="searchForm" (keydown.enter)="search()">
           <div id="search-form">
-            <input class="form-control mr-sm-2 w-100" type="search" placeholder="Search for items" aria-label="Search">
-            <fa-icon [icon]="['fas', 'search']" id="search_btn"></fa-icon>
+            <input class="form-control mr-sm-2 w-100" type="search" formControlName="keyword"
+              placeholder="Search for items" aria-label="Search">
+            <fa-icon [icon]="['fas', 'search']" id="search_btn" (click)="search()"></fa-icon>
           </div>
         </form>
       </div><!-- nav-right-container -->

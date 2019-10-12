@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   productsLength: number
 
   ngOnInit() {
-    this.products = this.service.getProducts()
+    this.products = this.service.getProducts({ productStatus: true })
     this.products.subscribe(products => this.productsLength = products.length)
   }
 

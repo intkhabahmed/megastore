@@ -13,7 +13,7 @@ export class ProductsComponent implements OnInit {
 
   products$: Observable<Product[]>
   constructor(private api: ApiService, public utility: Utility) {
-    this.products$ = api.getProducts()
+    this.products$ = api.getProducts({ productStatus: true })
   }
 
   ngOnInit() {

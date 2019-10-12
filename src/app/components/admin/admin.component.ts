@@ -172,7 +172,7 @@ export class AdminComponent implements OnInit {
       this.formArray('weight', { isNotDeep: true }).push(this.fb.control(this.formArray('weight', { index: i }).value, Validators.required));
       this.formArray('quantity', { isNotDeep: true }).push(this.fb.control(this.formArray('quantity', { index: i }).value, Validators.required));
     })
-    this.productForm.removeControl('properties')
+    this.formArray('properties', { isNotDeep: true }).disable()
     if (!this.isEditing) {
       this.api.addProduct(this.productForm.value).pipe().subscribe(
         product => {
@@ -194,11 +194,10 @@ export class AdminComponent implements OnInit {
           this.showOverlay = false
           this.loading = false
           this.submitted = false
-          this.productForm.reset({})
+          this.initializeFormGroups()
         }
       )
     }
-    this.productForm.addControl('properties', this.fb.array([this.addProperty]))
   }
 
   delete(id, type) {

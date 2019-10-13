@@ -1,11 +1,9 @@
-import { Utility } from './../../utils/utils';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Product } from 'src/app/models/product';
-import { CartItem } from './../../models/cart-item';
-import { OrderSummary } from './../../models/order-summary';
 import { ApiService } from './../../services/api.service';
 import { DataService } from './../../services/data.service';
-import { Observable } from 'rxjs';
+import { Utility } from './../../utils/utils';
 
 @Component({
   selector: 'app-home',
@@ -17,10 +15,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private service: ApiService, public dataService: DataService, public utility: Utility) { }
   products: Observable<Product[]>;
   productsLength: number
+  loading = false
 
   ngOnInit() {
+    this.loading = true
     this.products = this.service.getProducts({ productStatus: true })
-    this.products.subscribe(products => this.productsLength = products.length)
+    this.products.subscribe(products => {
+      this.loading = false
+      this.productsLength = products.length
+    })
   }
 
   ngAfterViewInit(): void {

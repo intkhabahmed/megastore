@@ -1,7 +1,5 @@
-import { PdfGeneratorService } from './../../services/pdf-generator.service';
-import { JsonUtils } from './../../utils/json-utils';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { GrossWeight } from 'src/app/models/gross-weight';
 import { Message } from 'src/app/models/message';
@@ -11,8 +9,9 @@ import { Product } from './../../models/product';
 import { User } from './../../models/user';
 import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
+import { PdfGeneratorService } from './../../services/pdf-generator.service';
 import { AdminTab, ShippingMethod } from './../../utils/enums';
-import { map } from 'rxjs/operators';
+import { JsonUtils } from './../../utils/json-utils';
 
 @Component({
   selector: 'app-admin',
@@ -31,6 +30,7 @@ export class AdminComponent implements OnInit {
   updateProductForm: FormGroup
   grossWeightForm: FormGroup
   shippingRateForm: FormGroup
+  categoryForm: FormGroup
   loading = false
   submitted = false;
   editing: string
@@ -40,6 +40,7 @@ export class AdminComponent implements OnInit {
   messages$: Observable<Message[]>
   showOverlay = false
   id: string
+  categories$: Observable<any[]>
 
   constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils, public pdf: PdfGeneratorService) { }
 
@@ -92,6 +93,10 @@ export class AdminComponent implements OnInit {
       area: [''],
       shippingMethod: ['', Validators.required]
     })
+
+    this.categoryForm = this.fb.group({
+      name: ['', Validators.required]
+    })
   }
 
   get f() {
@@ -104,6 +109,9 @@ export class AdminComponent implements OnInit {
     if (this.editing == 'shippingRate') {
       return this.shippingRateForm.controls
     }
+    if (this.editing == 'category') {
+      return this.categoryForm.controls
+    }
     return this.productForm.controls
   }
 
@@ -114,14 +122,17 @@ export class AdminComponent implements OnInit {
         if (!this.isEditing) {
           this.initializeFormGroups()
         }
+        this.categories$ = this.api.getCategories()
         this.currentTab = this.adminTab.NEW_PRODUCT_UPLOAD
         break;
       case this.adminTab.PRODUCT_LIST:
         this.products$ = this.api.getProducts()
+        this.categories$ = this.api.getCategories()
         this.currentTab = this.adminTab.PRODUCT_LIST
         break;
-      case this.adminTab.POPULAR_PRODUCTS:
-        this.currentTab = this.adminTab.POPULAR_PRODUCTS
+      case this.adminTab.CATEGORIES:
+        this.categories$ = this.api.getCategories()
+        this.currentTab = this.adminTab.CATEGORIES
         break;
       case this.adminTab.ORDER_INVOICE:
         this.api.getOrders().subscribe(orders => {
@@ -204,7 +215,7 @@ export class AdminComponent implements OnInit {
     this.alertService.clear()
     switch (type) {
       case 'product':
-        this.api.deleteProduct(id).pipe().subscribe(
+        this.api.deleteProduct(id).subscribe(
           data => {
             this.alertService.success("Product Deleted", true)
             this.products$ = this.api.getProducts()
@@ -215,13 +226,35 @@ export class AdminComponent implements OnInit {
         )
         break;
       case 'shippingRate':
-        this.api.deleteShippingRate(id).pipe().subscribe(
+        this.api.deleteShippingRate(id).subscribe(
           data => {
             this.alertService.success("Shipping Rate Deleted", true)
             this.shippingRates$ = this.api.getShippingRates('')
           },
           error => {
             this.alertService.error("Error deleting Shipping Rate", true)
+          }
+        )
+        break;
+      case 'grossWeight':
+        this.api.deleteGrossWeight(id).subscribe(
+          data => {
+            this.alertService.success("Grossweight Deleted", true)
+            this.grossWeights$ = this.api.getGrossWeights()
+          },
+          error => {
+            this.alertService.error("Error deleting gross weight", true)
+          }
+        )
+        break;
+      case 'category':
+        this.api.deleteCategory(id).subscribe(
+          data => {
+            this.alertService.success("Category Deleted", true)
+            this.categories$ = this.api.getCategories()
+          },
+          error => {
+            this.alertService.error("Error deleting category", true)
           }
         )
         break;
@@ -237,7 +270,7 @@ export class AdminComponent implements OnInit {
     }
     this.loading = true
     if (!this.isEditing) {
-      this.api.insertGrossWeight(this.grossWeightForm.value).pipe().subscribe(
+      this.api.insertGrossWeight(this.grossWeightForm.value).subscribe(
         grossWeight => {
           this.alertService.success("Gross Weight added")
           this.grossWeights$ = this.api.getGrossWeights()
@@ -253,7 +286,7 @@ export class AdminComponent implements OnInit {
         }
       )
     } else {
-      this.api.updateGrossWeight(this.id, this.grossWeightForm.value).pipe().subscribe(
+      this.api.updateGrossWeight(this.id, this.grossWeightForm.value).subscribe(
         data => {
           this.alertService.success("Gross Weight updated")
           this.grossWeights$ = this.api.getGrossWeights()
@@ -275,7 +308,7 @@ export class AdminComponent implements OnInit {
     }
     this.loading = true
     if (!this.isEditing) {
-      this.api.insertShippingRate(this.shippingRateForm.value).pipe().subscribe(
+      this.api.insertShippingRate(this.shippingRateForm.value).subscribe(
         shippingRate => {
           this.alertService.success("Shipping Rate added")
           this.shippingRates$ = this.api.getShippingRates("")
@@ -292,7 +325,7 @@ export class AdminComponent implements OnInit {
         }
       )
     } else {
-      this.api.updateShippingRate(this.id, this.shippingRateForm.value).pipe().subscribe(
+      this.api.updateShippingRate(this.id, this.shippingRateForm.value).subscribe(
         data => {
           this.alertService.success("Shipping Rate updated")
           this.shippingRates$ = this.api.getShippingRates("")
@@ -300,6 +333,44 @@ export class AdminComponent implements OnInit {
           this.loading = false
           this.submitted = false
           this.shippingRateForm.reset({})
+        }
+      )
+    }
+  }
+
+  addOrUpdateCategory() {
+    this.alertService.clear()
+    this.submitted = true
+    if (this.categoryForm.invalid) {
+      this.loading = false;
+      return
+    }
+    this.loading = true
+    if (!this.isEditing) {
+      this.api.insertCategory(this.categoryForm.value).subscribe(
+        category => {
+          this.alertService.success("Category added")
+          this.categories$ = this.api.getCategories()
+          this.showOverlay = false
+          this.loading = false
+          this.submitted = false
+          this.categoryForm.reset({})
+        },
+        error => {
+          this.alertService.error("Some error occurred while adding category", true)
+          this.loading = false
+          this.submitted = false
+        }
+      )
+    } else {
+      this.api.updateCategory(this.id, this.categoryForm.value).subscribe(
+        data => {
+          this.alertService.success("Category updated")
+          this.categories$ = this.api.getCategories()
+          this.showOverlay = false
+          this.loading = false
+          this.submitted = false
+          this.categoryForm.reset({})
         }
       )
     }
@@ -330,6 +401,8 @@ export class AdminComponent implements OnInit {
       this.grossWeightForm.patchValue(value)
     } else if (this.editing == "message") {
 
+    } else if (this.editing == 'category') {
+      this.categoryForm.patchValue(value)
     }
   }
 

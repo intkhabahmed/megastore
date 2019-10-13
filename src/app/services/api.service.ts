@@ -236,4 +236,30 @@ export class ApiService {
     )
   }
 
+  // Category methods
+  getCategories(): Observable<any[]> {
+    return this.http.get<any[]>(`${apiUrl}/categories/all`).pipe(
+      tap(categories => console.log('fetched categories'))
+    )
+  }
+
+  insertCategory(category: any): Observable<GrossWeight> {
+    return this.http.post(`${apiUrl}/categories`, category, httpOptions).pipe(
+      tap((category: any) => console.log(`added category with id=${category._id}`))
+    );
+  }
+
+  updateCategory(id: any, category: any): Observable<GrossWeight> {
+    return this.http.put(`${apiUrl}/categories/${id}`, category, httpOptions).pipe(
+      tap((category: any) => console.log(`updated category`))
+    )
+  }
+
+  deleteCategory(id: any): Observable<GrossWeight> {
+    return this.http.delete(`${apiUrl}/categories/${id}`, httpOptions).pipe(
+      tap((category: any) => console.log("category deleted")
+      )
+    )
+  }
+
 }

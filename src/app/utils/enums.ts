@@ -6,7 +6,8 @@ export enum AdminTab {
     SHIPPING_RATES,
     GROSS_WEIGHT_CALCULATOR,
     REGISTERED_USERS,
-    MESSAGES
+    MESSAGES,
+    CATEGORIES
 }
 
 export enum ShippingMethod {

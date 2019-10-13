@@ -13,6 +13,9 @@
                         [ngClass]="{'btn-pink': currentTab === adminTab.PRODUCT_LIST, 'btn-gray': currentTab !== adminTab.PRODUCT_LIST}"
                         (click)="showTab(adminTab.PRODUCT_LIST)">Live
                         Product List</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.CATEGORIES, 'btn-gray': currentTab !== adminTab.CATEGORIES}"
+                        (click)="showTab(adminTab.CATEGORIES)">Categories</button>
                     <!-- <button class="btn"
                         [ngClass]="{'btn-pink': currentTab === adminTab.POPULAR_PRODUCTS, 'btn-gray': currentTab !== adminTab.POPULAR_PRODUCTS}"
                         (click)="showTab(adminTab.POPULAR_PRODUCTS)">Popular
@@ -49,8 +52,8 @@
                                     <select formControlName="category" class="form-control"
                                         [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
                                         <option value="">Select Category</option>
-                                        <option value="Fibre">Fibre</option>
-                                        <option value="Paper">Paper</option>
+                                        <option [value]="category.name" *ngFor="let category of categories$ | async">
+                                            {{category.name}}</option>
                                     </select>
                                     <div *ngIf="submitted && f.category.errors" class="invalid-feedback">
                                         <div *ngIf="f.category.errors.required">Category is required</div>
@@ -300,6 +303,28 @@
                             </table>
                         </div><!-- overflow-scroll -->
                     </div><!-- popular products -->
+                    <div *ngIf="currentTab == adminTab.CATEGORIES">
+                        <h4>Categories</h4>
+                        <div class="form-group">
+                            <button (click)="showOverlay=true;editing='category'" class="btn btn-pink">Add
+                                New</button>
+                        </div>
+                        <div class="overflow-scroll">
+                            <table class="table table-bordered">
+                                <tr class="table-primary">
+                                    <th>Category Name</th>
+                                    <th>Operations</th>
+                                </tr>
+                                <tr *ngFor="let category of categories$ | async;index as i">
+                                    <td>{{category.name}}</td>
+                                    <td><a class="link"
+                                            (click)="isEditing=true;showOverlay=true;editing='category';populateEditForm(category)">Edit</a>&nbsp;&nbsp;<a
+                                            class="link">Delete</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div><!-- overflow-scroll -->
+                    </div><!-- gross weight calculator -->
                     <div *ngIf="currentTab == adminTab.ORDER_INVOICE">
                         <h4>Orders/Invoices</h4>
                         <div class="overflow-scroll">
@@ -468,8 +493,8 @@
                     <select formControlName="category" class="form-control"
                         [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
                         <option value="">Select Category</option>
-                        <option value="Fibre">Fibre</option>
-                        <option value="Paper">Paper</option>
+                        <option [value]="category.name" *ngFor="let category of categories$ | async">
+                            {{category.name}}</option>
                     </select>
                     <div *ngIf="submitted && f.category.errors" class="invalid-feedback">
                         <div *ngIf="f.category.errors.required">Category is required</div>
@@ -764,4 +789,27 @@
             </div>
         </form>
     </div><!-- add or edit shipping charges -->
+    <div *ngIf="editing == 'category'">
+        <form class="add-product-form" [formGroup]="categoryForm" (ngSubmit)="addOrUpdateCategory()">
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <label for="name">Category Name</label>
+                    <input type="text" formControlName="name" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                        <div *ngIf="f.name.errors.required">Category name is required</div>
+                    </div>
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <button [disabled]="loading" class="btn btn-pink center">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Save
+                    </button>
+                </div>
+            </div><!-- form-row -->
+
+        </form>
+    </div><!-- add or edit gross weight -->
 </div>

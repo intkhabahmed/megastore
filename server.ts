@@ -21,6 +21,7 @@ import * as mongoose from 'mongoose';
 import { join } from 'path';
 import 'zone.js/dist/zone-node';
 import { AddressesRoute } from './routes/address-routes';
+import { CategoriesRoute } from './routes/category-routes';
 import { GrossWeightsRoute } from './routes/gross-weight-routes';
 import { MessagesRoute } from './routes/message-routes';
 import { OrdersRoute } from './routes/order-routes';
@@ -42,6 +43,7 @@ const ordersRoute: OrdersRoute = new OrdersRoute();
 const grossWeightsRoute: GrossWeightsRoute = new GrossWeightsRoute();
 const messagesRoute: MessagesRoute = new MessagesRoute();
 const addressesRoute: AddressesRoute = new AddressesRoute()
+const categoriesRoute: CategoriesRoute = new CategoriesRoute()
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
@@ -70,7 +72,8 @@ shippingRoute.shippingRoute(app);
 ordersRoute.orderRoute(app);
 grossWeightsRoute.grossWeightRoute(app);
 messagesRoute.orderRoute(app);
-addressesRoute.addressRoute(app)
+addressesRoute.addressRoute(app);
+categoriesRoute.categoryRoute(app);
 
 // Example Express Rest API endpoints
 // app.get('/api/**', (req, res) => { });

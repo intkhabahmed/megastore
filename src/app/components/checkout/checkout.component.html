@@ -27,7 +27,8 @@
                                     </a>
                                 </div>
                                 <app-alert></app-alert>
-                                <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="showAddressForm">
+                                <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="showAddressForm"
+                                    (ngsubmit)="saveAndEditAddress()">
                                     <div class="form-row">
                                         <div class="form-group col-sm-6">
                                             <input type="text" formControlName="firstName" class="form-control"

@@ -31,6 +31,8 @@ export class AdminComponent implements OnInit {
   grossWeightForm: FormGroup
   shippingRateForm: FormGroup
   categoryForm: FormGroup
+  orderForm: FormGroup
+  messageForm: FormGroup
   loading = false
   submitted = false;
   editing: string
@@ -57,6 +59,8 @@ export class AdminComponent implements OnInit {
   cancel() {
     this.isEditing = false
     this.showOverlay = false
+    this.editing = ""
+    this.submitted = false
     this.initializeFormGroups()
   }
 
@@ -97,6 +101,14 @@ export class AdminComponent implements OnInit {
     this.categoryForm = this.fb.group({
       name: ['', Validators.required]
     })
+
+    this.orderForm = this.fb.group({
+      trackingNo: ['', Validators.required]
+    })
+
+    this.messageForm = this.fb.group({
+      reply: ['', Validators.required]
+    })
   }
 
   get f() {
@@ -111,6 +123,12 @@ export class AdminComponent implements OnInit {
     }
     if (this.editing == 'category') {
       return this.categoryForm.controls
+    }
+    if (this.editing == 'order') {
+      return this.orderForm.controls
+    }
+    if (this.editing == 'message') {
+      return this.messageForm.controls
     }
     return this.productForm.controls
   }
@@ -135,13 +153,7 @@ export class AdminComponent implements OnInit {
         this.currentTab = this.adminTab.CATEGORIES
         break;
       case this.adminTab.ORDER_INVOICE:
-        this.api.getOrders().subscribe(orders => {
-          orders.forEach(order => {
-            order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
-            order.payment = this.jsonUtils.parseJson(order.payment)
-          })
-          this.orders$ = of(orders)
-        })
+        this.getAndParseOrders()
         this.currentTab = this.adminTab.ORDER_INVOICE
         break;
       case this.adminTab.SHIPPING_RATES:
@@ -157,11 +169,22 @@ export class AdminComponent implements OnInit {
         this.currentTab = this.adminTab.REGISTERED_USERS
         break;
       case this.adminTab.MESSAGES:
+        this.messages$ = this.api.getMessages()
         this.currentTab = this.adminTab.MESSAGES
         break;
       default:
         break;
     }
+  }
+
+  getAndParseOrders() {
+    this.api.getOrders().subscribe(orders => {
+      orders.forEach(order => {
+        order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
+        order.payment = this.jsonUtils.parseJson(order.payment)
+      })
+      this.orders$ = of(orders)
+    })
   }
 
   addOrUpdateProduct() {
@@ -189,8 +212,7 @@ export class AdminComponent implements OnInit {
         product => {
           this.alertService.success("Product added", true)
           this.loading = false
-          this.submitted = false
-          this.initializeFormGroups()
+          this.cancel()
         },
         error => {
           this.alertService.error("Some error occurred while adding product", true)
@@ -202,10 +224,8 @@ export class AdminComponent implements OnInit {
         data => {
           this.alertService.success("Product updated")
           this.products$ = this.api.getProducts()
-          this.showOverlay = false
           this.loading = false
-          this.submitted = false
-          this.initializeFormGroups()
+          this.cancel()
         }
       )
     }
@@ -274,10 +294,8 @@ export class AdminComponent implements OnInit {
         grossWeight => {
           this.alertService.success("Gross Weight added")
           this.grossWeights$ = this.api.getGrossWeights()
-          this.showOverlay = false
           this.loading = false
-          this.submitted = false
-          this.grossWeightForm.reset({})
+          this.cancel()
         },
         error => {
           this.alertService.error("Some error occurred while adding gross weight", true)
@@ -290,10 +308,8 @@ export class AdminComponent implements OnInit {
         data => {
           this.alertService.success("Gross Weight updated")
           this.grossWeights$ = this.api.getGrossWeights()
-          this.showOverlay = false
           this.loading = false
-          this.submitted = false
-          this.grossWeightForm.reset({})
+          this.cancel()
         }
       )
     }
@@ -312,11 +328,8 @@ export class AdminComponent implements OnInit {
         shippingRate => {
           this.alertService.success("Shipping Rate added")
           this.shippingRates$ = this.api.getShippingRates("")
-          this.showOverlay = false
           this.loading = false
-          this.submitted = false
-          this.shippingRateForm.reset({})
-          this.shippingRateForm.patchValue({ isLocal: null, shippingMethod: [''] })
+          this.cancel()
         },
         error => {
           this.alertService.error("Some error occurred while adding shipping rate", true)
@@ -329,10 +342,8 @@ export class AdminComponent implements OnInit {
         data => {
           this.alertService.success("Shipping Rate updated")
           this.shippingRates$ = this.api.getShippingRates("")
-          this.showOverlay = false
           this.loading = false
-          this.submitted = false
-          this.shippingRateForm.reset({})
+          this.cancel()
         }
       )
     }
@@ -351,10 +362,8 @@ export class AdminComponent implements OnInit {
         category => {
           this.alertService.success("Category added")
           this.categories$ = this.api.getCategories()
-          this.showOverlay = false
           this.loading = false
-          this.submitted = false
-          this.categoryForm.reset({})
+          this.cancel()
         },
         error => {
           this.alertService.error("Some error occurred while adding category", true)
@@ -367,13 +376,47 @@ export class AdminComponent implements OnInit {
         data => {
           this.alertService.success("Category updated")
           this.categories$ = this.api.getCategories()
-          this.showOverlay = false
           this.loading = false
-          this.submitted = false
-          this.categoryForm.reset({})
+          this.cancel()
         }
       )
     }
+  }
+
+  updateOrder() {
+    this.alertService.clear()
+    this.submitted = true
+    if (this.orderForm.invalid) {
+      this.loading = false;
+      return
+    }
+    this.loading = true
+    this.api.updateOrder(this.id, this.orderForm.value).subscribe(
+      data => {
+        this.alertService.success("Order updated")
+        this.getAndParseOrders()
+        this.loading = false
+        this.cancel()
+      }
+    )
+  }
+
+  updateMessage() {
+    this.alertService.clear()
+    this.submitted = true
+    if (this.messageForm.invalid) {
+      this.loading = false;
+      return
+    }
+    this.loading = true
+    this.api.updateMessage(this.id, this.messageForm.value).subscribe(
+      data => {
+        this.alertService.success("Reply sent")
+        this.messages$ = this.api.getMessages()
+        this.loading = false
+        this.cancel()
+      }
+    )
   }
 
   populateEditForm(value: any) {
@@ -400,9 +443,11 @@ export class AdminComponent implements OnInit {
     } else if (this.editing == "grossWeight") {
       this.grossWeightForm.patchValue(value)
     } else if (this.editing == "message") {
-
+      this.messageForm.patchValue(value)
     } else if (this.editing == 'category') {
       this.categoryForm.patchValue(value)
+    } else if (this.editing == 'order') {
+      this.orderForm.patchValue(value)
     }
   }
 

@@ -1,15 +1,15 @@
-import { PdfGeneratorService } from './../../services/pdf-generator.service';
-import { JsonUtils } from './../../utils/json-utils';
-import { ShippingMethod } from './../../utils/enums';
-import { Address } from './../../models/address';
-import { Utility } from './../../utils/utils';
-import { AlertService } from './../../services/alert.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
+import { Message } from './../../models/message';
 import { User } from './../../models/user';
+import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
 import { AuthenticationService } from './../../services/authentication.service';
+import { PdfGeneratorService } from './../../services/pdf-generator.service';
+import { ShippingMethod } from './../../utils/enums';
+import { JsonUtils } from './../../utils/json-utils';
+import { Utility } from './../../utils/utils';
 
 @Component({
   selector: 'app-profile',
@@ -28,16 +28,19 @@ export class ProfileComponent implements OnInit {
   id: any;
   phoneForm: FormGroup
   passwordForm: FormGroup
+  messageForm: FormGroup
   constructor(private fb: FormBuilder, private api: ApiService, private authService: AuthenticationService,
     private alertService: AlertService, public utility: Utility, public jsonUtils: JsonUtils, public pdf: PdfGeneratorService) { }
 
   ngOnInit() {
     this.initForm()
+    this.loading = true
     this.user$ = this.api.getUserById(this.authService.currentUserValue._id)
     this.user$.subscribe(user => {
       this.api.getOrdersByUserId(user._id).subscribe(orders => {
         user.orders = orders
       })
+      this.loading = false
       this.user$ = of(user)
     })
   }
@@ -48,6 +51,9 @@ export class ProfileComponent implements OnInit {
     }
     if (this.editing === 'password') {
       return this.passwordForm.controls
+    }
+    if (this.editing === 'message') {
+      return this.messageForm.controls
     }
     return this.addressForm.controls
   }
@@ -72,6 +78,10 @@ export class ProfileComponent implements OnInit {
       oldPassword: ['', Validators.required],
       newPassword: ['', [Validators.required, Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%\^&\*]).{8,}$")]]
     })
+
+    this.messageForm = this.fb.group({
+      message: ['', Validators.required]
+    })
   }
 
   saveAndEditAddress() {
@@ -94,7 +104,7 @@ export class ProfileComponent implements OnInit {
               this.user$ = this.api.getUserById(user._id)
               this.loading = false
               this.submitted = false
-              this.editing = ""
+              this.cancel()
             })
           },
           error => {
@@ -109,8 +119,7 @@ export class ProfileComponent implements OnInit {
             this.user$ = this.api.getUserById(user._id)
             this.loading = false
             this.submitted = false
-            this.editing = ""
-            this.isEditing = false
+            this.cancel()
           },
           error => {
             this.alertService.error("Some error occurred while saving address", true)
@@ -134,12 +143,11 @@ export class ProfileComponent implements OnInit {
         this.user$.subscribe(user => {
           user.mobile = this.phoneForm.value.mobile
           this.api.updateUser(user._id, user).subscribe(user => {
-            this.editing = ''
             this.user$ = this.api.getUserById(user._id)
             this.submitted = false
             this.loading = false
             this.alertService.success("Updated phone number")
-            this.phoneForm.reset()
+            this.cancel()
           })
         },
           error => {
@@ -153,16 +161,40 @@ export class ProfileComponent implements OnInit {
           return
         }
         this.api.changePassword(this.authService.currentUserValue._id, this.passwordForm.value).subscribe(user => {
-          this.editing = ''
           this.submitted = false
           this.loading = false
           this.alertService.success("Updated Password")
-          this.passwordForm.reset()
+          this.cancel()
         },
           error => {
             this.loading = false
             this.alertService.error(error)
           })
+        break;
+      case 'message':
+        if (this.messageForm.invalid) {
+          this.loading = false
+          return
+        }
+        this.user$.subscribe(user => {
+          var message = new Message()
+          message.from = user.email
+          message.user = user._id
+          message.message = this.messageForm.controls.message.value
+          this.api.insertMessage(message).subscribe(message => {
+            user.messages.push(message._id)
+            this.api.updateUser(user._id, user).subscribe(user => {
+              this.user$ = this.api.getUserById(user._id)
+              this.loading = false
+              this.submitted = false
+              this.cancel()
+            })
+          },
+            error => {
+              this.loading = false
+              this.alertService.error(error)
+            })
+        })
         break;
     }
   }
@@ -204,6 +236,28 @@ export class ProfileComponent implements OnInit {
           )
         })
         break;
+      case 'message':
+        this.loading = true
+        this.user$.subscribe(user => {
+          user.messages = user.messages.filter(message => {
+            if (!message.reply) {
+              this.api.deleteMessage(message._id).subscribe(message => { })
+            }
+            return message._id != id
+          })
+          this.api.updateUser(user._id, user).subscribe(
+            user => {
+              this.loading = false
+              this.user$ = this.api.getUserById(user._id)
+              this.alertService.success("Message Deleted")
+            },
+            error => {
+              this.loading = false
+              this.alertService.error("Some error occurred while deleting message")
+            }
+          )
+        })
+        break;
       default:
         break;
     }
@@ -229,6 +283,7 @@ export class ProfileComponent implements OnInit {
   cancel() {
     this.isEditing = false
     this.editing = ''
+    this.submitted = false
     this.initForm()
   }
 

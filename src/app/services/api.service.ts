@@ -1,14 +1,14 @@
-import { Address } from './../models/address';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { GrossWeight } from '../models/gross-weight';
 import { Message } from '../models/message';
 import { Order } from '../models/order';
 import { ShippingRate } from '../models/shipping-rate';
 import { User } from '../models/user';
 import { apiUrl } from './../../environments/environment';
+import { Address } from './../models/address';
 import { Product } from './../models/product';
 
 const httpOptions = {
@@ -206,6 +206,13 @@ export class ApiService {
   updateMessage(id: any, message: Message): Observable<Message> {
     return this.http.put(`${apiUrl}/messages/${id}`, message, httpOptions).pipe(
       tap((rate: Message) => console.log(`updated message`))
+    )
+  }
+
+  deleteMessage(id: any): Observable<Message> {
+    return this.http.delete(`${apiUrl}/messages/${id}`, httpOptions).pipe(
+      tap((message: Message) => console.log("Message deleted")
+      )
     )
   }
 

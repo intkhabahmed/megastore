@@ -1,7 +1,6 @@
-import { User } from './user';
 export class Message {
     _id: string
-    user: User
+    user: any
     from: string
     message: string
     reply: string

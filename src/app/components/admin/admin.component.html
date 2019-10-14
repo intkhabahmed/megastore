@@ -334,17 +334,26 @@
                                     <th>Paid Rs.</th>
                                     <th>Order date</th>
                                     <th>Courier Type</th>
+                                    <th>Tracking No.</th>
                                     <th>Invoice</th>
+                                    <th>Operations</th>
                                 </tr>
                                 <tr *ngFor="let order of orders$ | async;index as i">
                                     <td>{{order.user.firstName}} {{order.user.lastName}} </td>
                                     <td>{{order.orderSummary.grandTotal}} </td>
                                     <td>{{order.orderDate}} </td>
                                     <td>{{courierType[order.orderSummary.shippingMethod]}} </td>
-                                    <td><a class="link" (click)="pdf.printPdf(order)">
+                                    <td>{{order.trackingNo}}</td>
+                                    <td>
+                                        <a class="link" (click)="pdf.printPdf(order)">
                                             <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
                                             </fa-icon>
-                                        </a></td>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="link"
+                                            (click)="isEditing=true;showOverlay=true;editing='order';populateEditForm(order)">Edit</a>
+                                    </td>
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
@@ -420,7 +429,7 @@
                                     <td>{{grossWeight.toBeAdded}}</td>
                                     <td><a class="link"
                                             (click)="isEditing=true;showOverlay=true;editing='grossWeight';populateEditForm(grossWeight)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link">Delete</a>
+                                            class="link" (click)="delete(grossWeight._id, 'grossWeight')">Delete</a>
                                     </td>
                                 </tr>
                             </table>
@@ -459,12 +468,17 @@
                                     <th>Message</th>
                                     <th>Reply</th>
                                     <th>Sent At</th>
+                                    <th>Operation</th>
                                 </tr>
                                 <tr *ngFor="let message of messages$ | async;index as i">
                                     <td>{{message.from}}</td>
                                     <td>{{message.message}}</td>
                                     <td>{{message.reply}}</td>
                                     <td>{{message.sentAt}}</td>
+                                    <td>
+                                        <a class="link"
+                                            (click)="isEditing=true;showOverlay=true;editing='message';populateEditForm(message)">Reply</a>
+                                    </td>
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
@@ -811,5 +825,51 @@
             </div><!-- form-row -->
 
         </form>
-    </div><!-- add or edit gross weight -->
+    </div><!-- add or edit category -->
+    <div *ngIf="editing == 'order'">
+        <form class="add-product-form" [formGroup]="orderForm" (ngSubmit)="updateOrder()">
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <label for="trackingNo">Tracking No.</label>
+                    <input type="text" formControlName="trackingNo" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.trackingNo.errors }" />
+                    <div *ngIf="submitted && f.trackingNo.errors" class="invalid-feedback">
+                        <div *ngIf="f.trackingNo.errors.required">Tracking no is required</div>
+                    </div>
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <button [disabled]="loading" class="btn btn-pink center">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Save
+                    </button>
+                </div>
+            </div><!-- form-row -->
+
+        </form>
+    </div><!-- update order -->
+    <div *ngIf="editing == 'message'">
+        <form class="add-product-form" [formGroup]="messageForm" (ngSubmit)="updateMessage()">
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <label for="reply">Reply</label>
+                    <textarea formControlName="reply" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.reply.errors }"
+                        placeholder="Type your reply"></textarea>
+                    <div *ngIf="submitted && f.reply.errors" class="invalid-feedback">
+                        <div *ngIf="f.reply.errors.required">Reply body is required</div>
+                    </div>
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <button [disabled]="loading" class="btn btn-pink center">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Save
+                    </button>
+                </div>
+            </div><!-- form-row -->
+        </form>
+    </div><!-- update message -->
 </div>

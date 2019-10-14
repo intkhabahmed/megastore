@@ -99,7 +99,9 @@ export class PdfGeneratorService {
   }
 
   printPdf(order: Order) {
-    order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
+    if (typeof order.orderSummary === 'string') {
+      order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
+    }
     this.rows = this.createRows(order.orderSummary)
     pdfMake.createPdf(this.dd(order)).open({}, window)
   }

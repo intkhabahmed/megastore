@@ -27,7 +27,8 @@
                                     </a>
                                 </div>
                                 <app-alert></app-alert>
-                                <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="showAddressForm">
+                                <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="showAddressForm"
+                                    (ngsubmit)="saveAndEditAddress()">
                                     <div class="form-row">
                                         <div class="form-group col-sm-6">
                                             <input type="text" formControlName="firstName" class="form-control"
@@ -200,7 +201,8 @@
                 </div><!-- cart-items -->
                 <div class="form-group mt-2">
                     <button class="btn btn-pink center" (click)="completePurchase()"
-                        [disabled]="!utility.order.address._id" title="Select the address first">Pay Now</button>
+                        [disabled]="!utility.order.address._id" title="Select the address first"><span *ngIf="loading"
+                            class="spinner-border spinner-border-sm mr-1"></span> Pay Now</button>
                 </div>
             </div><!-- .col-md-5 col-sm-12 -->
         </div><!-- row -->

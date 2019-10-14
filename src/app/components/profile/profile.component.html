@@ -1,18 +1,43 @@
 <div class="nav-negative-margin">
     <div class="nav-overlap"></div>
-    <div class="container" *ngIf="user$ | async;let user">
+    <div class="container mt-3" *ngIf="user$ | async;let user">
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
                         <app-alert></app-alert>
-                        <h3 class="content-heading mb-3">{{user.firstName}} {{user.lastName}}</h3>
+                        <div class="form-group clearfix">
+                            <h3 class="content-heading float-left">{{user.firstName}} {{user.lastName}}</h3>
+                            <a class="btn btn-pink float-right" (click)="editing='message'">Write to Craft Megastore</a>
+                        </div>
+                        <form *ngIf="editing==='message'" [formGroup]="messageForm">
+                            <div class="form-group">
+                                <textarea formControlName="message" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.message.errors }"
+                                    placeholder="Type your message here"></textarea>
+                                <div *ngIf="submitted && f.message.errors" class="invalid-feedback">
+                                    <div *ngIf="f.message.errors.required">Message is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group clearfix">
+                                <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
+                                    (click)="saveOrEditUser('message')">
+                                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                    Send
+                                </button>
+                                <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
+                                    (click)="cancel()">
+                                    Cancel
+                                </button>
+                            </div>
+                        </form>
                         <p class="content-text"><b>Email</b>: {{user.email}}</p>
                         <p class="content-text"><b>Password</b>: <a class="plain-link accent-color"
                                 (click)="editing='password'">
                                 <fa-icon [icon]="['far', 'edit']"></fa-icon> Change Password
                             </a></p>
-                        <form *ngIf="editing==='password'" [formGroup]="passwordForm">
+                        <form *ngIf="editing==='password'" [formGroup]="passwordForm"
+                            (keydown.enter)="saveOrEditUser('password')">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <input type="password" formControlName="oldPassword" class="form-control"
@@ -38,7 +63,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6 offset-md-6">
                                     <div class="float-right">
-                                        <a (click)="editing='';submitted=false">
+                                        <a (click)="cancel()">
                                             <fa-icon [icon]="['fas', 'times']" class="accent-color ml-1"></fa-icon>
                                         </a>
                                         <a (click)="saveOrEditUser('password')">
@@ -55,7 +80,8 @@
                             <a class="plain-link accent-color ml-2" (click)="populateForm(user.mobile, 'phone')"
                                 *ngIf="user.mobile">Edit</a>
                         </p>
-                        <form *ngIf="editing==='phone'" [formGroup]="phoneForm">
+                        <form *ngIf="editing==='phone'" [formGroup]="phoneForm"
+                            (keydown.enter)="saveOrEditUser('phone')">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <input type="text" formControlName="mobile" class="form-control"
@@ -69,7 +95,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <div class="mt-2">
-                                        <a (click)="editing='';submitted=false">
+                                        <a (click)="cancel()">
                                             <fa-icon [icon]="['fas', 'times']" class="accent-color ml-1"></fa-icon>
                                         </a>
                                         <a (click)="saveOrEditUser('phone')">
@@ -86,7 +112,8 @@
                                 <fa-icon [icon]="['fas','plus']"></fa-icon> Add Address
                             </a>
                         </div>
-                        <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="editing=='address'">
+                        <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="editing=='address'"
+                            (ngsubmit)="saveAndEditAddress()">
                             <div class="form-row">
                                 <div class="form-group col-sm-6">
                                     <input type="text" formControlName="firstName" class="form-control"
@@ -210,9 +237,11 @@
                             <div class="col-sm-9">
                                 <p class="content-text mb-0"><b>Order#</b> {{order.orderNo}}</p>
                                 <p class="content-text mb-0"><b>Order Placed on</b>
-                                    {{order.orderDate | date:'dd MMM yyyy'}}</p>
-                                <p class="content-text"><b>Courier Type:
+                                    {{order.orderDate | date:'dd MMM yyyy hh:mm a'}}</p>
+                                <p class="content-text mb-0"><b>Courier Type:
                                     </b>{{courierType[jsonUtils.parseJson(order.orderSummary).shippingMethod]}}</p>
+                                <p class="content-text"><b>Tracking No</b>: {{order.trackingNo || 'Processing order'}}
+                                </p>
                             </div>
                             <div class="col-sm-3">
                                 <a class="link" (click)="pdf.printPdf(order)" class="text-center">
@@ -231,7 +260,7 @@
         </div><!-- row -->
         <h2 class="content-heading mt-4">Wishlist</h2>
         <div class="row">
-            <div class="col-sm-12">
+            <div class="form-group col-sm-12">
                 <div class="card">
                     <div class="card-body w-100 wishlist">
                         <p class="content-text center" *ngIf="user.wishlist.length == 0">
@@ -255,5 +284,28 @@
                 </div>
             </div>
         </div><!-- row -->
+        <h2 class="content-heading mt-4">Messages</h2>
+        <div class="row">
+            <div class="col-sm-12 form-group">
+                <p class="content-text text-center" *ngIf="user.messages.length == 0">
+                    No Messages sent yet!!</p>
+                <table class="table table-bordered" *ngIf="user.messages.length > 0">
+                    <tr class="table-primary">
+                        <th>Message</th>
+                        <th>Reply</th>
+                        <th>Sent At</th>
+                        <th>Operation</th>
+                    </tr>
+                    <tr *ngFor="let message of user.messages;index as i">
+                        <td>{{message.message}}</td>
+                        <td [ngClass]="{'text-danger': !message.reply}">{{message.reply || 'Waiting for reply..!!'}}
+                        </td>
+                        <td>{{message.sentAt | date:'dd MMM yyyy hh:mm a'}}</td>
+                        <td><a class="link" (click)="delete(message._id, 'message')">Delete</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div><!-- row -->
     </div><!-- container -->
 </div>
+<span *ngIf="loading" class="spinner-border spinner-border-lg center"></span>

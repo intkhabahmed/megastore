@@ -11,7 +11,9 @@
                     </div>
                 </div><!-- col-sm-4 -->
                 <div class="col-sm-8">
-                    <a class="plain-link" [routerLink]="['/products', item.product._id]"><h5 class="order-heading">{{item.product.name}}</h5></a>
+                    <a class="plain-link" [routerLink]="['/products', item.product._id]">
+                        <h5 class="order-heading">{{item.product.name}}</h5>
+                    </a>
                     <p class="order-sub-heading">Product code - <b>{{item.product.productCode}}</b></p>
                     <table class="table order-table">
                         <tr>

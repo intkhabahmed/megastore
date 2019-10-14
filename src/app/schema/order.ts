@@ -5,7 +5,7 @@ const OrderSchema: Schema = new Schema({
     orderNo: { type: String, required: true },
     orderSummary: { type: String, required: true },
     orderStatus: { type: Number, required: true },
-    trackingDetails: { type: String },
+    trackingNo: { type: String },
     invoiceId: { type: String, required: true },
     payment: { type: String, required: true },
     address: { type: mongoose.Schema.ObjectId, ref: 'Address' },

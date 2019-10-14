@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ShippingRate } from 'src/app/models/shipping-rate';
 import { CartItem } from './../../models/cart-item';
+import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
 import { DataService } from './../../services/data.service';
 import { ShippingMethod } from './../../utils/enums';
@@ -17,7 +18,7 @@ import { Utility } from './../../utils/utils';
 export class CartComponent implements OnInit {
 
   constructor(public dataService: DataService, public utility: Utility, private cdr: ChangeDetectorRef,
-    private router: Router, private api: ApiService) { }
+    private router: Router, private api: ApiService, private alertService: AlertService) { }
 
   showDistanceDialog: boolean
   shippingMethod = ShippingMethod
@@ -30,6 +31,17 @@ export class CartComponent implements OnInit {
       this.utility.orderSummary.totalProductCost + this.utility.orderSummary.shippingCost
     if (this.utility.orderSummary.shippingCost == 0) {
       this.deliveryMethodSelected = false
+    }
+    if (this.utility.orderSummary.cartItems.size > 0) {
+      this.utility.orderSummary.cartItems.forEach(cartItem => {
+        this.api.getProduct(cartItem.product._id).subscribe(product => {
+          if (product.quantity[cartItem.product.selectedIndex][cartItem.product.subIndex] == 0) {
+            this.alertService.error("Some products were removed as they got out of stock", true)
+            this.utility.removeItemFromCart(cartItem)
+            this.cdr.detectChanges()
+          }
+        })
+      })
     }
   }
 

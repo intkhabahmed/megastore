@@ -1,14 +1,14 @@
-import { Address } from './../models/address';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { GrossWeight } from '../models/gross-weight';
 import { Message } from '../models/message';
 import { Order } from '../models/order';
 import { ShippingRate } from '../models/shipping-rate';
 import { User } from '../models/user';
 import { apiUrl } from './../../environments/environment';
+import { Address } from './../models/address';
 import { Product } from './../models/product';
 
 const httpOptions = {
@@ -209,6 +209,13 @@ export class ApiService {
     )
   }
 
+  deleteMessage(id: any): Observable<Message> {
+    return this.http.delete(`${apiUrl}/messages/${id}`, httpOptions).pipe(
+      tap((message: Message) => console.log("Message deleted")
+      )
+    )
+  }
+
   //Address methods
 
   getAddresses(): Observable<Address[]> {
@@ -232,6 +239,32 @@ export class ApiService {
   deleteAddress(id: any): Observable<Address> {
     return this.http.delete(`${apiUrl}/addresses/${id}`, httpOptions).pipe(
       tap((address: Address) => console.log("address deleted")
+      )
+    )
+  }
+
+  // Category methods
+  getCategories(): Observable<any[]> {
+    return this.http.get<any[]>(`${apiUrl}/categories/all`).pipe(
+      tap(categories => console.log('fetched categories'))
+    )
+  }
+
+  insertCategory(category: any): Observable<GrossWeight> {
+    return this.http.post(`${apiUrl}/categories`, category, httpOptions).pipe(
+      tap((category: any) => console.log(`added category with id=${category._id}`))
+    );
+  }
+
+  updateCategory(id: any, category: any): Observable<GrossWeight> {
+    return this.http.put(`${apiUrl}/categories/${id}`, category, httpOptions).pipe(
+      tap((category: any) => console.log(`updated category`))
+    )
+  }
+
+  deleteCategory(id: any): Observable<GrossWeight> {
+    return this.http.delete(`${apiUrl}/categories/${id}`, httpOptions).pipe(
+      tap((category: any) => console.log("category deleted")
       )
     )
   }

@@ -29,6 +29,7 @@ export class ProductdetailComponent implements OnInit {
     private alertService: AlertService, private authService: AuthenticationService) { }
 
   ngOnInit() {
+    this.loading = true
     this.product$ = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => {
         return this.api.getProduct(params.get('id'))
@@ -37,6 +38,7 @@ export class ProductdetailComponent implements OnInit {
     this.isEditing = this.route.snapshot.queryParams['isEditing'] || false
     this.itemId = this.route.snapshot.queryParams['itemId'] || -1
     this.product$.subscribe(product => {
+      this.loading = false
       if (this.isEditing && this.utility.orderSummary.cartItems.has(this.itemId)) {
         var item = this.utility.orderSummary.cartItems.get(this.itemId)
         this.cp = item.product

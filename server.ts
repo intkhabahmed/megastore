@@ -20,6 +20,7 @@ import 'localstorage-polyfill';
 import * as mongoose from 'mongoose';
 import { join } from 'path';
 import 'zone.js/dist/zone-node';
+import { dbUrl } from './helpers/config';
 import { AddressesRoute } from './routes/address-routes';
 import { CategoriesRoute } from './routes/category-routes';
 import { GrossWeightsRoute } from './routes/gross-weight-routes';
@@ -92,6 +93,6 @@ app.listen(PORT, () => {
   console.log(`Node Express server listening on http://localhost:${PORT}`);
 });
 
-mongoose.connect('mongodb://localhost:27017/megastore', { useNewUrlParser: true, useFindAndModify: false })
+mongoose.connect(dbUrl, { useNewUrlParser: true, useFindAndModify: false })
   .then(() => console.log('connection successful'))
   .catch((err) => console.error(err));

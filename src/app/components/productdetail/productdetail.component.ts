@@ -109,9 +109,9 @@ export class ProductdetailComponent implements OnInit {
 
   addToWishList(id: any) {
     this.loading = true
-    this.api.getUserById(this.authService.currentUserValue._id).subscribe(user => {
+    this.api.getUserById().subscribe(user => {
       user.wishlist.push(id)
-      this.api.updateUser(user._id, user).subscribe(user => {
+      this.api.updateUser(user).subscribe(user => {
         this.loading = false
         this.alertService.success("Added to wishlist")
       },

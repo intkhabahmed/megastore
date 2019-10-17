@@ -23,14 +23,13 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authenticationService: AuthenticationService,
     private alertService: AlertService
-  ) {
-    // redirect to home if already logged in
-    if (this.authenticationService.currentUserValue) {
-      this.router.navigate(['/']);
-    }
-  }
+  ) { }
 
   ngOnInit() {
+    // redirect to home if already logged in
+    if (this.authenticationService.token) {
+      this.router.navigate(['/']);
+    }
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern('^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$')]],
       password: ['', Validators.required]
@@ -60,7 +59,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         data => {
           this.submitted = false
-          this.router.navigate([this.returnUrl], {replaceUrl: true});
+          this.router.navigate([this.returnUrl], { replaceUrl: true });
         },
         error => {
           this.alertService.error(error);

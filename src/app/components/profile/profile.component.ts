@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.initForm()
     this.loading = true
-    this.user$ = this.api.getUserById(this.authService.currentUserValue._id)
+    this.user$ = this.api.getUserById()
     this.user$.subscribe(user => {
       this.api.getOrdersByUserId(user._id).subscribe(orders => {
         user.orders = orders
@@ -100,8 +100,8 @@ export class ProfileComponent implements OnInit {
           address => {
             this.alertService.success("Address added", true)
             user.addresses.push(address._id)
-            this.api.updateUser(user._id, user).subscribe(user => {
-              this.user$ = this.api.getUserById(user._id)
+            this.api.updateUser(user).subscribe(user => {
+              this.user$ = this.api.getUserById()
               this.loading = false
               this.submitted = false
               this.cancel()
@@ -116,7 +116,7 @@ export class ProfileComponent implements OnInit {
         this.api.updateAddress(this.id, this.addressForm.value).pipe().subscribe(
           address => {
             this.alertService.success("Address updated", true)
-            this.user$ = this.api.getUserById(user._id)
+            this.user$ = this.api.getUserById()
             this.loading = false
             this.submitted = false
             this.cancel()
@@ -142,8 +142,8 @@ export class ProfileComponent implements OnInit {
         }
         this.user$.subscribe(user => {
           user.mobile = this.phoneForm.value.mobile
-          this.api.updateUser(user._id, user).subscribe(user => {
-            this.user$ = this.api.getUserById(user._id)
+          this.api.updateUser(user).subscribe(user => {
+            this.user$ = this.api.getUserById()
             this.submitted = false
             this.loading = false
             this.alertService.success("Updated phone number")
@@ -160,7 +160,7 @@ export class ProfileComponent implements OnInit {
           this.loading = false
           return
         }
-        this.api.changePassword(this.authService.currentUserValue._id, this.passwordForm.value).subscribe(user => {
+        this.api.changePassword(this.passwordForm.value).subscribe(user => {
           this.submitted = false
           this.loading = false
           this.alertService.success("Updated Password")
@@ -183,8 +183,8 @@ export class ProfileComponent implements OnInit {
           message.message = this.messageForm.controls.message.value
           this.api.insertMessage(message).subscribe(message => {
             user.messages.push(message._id)
-            this.api.updateUser(user._id, user).subscribe(user => {
-              this.user$ = this.api.getUserById(user._id)
+            this.api.updateUser(user).subscribe(user => {
+              this.user$ = this.api.getUserById()
               this.loading = false
               this.submitted = false
               this.cancel()
@@ -207,9 +207,9 @@ export class ProfileComponent implements OnInit {
             this.alertService.success("Address Deleted", true)
             this.user$.subscribe(user => {
               user.addresses = user.addresses.filter(id => id != address._id)
-              this.api.updateUser(user._id, user).subscribe(
+              this.api.updateUser(user).subscribe(
                 user => {
-                  this.user$ = this.api.getUserById(user._id)
+                  this.user$ = this.api.getUserById()
                 }
               )
             })
@@ -223,10 +223,10 @@ export class ProfileComponent implements OnInit {
         this.loading = true
         this.user$.subscribe(user => {
           user.wishlist = user.wishlist.filter(product => product._id != id)
-          this.api.updateUser(user._id, user).subscribe(
+          this.api.updateUser(user).subscribe(
             user => {
               this.loading = false
-              this.user$ = this.api.getUserById(user._id)
+              this.user$ = this.api.getUserById()
               this.alertService.success("Removed item from wishlist")
             },
             error => {
@@ -245,10 +245,10 @@ export class ProfileComponent implements OnInit {
             }
             return message._id != id
           })
-          this.api.updateUser(user._id, user).subscribe(
+          this.api.updateUser(user).subscribe(
             user => {
               this.loading = false
-              this.user$ = this.api.getUserById(user._id)
+              this.user$ = this.api.getUserById()
               this.alertService.success("Message Deleted")
             },
             error => {

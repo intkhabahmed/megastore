@@ -46,13 +46,13 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: "profile/:id",
+    path: "profile",
     component: ProfileComponent,
     pathMatch: "full",
     canActivate: [AuthGuard]
   },
   {
-    path: "admin",//:id",
+    path: "admin-panel-cms",//:id",
     component: AdminComponent,
     pathMatch: "full",
     canActivate: [AuthGuard]

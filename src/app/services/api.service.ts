@@ -22,12 +22,12 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  private handleError<T>(operation = 'operation', result?: T) {
+  /* private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(error); // log to console instead
       return of(result as T);
     };
-  }
+  } */
 
   // Product methods
 
@@ -73,14 +73,14 @@ export class ApiService {
     )
   }
 
-  getUserById(id: any): Observable<User> {
-    return this.http.get<User>(`${apiUrl}/users/${id}`).pipe(
+  getUserById(): Observable<User> {
+    return this.http.get<User>(`${apiUrl}/users/current`).pipe(
       tap(users => console.log('fetched user'))
     )
   }
 
-  updateUser(id: any, user: User): Observable<User> {
-    return this.http.put(`${apiUrl}/users/${id}`, user, httpOptions).pipe(
+  updateUser(user: User): Observable<User> {
+    return this.http.put(`${apiUrl}/users/current`, user, httpOptions).pipe(
       tap((user: User) => console.log(`updated user`)))
   }
 
@@ -89,13 +89,13 @@ export class ApiService {
       tap((user: User) => console.log('Registered User')))
   }
 
-  deleteUser(id: number) {
-    return this.http.delete<User>(`${apiUrl}/users/${id}`).pipe(
+  deleteUser() {
+    return this.http.delete<User>(`${apiUrl}/users/current`).pipe(
       tap((user: User) => console.log('deleted user')))
   }
 
-  changePassword(id: any, body: any): Observable<User> {
-    return this.http.put<User>(`${apiUrl}/users/changePassword/${id}`, body, httpOptions).pipe(
+  changePassword(body: any): Observable<User> {
+    return this.http.put<User>(`${apiUrl}/users/changePassword`, body, httpOptions).pipe(
       tap(user => console.log("Password updated"))
     )
   }
@@ -217,12 +217,6 @@ export class ApiService {
   }
 
   //Address methods
-
-  getAddresses(): Observable<Address[]> {
-    return this.http.get<Address[]>(`${apiUrl}/addresses/all`).pipe(
-      tap(addresses => console.log('fetched addresses'))
-    )
-  }
 
   insertAddress(address: Address): Observable<Address> {
     return this.http.post(`${apiUrl}/addresses`, address, httpOptions).pipe(

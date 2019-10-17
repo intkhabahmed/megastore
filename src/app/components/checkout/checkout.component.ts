@@ -37,7 +37,7 @@ export class CheckoutComponent implements OnInit {
   ngOnInit() {
 
     this.initForm()
-    this.user$ = this.api.getUserById(this.authService.currentUserValue._id)
+    this.user$ = this.api.getUserById()
     if (this.utility.orderSummary.cartItems.size == 0) {
       this.router.navigate(['/'], { replaceUrl: true })
     }
@@ -64,8 +64,6 @@ export class CheckoutComponent implements OnInit {
     this.loading = true
     this.utility.orderSummary.cartItems.forEach(item => {
       item.product.quantity[item.product.selectedIndex][item.product.subIndex] -= item.noOfItems
-      item.product.selectedIndex = undefined
-      item.product.subIndex = undefined
       this.api.updateProduct(item.product._id, item.product).subscribe(() => { })
     })
     this.utility.order.orderStatus = OrderStatus.PROCESSING
@@ -77,13 +75,12 @@ export class CheckoutComponent implements OnInit {
     payment.paymentMethod = "Credit Card"
     payment.transactionId = Math.random().toString(36).substring(2, 15)
     this.utility.order.payment = this.jsonUtils.getJsonString(payment)
-    this.utility.order.user = this.authService.currentUserValue._id
     this.utility.order.orderNo = `${Math.random().toString(36).substring(3, 6)}-${Math.random().toString(36).substring(7, 15)}-${Math.random().toString(36).substring(9, 17)}`
     this.api.insertOrder(this.utility.order).subscribe(order => {
       this.loading = false
       this.user$.subscribe(user => {
         user.orders.push(order._id)
-        this.api.updateUser(user._id, user).subscribe(user => {
+        this.api.updateUser(user).subscribe(user => {
           this.loading = false
           this.submitted = false
         })
@@ -114,8 +111,8 @@ export class CheckoutComponent implements OnInit {
           address => {
             this.alertService.success("Address added", true)
             user.addresses.push(address._id)
-            this.api.updateUser(user._id, user).subscribe(user => {
-              this.user$ = this.api.getUserById(user._id)
+            this.api.updateUser(user).subscribe(user => {
+              this.user$ = this.api.getUserById()
               this.loading = false
               this.submitted = false
               this.showAddressForm = false
@@ -131,7 +128,7 @@ export class CheckoutComponent implements OnInit {
         this.api.updateAddress(this.id, this.addressForm.value).pipe().subscribe(
           address => {
             this.alertService.success("Address updated", true)
-            this.user$ = this.api.getUserById(user._id)
+            this.user$ = this.api.getUserById()
             this.loading = false
             this.submitted = false
             this.showAddressForm = false
@@ -169,9 +166,9 @@ export class CheckoutComponent implements OnInit {
         this.alertService.success("Address Deleted", true)
         this.user$.subscribe(user => {
           user.addresses = user.addresses.filter(id => id != address._id)
-          this.api.updateUser(user._id, user).subscribe(
+          this.api.updateUser(user).subscribe(
             user => {
-              this.user$ = this.api.getUserById(user._id)
+              this.user$ = this.api.getUserById()
               this.cdr.detectChanges()
             }
           )

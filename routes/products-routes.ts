@@ -1,5 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import Product from '../src/app/schema/product'
+import { verifyToken } from './../helpers/jwt-helper';
+import { NextFunction, Request, Response } from 'express';
+import Product from '../src/app/schema/product';
 
 export class ProductsRoute {
 
@@ -18,25 +19,35 @@ export class ProductsRoute {
             });
         });
 
-        app.route('/api/').post((req: Request, res: Response, next: NextFunction) => {
-            Product.create(req.body, (err, product) => {
-                if (err) { return next(err); }
-                res.json(product);
-            });
-        });
+        app.route('/api/').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
+            if (!req.isAdmin) {
+                res.status(401).send({ message: "Unauthorized request" })
+            } else {
+                Product.create(req.body, (err, product) => {
+                    if (err) { return next(err); }
+                    res.json(product);
+                })
+            }
+        })
 
-        app.route('/api/:id').put((req: Request, res: Response, next: NextFunction) => {
+        app.route('/api/:id').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
+            delete req.body.selectedIndex
+            delete req.body.subIndex
             Product.findByIdAndUpdate(req.params.id, req.body, (err, product) => {
                 if (err) { return next(err); }
                 res.json(product);
             });
         });
 
-        app.route('/api/:id').delete((req: Request, res: Response, next: NextFunction) => {
-            Product.findByIdAndRemove(req.params.id, req.body, (err, product) => {
-                if (err) { return next(err); }
-                res.json(product);
-            });
+        app.route('/api/:id').delete(verifyToken, (req: Request, res: Response, next: NextFunction) => {
+            if (!req.isAdmin) {
+                res.status(401).send({ message: "Unauthorized request" })
+            } else {
+                Product.findByIdAndRemove(req.params.id, req.body, (err, product) => {
+                    if (err) { return next(err); }
+                    res.json(product);
+                })
+            }
         });
     }
 }

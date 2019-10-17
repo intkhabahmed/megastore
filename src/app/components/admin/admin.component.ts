@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
@@ -44,7 +45,15 @@ export class AdminComponent implements OnInit {
   id: string
   categories$: Observable<any[]>
 
-  constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils, public pdf: PdfGeneratorService) { }
+  constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils,
+    public pdf: PdfGeneratorService, private router: Router) {
+    api.getUserById().subscribe(user => {
+      if (!user.isAdmin) {
+        router.navigate(['/'])
+        alertService.error("Forbidden", true)
+      }
+    })
+  }
 
   get adminTab() {
     return AdminTab
@@ -52,7 +61,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.currentTab = this.adminTab.NEW_PRODUCT_UPLOAD
-
+    this.categories$ = this.api.getCategories()
     this.initializeFormGroups()
   }
 

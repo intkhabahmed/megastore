@@ -10,34 +10,36 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" routerLink="">HOME <span class="sr-only">(current)</span></a>
+          <a class="nav-link linkc" routerLink="">HOME <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/products">PRODUCTS <span class="sr-only">(current)</span></a>
+          <a class="nav-link linkc" routerLink="/products">PRODUCTS <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">ABOUT US <span class="sr-only">(current)</span></a>
+          <a class="nav-link linkc" href="#">ABOUT US <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">CONTACT <span class="sr-only">(current)</span></a>
+          <a class="nav-link linkc" href="#">CONTACT <span class="sr-only">(current)</span></a>
         </li>
       </ul>
       <div class="nav-right-container">
         <div class="nav-top">
-          <a routerLink="cart" class="nav-right-btn" id="cart-btn">
+          <a routerLink="cart" class="nav-right-btn linkc" id="cart-btn">
             <fa-icon [icon]="['fas', 'shopping-cart']" class="mr-3"></fa-icon>
             <span class="cart-item-count">{{cartItemCount}}</span>
           </a>
-          <a routerLink="/login" class="nav-right-btn" id="login-btn" *ngIf="!currentUser">&nbsp; LOGIN</a>
-          <li class="nav-item dropdown nav-right-btn" *ngIf="currentUser">
+          <a routerLink="/login" class="nav-right-btn linkc" id="login-btn" *ngIf="!currentToken">&nbsp; LOGIN</a>
+          <li class="nav-item dropdown nav-right-btn" *ngIf="currentToken">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
               aria-expanded="false">
-              <fa-icon [icon]="['fas', 'user-circle']"></fa-icon> Intkhab
+              <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>&nbsp;<span
+                *ngIf="currentUser$ | async;let user">{{user.firstName}}</span>
             </a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" [routerLink]="['/profile', currentUser._id]">View Profile</a>
+            <div class="dropdown-menu" *ngIf="currentUser$ | async;let user">
+              <a class="dropdown-item linkc" routerLink="/profile" *ngIf="!user.isAdmin">View Profile</a>
+              <a class="dropdown-item linkc" routerLink="/admin-panel-cms" *ngIf="user.isAdmin">Admin Panel</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" (click)="logout()">Logout</a>
+              <a class="dropdown-item linkc" (click)="logout()">Logout</a>
             </div>
           </li>
         </div><!-- nav-top -->

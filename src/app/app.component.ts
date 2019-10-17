@@ -1,3 +1,5 @@
+import { ApiService } from './services/api.service';
+import { Observable } from 'rxjs';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -14,24 +16,31 @@ import { DataService } from './services/data.service';
 export class AppComponent {
   title = 'maa-taluja-creations';
   constructor(private dataService: DataService, private authenticationService: AuthenticationService, public router: Router,
-    private fb: FormBuilder) {
-    this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
+    private fb: FormBuilder, private api: ApiService) {
   }
 
   cartItemCount: number;
-  currentUser: User
+  currentToken: any
   searchForm: FormGroup
+  currentUser$: Observable<User>
 
   ngOnInit(): void {
     this.dataService.orderSummary.subscribe(summary => this.cartItemCount = summary.cartItems.size);
     this.searchForm = this.fb.group({
       keyword: ['', Validators.required]
     })
+    this.authenticationService.currentToken.subscribe(x => {
+      this.currentToken = x
+      if (x) {
+        this.currentUser$ = this.api.getUserById()
+      }
+    });
   }
 
   ngAfterViewInit(): void {
     if ($(window).width() < 992) {
-      $('.nav-link, .nav-right-btn').on('click', () => {
+      $('.linkc').on('click', (event) => {
+
         $('.navbar-collapse').removeClass('show');
       });
     }

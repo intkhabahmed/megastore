@@ -1,11 +1,10 @@
-import { ApiService } from './../../services/api.service';
 import { Component, OnInit } from '@angular/core';
-import { first, catchError } from 'rxjs/operators';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { first } from 'rxjs/operators';
 import { AlertService } from 'src/app/services/alert.service';
-import { throwError } from 'rxjs';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { ApiService } from './../../services/api.service';
 
 @Component({
   selector: 'app-signup',
@@ -23,14 +22,13 @@ export class SignupComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private alertService: AlertService,
     private apiService: ApiService
-  ) {
-    // redirect to home if already logged in
-    if (this.authenticationService.currentUserValue) {
-      this.router.navigate(['/']);
-    }
-  }
+  ) { }
 
   ngOnInit() {
+    // redirect to home if already logged in
+    if (this.authenticationService.token) {
+      this.router.navigate(['/']);
+    }
     this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],

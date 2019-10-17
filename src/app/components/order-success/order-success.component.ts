@@ -15,7 +15,7 @@ export class OrderSuccessComponent implements OnInit {
   }
 
   goToProfile() {
-    this.router.navigate(['/profile', this.auth.currentUserValue._id], { replaceUrl: true })
+    this.router.navigate(['/profile'], { replaceUrl: true })
   }
 
   goHome() {

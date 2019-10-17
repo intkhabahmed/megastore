@@ -10,6 +10,6 @@ export class User {
     messages: any
     orders: any
     wishlist: any
-    token: string
+    isAdmin: boolean
     createdAt: Date
 }

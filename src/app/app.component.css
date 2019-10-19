@@ -60,6 +60,11 @@
     content: none;
 }
 
+.category-dropdown {
+    max-height: 300px;
+    overflow: auto;
+}
+
 @media(max-width: 992px) {
     .navbar-nav {
         margin-left: 0;

@@ -1,9 +1,10 @@
-import { logging } from 'protractor';
-import { Utility } from './../../utils/utils';
-import { ApiService } from './../../services/api.service';
-import { Product } from './../../models/product';
-import { Observable, of } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { Product } from './../../models/product';
+import { ApiService } from './../../services/api.service';
+import { Utility } from './../../utils/utils';
 
 @Component({
   selector: 'app-products',
@@ -14,17 +15,14 @@ export class ProductsComponent implements OnInit {
 
   products$: Observable<Product[]>
   categories$: Observable<any[]>
-  currentCategory = 'All'
+  currentCategory
   loading = false
-  constructor(private api: ApiService, public utility: Utility) { }
+  constructor(private api: ApiService, public utility: Utility, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.loading = true
-    this.api.getProducts({ productStatus: true }).subscribe(products => {
-      this.loading = false
-      this.products$ = of(products)
-    })
     this.categories$ = this.api.getCategories()
+    this.currentCategory = this.route.snapshot.queryParams['category'] || 'All'
+    this.filterProduct(this.route.snapshot.queryParams['category'] || undefined)
   }
 
   filterProduct(categoryName?) {

@@ -457,7 +457,7 @@
                                     <td>{{user.email}} </td>
                                     <td>
                                         <p *ngFor="let address of user.addresses">{{address.address}}, {{address.city}},
-                                            {{address.state}}-{{address.postalCode}}</p>
+                                            {{address.state}} - {{address.postalCode}}</p>
                                     </td>
                                     <td>{{user.createdAt | date:'dd MMM yyyy'}}</td>
                                 </tr>

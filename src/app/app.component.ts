@@ -23,6 +23,7 @@ export class AppComponent {
   currentToken: any
   searchForm: FormGroup
   currentUser$: Observable<User>
+  categories$: Observable<any[]>
 
   ngOnInit(): void {
     this.dataService.orderSummary.subscribe(summary => this.cartItemCount = summary.cartItems.size);
@@ -35,12 +36,13 @@ export class AppComponent {
         this.currentUser$ = this.api.getUserById()
       }
     });
+    this.categories$ = this.api.getCategories()
   }
 
   ngAfterViewInit(): void {
     if ($(window).width() < 992) {
       $('.linkc').on('click', () => {
-        $('.navbar-collapse').removeClass('show');
+        $('.collapse.navbar-collapse').removeClass('show');
       });
     }
   }
@@ -56,5 +58,9 @@ export class AppComponent {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/']);
+  }
+
+  openProductsWithQuery(query?) {
+    this.router.navigate(['/products'], { queryParams: { 'category': query } })
   }
 }

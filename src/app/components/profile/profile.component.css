@@ -3,7 +3,7 @@
 }
 
 .saved-addresses {
-    clear: both;
+    max-height: 320px;
 }
 
 .address-item {
@@ -16,28 +16,13 @@
     float: right;
 }
 
-figure {
-    position: relative;
-    margin  : 0;
-}
-
-figcaption {
-    position  : absolute;
-    bottom    : 0px;
-    left      : 0px;
-    padding   : 5px;
-    background: #0000007F;
-    width     : 150px;
-}
-
 .wishlist {
     display      : flex;
     flex-flow    : row;
-    align-content: space-between;
+    align-content: flex-start;
     overflow     : auto;
 }
 
-.wishlist-item {
-    width: max-content;
-    margin: 5px;
+.orders {
+    max-height: 600px;
 }

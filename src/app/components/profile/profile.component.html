@@ -5,7 +5,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <app-alert></app-alert>
+                        <app-alert class="alert-window"></app-alert>
                         <div class="form-group clearfix">
                             <h3 class="content-heading float-left">{{user.firstName}} {{user.lastName}}</h3>
                             <a class="btn btn-pink float-right" (click)="editing='message'">Write to Craft Megastore</a>
@@ -199,7 +199,7 @@
                                 </button>
                             </div>
                         </form>
-                        <div class="clearfix saved-addresses">
+                        <div class="clearfix saved-addresses overflow-auto">
                             <p class="content-text text-center" *ngIf="editing=='' && user.addresses.length == 0">
                                 No Saved
                                 Addresses</p>
@@ -228,7 +228,7 @@
                 </div><!-- card profile-details -->
             </div><!-- col-md-6 -->
             <div class="col-md-6">
-                <div class="card">
+                <div class="card orders overflow-auto">
                     <h2 class="content-heading mb-3">Order History</h2>
                     <div class="card-body">
                         <p class="content-text text-center" *ngIf="user.orders.length == 0">
@@ -258,32 +258,32 @@
                 </div><!-- card order-history -->
             </div><!-- col-md-6 -->
         </div><!-- row -->
+        <hr>
         <h2 class="content-heading mt-4">Wishlist</h2>
         <div class="row">
-            <div class="form-group col-sm-12">
-                <div class="card">
-                    <div class="card-body w-100 wishlist">
-                        <p class="content-text center" *ngIf="user.wishlist.length == 0">
-                            Nothing in wishlist!!</p>
-                        <div class="wishlist-item" *ngFor="let product of user.wishlist">
-                            <a routerLink="['/products', {{product._id}}]" target="_blank"
-                                class="plain-link align-center content-text text-white">
-                                <figure>
-                                    <img [src]="product.imageUrl[0]" [alt]="product.name" class="img" height="150"
-                                        width="150">
-                                    <figcaption>
-                                        {{product.name}}
-                                    </figcaption>
-                                </figure>
-                            </a>
+            <div class="form-group col-sm-12 wishlist">
+                <p class="content-text center" *ngIf="user.wishlist.length == 0">
+                    Nothing in wishlist!!</p>
+                <div class="card col-lg-3 col-md-4 col-sm-5 col-7 p-0" *ngFor="let product of user.wishlist">
+                    <div class="card-img-top">
+                        <a [routerLink]="['/products', product._id]" class="plain-link float-left">
+                            <img src="{{product.imageUrl[0]}}" class="img img-responsive w-100" [alt]="product.name">
+                        </a>
+                    </div>
+                    <div class="card-body clearfix">
+                        <a [routerLink]="['/products', product._id]" class="plain-link float-left">
+                            <h4 class="card-title content-heading">{{product.name}}</h4>
+                        </a>
+                        <div class="w-max-content float-right">
                             <button class="btn btn-pink center mt-1" [disabled]="loading"
                                 (click)="delete(product._id, 'wishlist')"><span *ngIf="loading"
                                     class="spinner-border spinner-border-sm mr-1"></span> Remove</button>
                         </div>
                     </div>
-                </div>
+                </div><!-- card -->
             </div>
         </div><!-- row -->
+        <hr>
         <h2 class="content-heading mt-4">Messages</h2>
         <div class="row">
             <div class="col-sm-12 form-group">

@@ -39,8 +39,7 @@ export class AppComponent {
 
   ngAfterViewInit(): void {
     if ($(window).width() < 992) {
-      $('.linkc').on('click', (event) => {
-
+      $('.linkc').on('click', () => {
         $('.navbar-collapse').removeClass('show');
       });
     }
@@ -51,6 +50,7 @@ export class AppComponent {
       return
     }
     this.router.navigate(["/search"], { queryParams: { query: this.searchForm.controls.keyword.value } })
+    this.searchForm.reset()
   }
 
   logout() {

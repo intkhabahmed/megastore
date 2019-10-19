@@ -50,6 +50,26 @@
 
 .card {
     max-height: 350px;
-    padding: 0;
-    margin: 1rem;
+    padding   : 0;
+    margin    : 1rem;
+}
+
+.banner-image {
+    max-height: 680px;
+}
+
+.carousel-caption {
+    background: #00000080;
+}
+
+@media(max-width: 992px) {
+    .banner-image {
+        max-height: 400px;
+    }
+}
+
+@media(max-width: 767px) {
+    .banner-image {
+        max-height: 250px;
+    }
 }

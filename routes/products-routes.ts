@@ -1,12 +1,19 @@
-import { verifyToken } from './../helpers/jwt-helper';
 import { NextFunction, Request, Response } from 'express';
 import Product from '../src/app/schema/product';
+import { verifyToken } from './../helpers/jwt-helper';
 
 export class ProductsRoute {
 
     public productRoute(app): void {
         app.route('/api/products').post((req: Request, res: Response, next: NextFunction) => {
             Product.find(req.body, (err, products) => {
+                if (err) { return next(err); }
+                res.json(products);
+            });
+        });
+
+        app.route('/api/products/new').post((req: Request, res: Response, next: NextFunction) => {
+            Product.find(req.body).sort({ createdAt: -1 }).limit(5).exec((err, products) => {
                 if (err) { return next(err); }
                 res.json(products);
             });

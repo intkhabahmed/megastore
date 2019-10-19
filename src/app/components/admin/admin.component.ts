@@ -1,6 +1,6 @@
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { GrossWeight } from 'src/app/models/gross-weight';
 import { Message } from 'src/app/models/message';
@@ -34,6 +34,7 @@ export class AdminComponent implements OnInit {
   categoryForm: FormGroup
   orderForm: FormGroup
   messageForm: FormGroup
+  bannerForm: FormGroup
   loading = false
   submitted = false;
   editing: string
@@ -44,6 +45,7 @@ export class AdminComponent implements OnInit {
   showOverlay = false
   id: string
   categories$: Observable<any[]>
+  banners$: Observable<any[]>;
 
   constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils,
     public pdf: PdfGeneratorService, private router: Router) {
@@ -118,6 +120,12 @@ export class AdminComponent implements OnInit {
     this.messageForm = this.fb.group({
       reply: ['', Validators.required]
     })
+
+    this.bannerForm = this.fb.group({
+      imageUrl: ['', Validators.required],
+      title: [''],
+      subTitle: ['']
+    })
   }
 
   get f() {
@@ -138,6 +146,9 @@ export class AdminComponent implements OnInit {
     }
     if (this.editing == 'message') {
       return this.messageForm.controls
+    }
+    if (this.editing == 'banner') {
+      return this.bannerForm.controls
     }
     return this.productForm.controls
   }
@@ -181,6 +192,10 @@ export class AdminComponent implements OnInit {
         this.messages$ = this.api.getMessages()
         this.currentTab = this.adminTab.MESSAGES
         break;
+      case this.adminTab.BANNERS:
+        this.banners$ = this.api.getBanners()
+        this.currentTab = this.adminTab.BANNERS
+        break;
       default:
         break;
     }
@@ -191,6 +206,7 @@ export class AdminComponent implements OnInit {
       orders.forEach(order => {
         order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
         order.payment = this.jsonUtils.parseJson(order.payment)
+        order.address = this.jsonUtils.parseJson(order.address)
       })
       this.orders$ = of(orders)
     })
@@ -235,6 +251,11 @@ export class AdminComponent implements OnInit {
           this.products$ = this.api.getProducts()
           this.loading = false
           this.cancel()
+        },
+        error => {
+          this.alertService.error("Some error occurred while updating product", true)
+          this.loading = false
+          this.submitted = false
         }
       )
     }
@@ -287,6 +308,17 @@ export class AdminComponent implements OnInit {
           }
         )
         break;
+      case 'banner':
+        this.api.deleteBanner(id).subscribe(
+          data => {
+            this.alertService.success("Banner Deleted", true)
+            this.banners$ = this.api.getBanners()
+          },
+          error => {
+            this.alertService.error("Error deleting banner", true)
+          }
+        )
+        break;
     }
   }
 
@@ -319,6 +351,11 @@ export class AdminComponent implements OnInit {
           this.grossWeights$ = this.api.getGrossWeights()
           this.loading = false
           this.cancel()
+        },
+        error => {
+          this.alertService.error("Some error occurred while updating gross weight", true)
+          this.loading = false
+          this.submitted = false
         }
       )
     }
@@ -353,6 +390,11 @@ export class AdminComponent implements OnInit {
           this.shippingRates$ = this.api.getShippingRates("")
           this.loading = false
           this.cancel()
+        },
+        error => {
+          this.alertService.error("Some error occurred while updating shipping rate", true)
+          this.loading = false
+          this.submitted = false
         }
       )
     }
@@ -387,6 +429,11 @@ export class AdminComponent implements OnInit {
           this.categories$ = this.api.getCategories()
           this.loading = false
           this.cancel()
+        },
+        error => {
+          this.alertService.error("Some error occurred while updating category", true)
+          this.loading = false
+          this.submitted = false
         }
       )
     }
@@ -406,6 +453,11 @@ export class AdminComponent implements OnInit {
         this.getAndParseOrders()
         this.loading = false
         this.cancel()
+      },
+      error => {
+        this.alertService.error("Some error occurred while updating order", true)
+        this.loading = false
+        this.submitted = false
       }
     )
   }
@@ -424,8 +476,52 @@ export class AdminComponent implements OnInit {
         this.messages$ = this.api.getMessages()
         this.loading = false
         this.cancel()
+      },
+      error => {
+        this.alertService.error("Some error occurred while updating message", true)
+        this.loading = false
+        this.submitted = false
       }
     )
+  }
+
+  addOrUpdateBanner() {
+    this.alertService.clear()
+    this.submitted = true
+    if (this.bannerForm.invalid) {
+      this.loading = false;
+      return
+    }
+    this.loading = true
+    if (!this.isEditing) {
+      this.api.insertBanner(this.bannerForm.value).subscribe(
+        banner => {
+          this.alertService.success("Banner added")
+          this.banners$ = this.api.getBanners()
+          this.loading = false
+          this.cancel()
+        },
+        error => {
+          this.alertService.error("Some error occurred while adding banner", true)
+          this.loading = false
+          this.submitted = false
+        }
+      )
+    } else {
+      this.api.updateBanner(this.id, this.bannerForm.value).subscribe(
+        data => {
+          this.alertService.success("Banner updated")
+          this.banners$ = this.api.getBanners()
+          this.loading = false
+          this.cancel()
+        },
+        error => {
+          this.alertService.error("Some error occurred while updating banner", true)
+          this.loading = false
+          this.submitted = false
+        }
+      )
+    }
   }
 
   populateEditForm(value: any) {
@@ -457,6 +553,8 @@ export class AdminComponent implements OnInit {
       this.categoryForm.patchValue(value)
     } else if (this.editing == 'order') {
       this.orderForm.patchValue(value)
+    } else if (this.editing == 'banner') {
+      this.bannerForm.patchValue(value)
     }
   }
 

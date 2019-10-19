@@ -22,6 +22,7 @@ import { join } from 'path';
 import 'zone.js/dist/zone-node';
 import { dbUrl } from './helpers/config';
 import { AddressesRoute } from './routes/address-routes';
+import { BannersRoute } from './routes/banner-routes';
 import { CategoriesRoute } from './routes/category-routes';
 import { GrossWeightsRoute } from './routes/gross-weight-routes';
 import { MessagesRoute } from './routes/message-routes';
@@ -45,6 +46,7 @@ const grossWeightsRoute: GrossWeightsRoute = new GrossWeightsRoute();
 const messagesRoute: MessagesRoute = new MessagesRoute();
 const addressesRoute: AddressesRoute = new AddressesRoute()
 const categoriesRoute: CategoriesRoute = new CategoriesRoute()
+const bannersRoute: BannersRoute = new BannersRoute();
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
@@ -75,6 +77,7 @@ grossWeightsRoute.grossWeightRoute(app);
 messagesRoute.orderRoute(app);
 addressesRoute.addressRoute(app);
 categoriesRoute.categoryRoute(app);
+bannersRoute.bannerRoute(app)
 
 // Example Express Rest API endpoints
 // app.get('/api/**', (req, res) => { });
@@ -93,6 +96,6 @@ app.listen(PORT, () => {
   console.log(`Node Express server listening on http://localhost:${PORT}`);
 });
 
-mongoose.connect(dbUrl, { useNewUrlParser: true, useFindAndModify: false })
+mongoose.connect(dbUrl, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => console.log('connection successful'))
   .catch((err) => console.error(err));

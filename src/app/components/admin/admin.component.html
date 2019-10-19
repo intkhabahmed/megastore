@@ -39,6 +39,9 @@
                     <button class="btn"
                         [ngClass]="{'btn-pink': currentTab === adminTab.MESSAGES, 'btn-gray': currentTab !== adminTab.MESSAGES}"
                         (click)="showTab(adminTab.MESSAGES)">Messages</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.BANNERS, 'btn-gray': currentTab !== adminTab.BANNERS}"
+                        (click)="showTab(adminTab.BANNERS)">Banners</button>
                 </div>
             </div><!-- col-md-4 col-sm-12 -->
             <div class="col-lg-10 col-md-10 col-sm-12">
@@ -330,6 +333,7 @@
                         <div class="overflow-scroll">
                             <table class="table table-bordered">
                                 <tr class="table-primary">
+                                    <th>Order No</th>
                                     <th>User Name</th>
                                     <th>Paid Rs.</th>
                                     <th>Order date</th>
@@ -339,9 +343,10 @@
                                     <th>Operations</th>
                                 </tr>
                                 <tr *ngFor="let order of orders$ | async;index as i">
+                                    <td>{{order.orderNo}}</td>
                                     <td>{{order.user.firstName}} {{order.user.lastName}} </td>
                                     <td>{{order.orderSummary.grandTotal}} </td>
-                                    <td>{{order.orderDate}} </td>
+                                    <td>{{order.orderDate | date:'dd MMM yyyy hh:mm a'}} </td>
                                     <td>{{courierType[order.orderSummary.shippingMethod]}} </td>
                                     <td>{{order.trackingNo}}</td>
                                     <td>
@@ -478,6 +483,33 @@
                                     <td>
                                         <a class="link"
                                             (click)="isEditing=true;showOverlay=true;editing='message';populateEditForm(message)">Reply</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div><!-- overflow-scroll -->
+                    </div><!-- messages -->
+                    <div *ngIf="currentTab == adminTab.BANNERS">
+                        <h4>Banners</h4>
+                        <div class="form-group">
+                            <button (click)="showOverlay=true;editing='banner'" class="btn btn-pink">Add
+                                New</button>
+                        </div>
+                        <div class="overflow-scroll">
+                            <table class="table table-bordered">
+                                <tr class="table-primary">
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th>Subtitle</th>
+                                    <th>Operation</th>
+                                </tr>
+                                <tr *ngFor="let banner of banners$ | async;index as i">
+                                    <td><img [src]="banner.imageUrl" [alt]="banner.title" height="150" class="img"></td>
+                                    <td>{{banner.title}}</td>
+                                    <td>{{banner.subTitle}}</td>
+                                    <td>
+                                        <a class="link"
+                                            (click)="isEditing=true;showOverlay=true;editing='banner';populateEditForm(banner)">Edit</a>&nbsp;&nbsp;<a
+                                            class="link" (click)="delete(banner._id, 'banner')">Delete</a>
                                     </td>
                                 </tr>
                             </table>
@@ -860,6 +892,38 @@
                     <div *ngIf="submitted && f.reply.errors" class="invalid-feedback">
                         <div *ngIf="f.reply.errors.required">Reply body is required</div>
                     </div>
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <button [disabled]="loading" class="btn btn-pink center">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Save
+                    </button>
+                </div>
+            </div><!-- form-row -->
+        </form>
+    </div><!-- update message -->
+    <div *ngIf="editing == 'banner'">
+        <form class="add-product-form" [formGroup]="bannerForm" (ngSubmit)="addOrUpdateBanner()">
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <label for="imageUrl">Image URL</label>
+                    <input formControlName="imageUrl" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.imageUrl.errors }" placeholder="Type imageUrl" />
+                    <div *ngIf="submitted && f.imageUrl.errors" class="invalid-feedback">
+                        <div *ngIf="f.imageUrl.errors.required">Image URL is required</div>
+                    </div>
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="title">Caption Title</label>
+                    <input formControlName="title" class="form-control" placeholder="Type title" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="subTitle">Sub Title</label>
+                    <input formControlName="subTitle" class="form-control" placeholder="Type subTitle" />
                 </div>
             </div><!-- form-row -->
             <div class="form-row">

@@ -1,29 +1,14 @@
 <div id="mainCarousel" class="carousel slide nav-negative-margin" data-ride="carousel">
     <ol class="carousel-indicators">
-        <li data-target="#mainCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#mainCarousel" data-slide-to="1"></li>
-        <li data-target="#mainCarousel" data-slide-to="2"></li>
+        <li data-target="#mainCarousel" [attr.data-slide-to]="i" [ngClass]="{'active': i == 0}"
+            *ngFor="let banner of banners$| async;index as i"></li>
     </ol>
     <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="/assets/images/banner1.png" class="d-block w-100" alt="/public/assets/images/banner1.png">
-            <div class="carousel-caption d-none d-md-block">
-                <h4>First slide label</h4>
-                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="/assets/images/banner1.png" class="d-block w-100" alt="/public/assets/images/banner1.png">
-            <div class="carousel-caption d-none d-md-block">
-                <h4>Second slide label</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="/assets/images/banner1.png" class="d-block w-100" alt="/public/assets/images/banner1.png">
-            <div class="carousel-caption d-none d-md-block">
-                <h4>Third slide label</h4>
-                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+        <div class="carousel-item" *ngFor="let banner of banners$ | async;index as i" [ngClass]="{'active': i == 0}">
+            <img [src]="banner.imageUrl" class="d-block w-100 banner-image" [alt]="banner.title">
+            <div class="carousel-caption d-none d-md-block" *ngIf="banner.title || banner.subTitle">
+                <h4>{{banner.title}}</h4>
+                <p>{{banner.subTitle}}</p>
             </div>
         </div>
     </div>
@@ -32,7 +17,6 @@
     <div id="product-types-container">
         <div class="row">
             <h3 class="heading">Products</h3>
-
             <div class="product-slider-container w-100">
                 <div class="product-slider" id="popular-product-slider">
                     <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let product of products | async">
@@ -69,10 +53,20 @@
             <h3 class="heading">New Arrivals</h3>
             <div class="product-slider-container">
                 <div class="product-slider" id="new-arrivals-slider">
-                    <img src="/assets/images/download.png" class="img-responsive col-md-4 col-sm-6" alt="...">
-                    <img src="/assets/images/download.png" class="img-responsive col-md-4 col-sm-6" alt="...">
-                    <img src="/assets/images/download.png" class="img-responsive col-md-4 col-sm-6" alt="...">
-                    <img src="/assets/images/download.png" class="img-responsive col-md-4 col-sm-6" alt="...">
+                    <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let product of newProducts$ | async">
+                        <div class="card-img-top">
+                            <img src="{{product.imageUrl[0]}}" class="img img-responsive w-100" [alt]="product.name">
+                        </div>
+                        <div class="card-body clearfix">
+                            <h4 class="card-title content-heading float-left">{{product.name}}</h4>
+                            <div class="w-max-content float-right">
+                                <!-- show when quantity > 0 -->
+                                <a [routerLink]="['/products', product._id]" class="btn btn-pink">
+                                    View Product
+                                </a>
+                            </div>
+                        </div>
+                    </div><!-- card -->
                 </div><!-- product-slider -->
             </div><!-- product-slider-container -->
             <div class="indicators-container">

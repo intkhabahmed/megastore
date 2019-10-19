@@ -67,7 +67,7 @@ export class CheckoutComponent implements OnInit {
       this.api.updateProduct(item.product._id, item.product).subscribe(() => { })
     })
     this.utility.order.orderStatus = OrderStatus.PROCESSING
-    this.utility.order.address = this.utility.order.address._id
+    this.utility.order.address = this.jsonUtils.getJsonString(this.utility.order.address)
     this.utility.order.invoiceId = Math.random().toString(10).substring(2, 7)
     this.utility.order.orderSummary = this.jsonUtils.getJsonString(this.utility.orderSummary)
     var payment = new Payment()
@@ -75,7 +75,7 @@ export class CheckoutComponent implements OnInit {
     payment.paymentMethod = "Credit Card"
     payment.transactionId = Math.random().toString(36).substring(2, 15)
     this.utility.order.payment = this.jsonUtils.getJsonString(payment)
-    this.utility.order.orderNo = `${Math.random().toString(36).substring(3, 6)}-${Math.random().toString(36).substring(7, 15)}-${Math.random().toString(36).substring(9, 17)}`
+    this.utility.order.orderNo = (`${Math.random().toString(36).substring(3, 6)}-${Math.random().toString(36).substring(7, 15)}-${Math.random().toString(36).substring(9, 17)}`).toLocaleUpperCase()
     this.api.insertOrder(this.utility.order).subscribe(order => {
       this.loading = false
       this.user$.subscribe(user => {

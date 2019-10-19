@@ -30,7 +30,7 @@
           </a>
           <a routerLink="/login" class="nav-right-btn linkc" id="login-btn" *ngIf="!currentToken">&nbsp; LOGIN</a>
           <li class="nav-item dropdown nav-right-btn" *ngIf="currentToken">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+            <a class="nav-link dropdown-toggle plain-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
               aria-expanded="false">
               <fa-icon [icon]="['fas', 'user-circle']"></fa-icon>&nbsp;<span
                 *ngIf="currentUser$ | async;let user">{{user.firstName}}</span>

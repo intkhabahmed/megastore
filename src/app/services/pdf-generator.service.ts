@@ -102,6 +102,9 @@ export class PdfGeneratorService {
     if (typeof order.orderSummary === 'string') {
       order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
     }
+    if (typeof order.address === 'string') {
+      order.address = this.jsonUtils.parseJson(order.address)
+    }
     this.rows = this.createRows(order.orderSummary)
     pdfMake.createPdf(this.dd(order)).open({}, window)
   }
@@ -136,6 +139,22 @@ export class PdfGeneratorService {
                       },
                       {
                         text: order.invoiceId,
+                        style: 'invoiceSubValue',
+                        width: 100
+
+                      }
+                    ]
+                  },
+                  {
+                    columns: [
+                      {
+                        text: 'Order #',
+                        style: 'invoiceSubTitle',
+                        width: '*'
+
+                      },
+                      {
+                        text: order.orderNo,
                         style: 'invoiceSubValue',
                         width: 100
 
@@ -194,7 +213,7 @@ export class PdfGeneratorService {
         {
           columns: [
             {
-              text: 'Maa Taluja Creations',
+              text: 'Craft Mega Store',
               style: 'invoiceBillingDetails'
             },
             {
@@ -224,7 +243,7 @@ export class PdfGeneratorService {
               style: 'invoiceBillingAddress'
             },
             {
-              text: `${order.address.address}, ${order.address.city}, ${order.address.state} - ${order.address.postalCode}`,
+              text: `${order.address.address}, \n${order.address.city}, ${order.address.state} - ${order.address.postalCode} \nMobile: ${order.address.mobile} \nE-Mail: ${order.user.email}`,
               style: 'invoiceBillingAddress'
             },
           ]

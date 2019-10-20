@@ -26,6 +26,7 @@ import { BannersRoute } from './routes/banner-routes';
 import { CategoriesRoute } from './routes/category-routes';
 import { GrossWeightsRoute } from './routes/gross-weight-routes';
 import { MessagesRoute } from './routes/message-routes';
+import { NewArrivalsRoute } from './routes/new-arrival-routes';
 import { OrdersRoute } from './routes/order-routes';
 import { ProductsRoute } from './routes/products-routes';
 import { ShippingRatesRoute } from './routes/shipping-rate-routes';
@@ -47,6 +48,7 @@ const messagesRoute: MessagesRoute = new MessagesRoute();
 const addressesRoute: AddressesRoute = new AddressesRoute()
 const categoriesRoute: CategoriesRoute = new CategoriesRoute()
 const bannersRoute: BannersRoute = new BannersRoute();
+const newArrivalRoute: NewArrivalsRoute = new NewArrivalsRoute();
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
@@ -77,7 +79,8 @@ grossWeightsRoute.grossWeightRoute(app);
 messagesRoute.orderRoute(app);
 addressesRoute.addressRoute(app);
 categoriesRoute.categoryRoute(app);
-bannersRoute.bannerRoute(app)
+bannersRoute.bannerRoute(app);
+newArrivalRoute.newArrivalRoute(app);
 
 // Example Express Rest API endpoints
 // app.get('/api/**', (req, res) => { });

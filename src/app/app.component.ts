@@ -47,6 +47,10 @@ export class AppComponent {
     }
   }
 
+  isActive(path) {
+    return location.pathname == path
+  }
+
   search() {
     if (this.searchForm.invalid) {
       return

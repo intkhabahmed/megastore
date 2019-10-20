@@ -12,13 +12,6 @@ export class ProductsRoute {
             });
         });
 
-        app.route('/api/products/new').post((req: Request, res: Response, next: NextFunction) => {
-            Product.find(req.body).sort({ createdAt: -1 }).limit(5).exec((err, products) => {
-                if (err) { return next(err); }
-                res.json(products);
-            });
-        });
-
         app.route('/api/:id').get((req: Request, res: Response, next: NextFunction) => {
             Product.findById(req.params.id, (err, product) => {
                 if (err) { return next(err); }

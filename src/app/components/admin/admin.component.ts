@@ -35,6 +35,7 @@ export class AdminComponent implements OnInit {
   orderForm: FormGroup
   messageForm: FormGroup
   bannerForm: FormGroup
+  newArrivalForm: FormGroup
   loading = false
   submitted = false;
   editing: string
@@ -46,6 +47,7 @@ export class AdminComponent implements OnInit {
   id: string
   categories$: Observable<any[]>
   banners$: Observable<any[]>;
+  newArrivals$: Observable<any[]>;
 
   constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils,
     public pdf: PdfGeneratorService, private router: Router) {
@@ -126,6 +128,11 @@ export class AdminComponent implements OnInit {
       title: [''],
       subTitle: ['']
     })
+
+    this.newArrivalForm = this.fb.group({
+      imageUrl: ['', Validators.required],
+      name: ['']
+    })
   }
 
   get f() {
@@ -149,6 +156,9 @@ export class AdminComponent implements OnInit {
     }
     if (this.editing == 'banner') {
       return this.bannerForm.controls
+    }
+    if (this.editing == 'newArrival') {
+      return this.newArrivalForm.controls
     }
     return this.productForm.controls
   }
@@ -195,6 +205,10 @@ export class AdminComponent implements OnInit {
       case this.adminTab.BANNERS:
         this.banners$ = this.api.getBanners()
         this.currentTab = this.adminTab.BANNERS
+        break;
+      case this.adminTab.NEW_ARRIVALS:
+        this.newArrivals$ = this.api.getNewArrivals()
+        this.currentTab = this.adminTab.NEW_ARRIVALS
         break;
       default:
         break;
@@ -316,6 +330,17 @@ export class AdminComponent implements OnInit {
           },
           error => {
             this.alertService.error("Error deleting banner", true)
+          }
+        )
+        break;
+      case 'newArrival':
+        this.api.deleteNewArrival(id).subscribe(
+          data => {
+            this.alertService.success("Offer Deleted", true)
+            this.newArrivals$ = this.api.getNewArrivals()
+          },
+          error => {
+            this.alertService.error("Error deleting offer", true)
           }
         )
         break;
@@ -524,6 +549,45 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  addOrUpdateNewArrival() {
+    this.alertService.clear()
+    this.submitted = true
+    if (this.newArrivalForm.invalid) {
+      this.loading = false;
+      return
+    }
+    this.loading = true
+    if (!this.isEditing) {
+      this.api.insertNewArrival(this.newArrivalForm.value).subscribe(
+        offer => {
+          this.alertService.success("Offer added")
+          this.newArrivals$ = this.api.getNewArrivals()
+          this.loading = false
+          this.cancel()
+        },
+        error => {
+          this.alertService.error("Some error occurred while adding offer", true)
+          this.loading = false
+          this.submitted = false
+        }
+      )
+    } else {
+      this.api.updateNewArrival(this.id, this.newArrivalForm.value).subscribe(
+        data => {
+          this.alertService.success("Offer updated")
+          this.newArrivals$ = this.api.getNewArrivals()
+          this.loading = false
+          this.cancel()
+        },
+        error => {
+          this.alertService.error("Some error occurred while updating offer", true)
+          this.loading = false
+          this.submitted = false
+        }
+      )
+    }
+  }
+
   populateEditForm(value: any) {
     this.id = value._id
     if (this.editing == "product") {
@@ -555,6 +619,8 @@ export class AdminComponent implements OnInit {
       this.orderForm.patchValue(value)
     } else if (this.editing == 'banner') {
       this.bannerForm.patchValue(value)
+    } else if (this.editing == 'newArrival') {
+      this.newArrivalForm.patchValue(value)
     }
   }
 

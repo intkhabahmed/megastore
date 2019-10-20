@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { ApiService } from './../../services/api.service';
 import { DataService } from './../../services/data.service';
@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private service: ApiService, public dataService: DataService, public utility: Utility) { }
   products: Observable<Product[]>
   productsLength: number
-  newProducts$: Observable<Product[]>
+  newArrivals$: Observable<Product[]>
   banners$: Observable<any[]>
   loading = false
 
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.loading = false
       this.productsLength = products.length
     })
-    this.newProducts$ = this.service.getNewProducts({ productStatus: true })
+    this.newArrivals$ = this.service.getNewArrivals()
   }
 
   ngAfterViewInit(): void {
@@ -52,6 +52,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       $('#popular-product-slider').css({ 'transform': 'translate(-' + pp_positionX + 'px, 0px)' });
     });
     $('#pp_prev_btn').on('click', () => {
+      if ($('#popular-product-slider').width() > $("#popular-product-slider div").width() * (this.productsLength + 0.5)) {
+        return;
+      }
       if (pp_positionX > 0) {
         pp_positionX -= $("#popular-product-slider div").width() + 10;
         if (pp_positionX < 0) {

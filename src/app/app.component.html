@@ -9,10 +9,10 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+        <li class="nav-item" [ngClass]="{'active': isActive('/')}">
           <a class="nav-link linkc" routerLink="">HOME <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" [ngClass]="{'active': isActive('/products')}">
           <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
             PRODUCTS
@@ -80,9 +80,10 @@
         </div>
         <div class="col-sm-4 offset-sm-4">
           <p class="content-heading"><b>Contact Us</b></p>
-          <p class="content-text">Lorem ipsum dolor sit amet, <br>consectetur adipisicing elit, sed do eiusmod
+          <p class="content-text">Rane Vihar, House No 264/218, Savlem, Alto-Pilerne, Bardez, GOA-40251
+            <br> GSTIN/UIN: 30AWXPS1609N1ZY <br> State Name: Goa, Code: 30
           </p>
-          <p class="content-text"><img src="/assets/images/mail.png"> recruitment@aargon.com</p>
+          <p class="content-text"><img src="/assets/images/mail.png"> vishaldata78@gmail.com</p>
           <p class="content-text"><img src="/assets/images/phone.png"> 1234567</p>
         </div>
       </div>

@@ -5,6 +5,7 @@ export class Product {
     description: string
     imageUrl: string[]
     category: string
+    subCategory: string
     price: number[][] = []
     productStatus: Boolean
     quantity: number[][] = []

@@ -5,14 +5,21 @@
             <div class="col-md-2 offset-md-1">
                 <h4 class="heading mt-1">Categories</h4>
                 <ul class="product-category-list">
-                    <li (click)="filterProduct();currentCategory='All'"
+                    <li (click)="filterProduct();currentCategory='All';currentSubCategory=''"
                         [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === 'All'}"
                         class="content-text">All</li>
                     <li *ngFor="let category of categories$ | async;index as i"
-                        (click)="filterProduct(category.name);currentCategory=category.name"
+                        (click)="filterProduct(category.name);currentCategory=category.name;currentSubCategory=''"
                         [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === category.name}"
                         class="content-text">
-                        {{category.name}}</li>
+                        {{category.name}}
+                        <ul>
+                            <li *ngFor="let subCategory of category.subCategories;index as i" (click)="filterProduct(category.name, subCategory);$event.stopPropagation();currentCategory=category.name;
+                                currentSubCategory=subCategory"
+                                [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === category.name && currentSubCategory === subCategory}"
+                                class="content-text">{{subCategory}}</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div class="col-md-9">

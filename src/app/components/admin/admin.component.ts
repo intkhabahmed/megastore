@@ -48,6 +48,7 @@ export class AdminComponent implements OnInit {
   categories$: Observable<any[]>
   banners$: Observable<any[]>;
   newArrivals$: Observable<any[]>;
+  subCategories$: Observable<any[]>;
 
   constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils,
     public pdf: PdfGeneratorService, private router: Router) {
@@ -80,6 +81,7 @@ export class AdminComponent implements OnInit {
   initializeFormGroups() {
     this.productForm = this.fb.group({
       category: ['', Validators.required],
+      subCategory: ['', Validators.required],
       imageUrl: this.fb.array([]),
       name: ['', Validators.required],
       productCode: ['', Validators.required],
@@ -112,7 +114,8 @@ export class AdminComponent implements OnInit {
     })
 
     this.categoryForm = this.fb.group({
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      subCategories: this.fb.array([])
     })
 
     this.orderForm = this.fb.group({
@@ -591,6 +594,7 @@ export class AdminComponent implements OnInit {
   populateEditForm(value: any) {
     this.id = value._id
     if (this.editing == "product") {
+      this.loadSubCategories(value.category)
       this.productForm.patchValue(value)
       this.formArray('properties', { isNotDeep: true }).clear()
       this.formArray('colors', { isNotDeep: true }).clear()
@@ -615,6 +619,8 @@ export class AdminComponent implements OnInit {
       this.messageForm.patchValue(value)
     } else if (this.editing == 'category') {
       this.categoryForm.patchValue(value)
+      this.formArray('subCategories', {}, 'category').clear()
+      value.subCategories.map(subCategory => this.formArray('subCategories', {}, 'category').push(this.fb.control(subCategory, Validators.required)))
     } else if (this.editing == 'order') {
       this.orderForm.patchValue(value)
     } else if (this.editing == 'banner') {
@@ -624,14 +630,21 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  formArray(type, { isNotDeep = false, index = -1 }): FormArray {
+  formArray(type, { isNotDeep = false, index = -1 }, formType?): FormArray {
+    if (formType) {
+      return this.categoryForm.get(type) as FormArray
+    }
     if (isNotDeep) {
       return this.productForm.get(type) as FormArray
     }
     return (this.productForm.get('properties') as FormArray).controls[index].get(type) as FormArray
   }
 
-  addField(fieldName, { isNotDeep = false, index = -1 }) {
+  addField(fieldName, { isNotDeep = false, index = -1 }, formType?) {
+    if (formType) {
+      this.formArray(fieldName, {}, formType).push(this.fb.control('', Validators.required))
+      return
+    }
     if (fieldName === 'properties') {
       this.formArray(fieldName, { isNotDeep: true }).push(this.addProperty(true))
       return
@@ -639,7 +652,11 @@ export class AdminComponent implements OnInit {
     this.formArray(fieldName, { isNotDeep, index }).push(this.fb.control('', Validators.required))
   }
 
-  removeField(fieldName, { isNotDeep = false, index = -1, index1 = -1 }) {
+  removeField(fieldName, { isNotDeep = false, index = -1, index1 = -1 }, formType?) {
+    if (formType) {
+      this.formArray(fieldName, {}, formType).removeAt(index)
+      return
+    }
     if (index1 === -1) {
       this.formArray(fieldName, { isNotDeep: true }).removeAt(index)
       return
@@ -666,6 +683,17 @@ export class AdminComponent implements OnInit {
 
   filterShippingRates(value) {
     this.shippingRates$ = this.api.getShippingRates(value)
+  }
+
+  loadSubCategories(value) {
+    this.categories$.subscribe(categories => {
+      categories.forEach(category => {
+        if (category.name === value) {
+          this.subCategories$ = of(category.subCategories)
+          return;
+        }
+      })
+    })
   }
 
 }

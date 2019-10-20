@@ -8,7 +8,8 @@ export enum AdminTab {
     REGISTERED_USERS,
     MESSAGES,
     CATEGORIES,
-    BANNERS
+    BANNERS,
+    NEW_ARRIVALS
 }
 
 export enum ShippingMethod {

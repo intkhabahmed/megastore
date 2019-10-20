@@ -62,7 +62,7 @@
 
 .category-dropdown {
     max-height: 300px;
-    overflow: auto;
+    overflow  : auto;
 }
 
 @media(max-width: 992px) {

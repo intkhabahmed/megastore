@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { GrossWeight } from '../models/gross-weight';
 import { Message } from '../models/message';
 import { Order } from '../models/order';
@@ -26,10 +25,6 @@ export class ApiService {
 
   getProducts(filter: any = {}): Observable<Product[]> {
     return this.http.post<Product[]>(`${apiUrl}/products`, filter, httpOptions)
-  }
-
-  getNewProducts(filter: any = {}): Observable<Product[]> {
-    return this.http.post<Product[]>(`${apiUrl}/products/new`, filter, httpOptions)
   }
 
   getProduct(id: any): Observable<Product> {
@@ -200,6 +195,23 @@ export class ApiService {
 
   deleteBanner(id: any): Observable<any> {
     return this.http.delete<any>(`${apiUrl}/banners/${id}`, httpOptions)
+  }
+
+  // New Arrival methods
+  getNewArrivals(): Observable<any[]> {
+    return this.http.get<any[]>(`${apiUrl}/newArrivals/all`)
+  }
+
+  insertNewArrival(newArrival: any): Observable<any> {
+    return this.http.post<any>(`${apiUrl}/newArrivals`, newArrival, httpOptions)
+  }
+
+  updateNewArrival(id: any, newArrival: any): Observable<any> {
+    return this.http.put<any>(`${apiUrl}/newArrivals/${id}`, newArrival, httpOptions)
+  }
+
+  deleteNewArrival(id: any): Observable<any> {
+    return this.http.delete<any>(`${apiUrl}/newArrivals/${id}`, httpOptions)
   }
 
 }

@@ -42,6 +42,9 @@
                     <button class="btn"
                         [ngClass]="{'btn-pink': currentTab === adminTab.BANNERS, 'btn-gray': currentTab !== adminTab.BANNERS}"
                         (click)="showTab(adminTab.BANNERS)">Banners</button>
+                    <button class="btn"
+                        [ngClass]="{'btn-pink': currentTab === adminTab.NEW_ARRIVALS, 'btn-gray': currentTab !== adminTab.NEW_ARRIVALS}"
+                        (click)="showTab(adminTab.NEW_ARRIVALS)">New Arrivalas/Offers</button>
                 </div>
             </div><!-- col-md-4 col-sm-12 -->
             <div class="col-lg-10 col-md-10 col-sm-12">
@@ -514,7 +517,33 @@
                                 </tr>
                             </table>
                         </div><!-- overflow-scroll -->
-                    </div><!-- messages -->
+                    </div><!-- banners -->
+                    <div *ngIf="currentTab == adminTab.NEW_ARRIVALS">
+                        <h4>New Arrivals</h4>
+                        <div class="form-group">
+                            <button (click)="showOverlay=true;editing='newArrival'" class="btn btn-pink">Add
+                                New</button>
+                        </div>
+                        <div class="overflow-scroll">
+                            <table class="table table-bordered">
+                                <tr class="table-primary">
+                                    <th>Image</th>
+                                    <th>Offer Name</th>
+                                    <th>Operation</th>
+                                </tr>
+                                <tr *ngFor="let newArrival of newArrivals$ | async;index as i">
+                                    <td><img [src]="newArrival.imageUrl" [alt]="newArrival.name" height="150"
+                                            class="img"></td>
+                                    <td>{{newArrival.name}}</td>
+                                    <td>
+                                        <a class="link"
+                                            (click)="isEditing=true;showOverlay=true;editing='newArrival';populateEditForm(newArrival)">Edit</a>&nbsp;&nbsp;<a
+                                            class="link" (click)="delete(newArrival._id, 'newArrival')">Delete</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div><!-- overflow-scroll -->
+                    </div><!-- new arrivals -->
                 </div><!-- card -->
             </div><!-- col-md-8 col-sm-12 -->
         </div><!-- ṛow -->
@@ -935,5 +964,31 @@
                 </div>
             </div><!-- form-row -->
         </form>
-    </div><!-- update message -->
+    </div><!-- update banner -->
+    <div *ngIf="editing == 'newArrival'">
+        <form class="add-product-form" [formGroup]="newArrivalForm" (ngSubmit)="addOrUpdateNewArrival()">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="imageUrl">Image URL</label>
+                    <input formControlName="imageUrl" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.imageUrl.errors }" placeholder="Type imageUrl" />
+                    <div *ngIf="submitted && f.imageUrl.errors" class="invalid-feedback">
+                        <div *ngIf="f.imageUrl.errors.required">Image URL is required</div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="name">Offer Name</label>
+                    <input formControlName="name" class="form-control" placeholder="Type name" />
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-6 offset-md-3">
+                    <button [disabled]="loading" class="btn btn-pink center">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Save
+                    </button>
+                </div>
+            </div><!-- form-row -->
+        </form>
+    </div><!-- update new Arrival -->
 </div>

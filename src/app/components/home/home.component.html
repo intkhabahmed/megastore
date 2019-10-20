@@ -7,8 +7,8 @@
         <div class="carousel-item" *ngFor="let banner of banners$ | async;index as i" [ngClass]="{'active': i == 0}">
             <img [src]="banner.imageUrl" class="d-block w-100 banner-image" [alt]="banner.title">
             <div class="carousel-caption d-none d-md-block" *ngIf="banner.title || banner.subTitle">
-                <h4>{{banner.title}}</h4>
-                <p>{{banner.subTitle}}</p>
+                <h4 class="display-4 font-weight-bold mb-0">{{banner.title}}</h4>
+                <p class="content-heading">{{banner.subTitle}}</p>
             </div>
         </div>
     </div>
@@ -19,7 +19,7 @@
             <h3 class="heading">Products</h3>
             <div class="product-slider-container w-100">
                 <div class="product-slider" id="popular-product-slider">
-                    <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let product of products | async">
+                    <div class="card col-lg-2 col-md-4 col-sm-5 col-7" *ngFor="let product of products | async">
                         <div class="card-img-top">
                             <img src="{{product.imageUrl[0]}}" class="img img-responsive w-100" [alt]="product.name">
                         </div>
@@ -49,33 +49,27 @@
             </div>
         </div><!-- row -->
 
-        <div class="row" id="new-arrivals-container">
-            <h3 class="heading">New Arrivals</h3>
-            <div class="product-slider-container">
-                <div class="product-slider" id="new-arrivals-slider">
-                    <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let product of newProducts$ | async">
-                        <div class="card-img-top">
-                            <img src="{{product.imageUrl[0]}}" class="img img-responsive w-100" [alt]="product.name">
-                        </div>
-                        <div class="card-body clearfix">
-                            <h4 class="card-title content-heading float-left">{{product.name}}</h4>
-                            <div class="w-max-content float-right">
-                                <!-- show when quantity > 0 -->
-                                <a [routerLink]="['/products', product._id]" class="btn btn-pink">
-                                    View Product
-                                </a>
+        <div *ngIf="newArrivals$| async;let newArrivals">
+            <div class="row" id="new-arrivals-container" *ngIf="newArrivals.length > 0">
+                <h3 class="heading">New Arrivals</h3>
+                <div class="product-slider-container w-100">
+                    <div class="product-slider" id="new-arrivals-slider">
+                        <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let newArrival of newArrivals">
+                            <div class="card-img-top-na">
+                                <img [src]="newArrival.imageUrl" class="img img-responsive w-100"
+                                    [alt]="newArrival.name" height="160">
                             </div>
-                        </div>
-                    </div><!-- card -->
-                </div><!-- product-slider -->
-            </div><!-- product-slider-container -->
-            <div class="indicators-container">
-                <fa-icon [icon]="['fas', 'chevron-right']" pull="right" size="2x" class="indicators-btn"
-                    id="na_next_btn"></fa-icon>
-                <fa-icon [icon]="['fas', 'chevron-left']" pull="right" size="2x" class="indicators-btn"
-                    id="na_prev_btn"></fa-icon>
-            </div>
-        </div><!-- row -->
+                        </div><!-- card -->
+                    </div><!-- product-slider -->
+                </div><!-- product-slider-container -->
+                <div class="indicators-container">
+                    <fa-icon [icon]="['fas', 'chevron-right']" pull="right" size="2x" class="indicators-btn"
+                        id="na_next_btn"></fa-icon>
+                    <fa-icon [icon]="['fas', 'chevron-left']" pull="right" size="2x" class="indicators-btn"
+                        id="na_prev_btn"></fa-icon>
+                </div>
+            </div><!-- row -->
+        </div>
     </div><!-- product-types-container -->
 </div><!-- Container -->
 <span *ngIf="loading" class="spinner-border spinner-border-lg center"></span>

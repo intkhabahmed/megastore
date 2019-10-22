@@ -1,52 +1,49 @@
-<div class="nav-negative-margin">
-    <div class="nav-overlap"></div>
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <div class="col-md-2 offset-md-1">
-                <h4 class="heading mt-1">Categories</h4>
-                <ul class="product-category-list">
-                    <li (click)="filterProduct();currentCategory='All';currentSubCategory=''"
-                        [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === 'All'}"
-                        class="content-text">All</li>
-                    <li *ngFor="let category of categories$ | async;index as i"
-                        (click)="filterProduct(category.name);currentCategory=category.name;currentSubCategory=''"
-                        [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === category.name}"
-                        class="content-text">
-                        {{category.name}}
-                        <ul>
-                            <li *ngFor="let subCategory of category.subCategories;index as i" (click)="filterProduct(category.name, subCategory);$event.stopPropagation();currentCategory=category.name;
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-2 offset-md-1">
+            <h4 class="heading mt-1">Categories</h4>
+            <ul class="product-category-list">
+                <li (click)="filterProduct();currentCategory='All';currentSubCategory=''"
+                    [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === 'All'}"
+                    class="content-text">All</li>
+                <li *ngFor="let category of categories$ | async;index as i"
+                    (click)="filterProduct(category.name);currentCategory=category.name;currentSubCategory=''"
+                    [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === category.name}"
+                    class="content-text">
+                    {{category.name}}
+                    <ul>
+                        <li *ngFor="let subCategory of category.subCategories;index as i" (click)="filterProduct(category.name, subCategory);$event.stopPropagation();currentCategory=category.name;
                                 currentSubCategory=subCategory"
-                                [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === category.name && currentSubCategory === subCategory}"
-                                class="content-text">{{subCategory}}</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-9">
-                <h2 class="heading mt-1">Showing: {{currentCategory}}</h2>
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                <div class="row product-list">
-                    <div class="card col-lg-2 col-md-4 col-sm-5 col-10" *ngFor="let product of products$ | async">
-                        <div class="card-img-top">
-                            <img [src]="product.imageUrl[0]" class="img img-responsive w-100" [alt]="product.name">
+                            [ngClass]="{'accent-color content-text-lg font-weight-bold': currentCategory === category.name && currentSubCategory === subCategory}"
+                            class="content-text">{{subCategory}}</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <h2 class="heading mt-1">Showing: {{currentCategory}}</h2>
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            <div class="row product-list">
+                <div class="card col-lg-2 col-md-4 col-sm-5 col-10" *ngFor="let product of products$ | async">
+                    <div class="card-img-top">
+                        <img [src]="product.imageUrl[0]" class="img img-responsive w-100" [alt]="product.name">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{product.name}}</h5>
+                        <p class="content-text">Product code - {{product.productCode}}</p>
+                        <p class="content-text">Avialable from Rs. {{utility.getMinPrice(product.price)}}</p>
+                        <p class="content-text text-danger font-weight-bold"
+                            *ngIf="utility.checkForOutOfStock(product)">Out of
+                            Stock</p>
+                        <div class="w-max-content center">
+                            <!-- show when quantity > 0 -->
+                            <a [routerLink]="['/products', product._id]" class="btn btn-pink">
+                                View Product
+                            </a>
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{product.name}}</h5>
-                            <p class="content-text">Product code - {{product.productCode}}</p>
-                            <p class="content-text">Avialable from Rs. {{utility.getMinPrice(product.price)}}</p>
-                            <p class="content-text text-danger font-weight-bold"
-                                *ngIf="utility.checkForOutOfStock(product)">Out of
-                                Stock</p>
-                            <div class="w-max-content center">
-                                <!-- show when quantity > 0 -->
-                                <a [routerLink]="['/products', product._id]" class="btn btn-pink">
-                                    View Product
-                                </a>
-                            </div>
-                        </div>
-                    </div><!-- card -->
-                </div><!-- row product-list -->
-            </div><!-- col-md-9 -->
-        </div><!-- row -->
-    </div><!-- container-fluid -->
-</div><!-- nav-negative-margin -->
+                    </div>
+                </div><!-- card -->
+            </div><!-- row product-list -->
+        </div><!-- col-md-9 -->
+    </div><!-- row -->
+</div><!-- container-fluid -->

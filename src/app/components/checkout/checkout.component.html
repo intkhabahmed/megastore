@@ -1,210 +1,206 @@
-<div class="nav-negative-margin">
-    <div class="nav-overlap"></div>
-    <div class="container">
-        <h3 class="checkout-title">Checkout</h3>
-        <div class="row">
-            <div class="col-md-7 col-sm-12">
-                <div id="checkout">
-                    <div class="card">
-                        <div class="card-header " id="shipping">
-                            <h2 class="mb-0">
-                                <button class="btn btn-link-white" type="button" aria-expanded="true"
-                                    aria-controls="collapseShipping">
-                                    Shipping Address
-                                </button>
-                            </h2>
-                        </div><!-- card-header -->
+<div class="container">
+    <h3 class="checkout-title">Checkout</h3>
+    <div class="row">
+        <div class="col-md-7 col-sm-12">
+            <div id="checkout">
+                <div class="card">
+                    <div class="card-header " id="shipping">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link-white" type="button" aria-expanded="true"
+                                aria-controls="collapseShipping">
+                                Shipping Address
+                            </button>
+                        </h2>
+                    </div><!-- card-header -->
 
-                        <div id="collapseShipping" class="collapse show" aria-labelledby="shipping"
-                            data-parent="#checkout">
-                            <div class="card-body">
-                                <h2 class="content-heading accent-color">Saved Addresses</h2>
-                                <small class="content-text-sm">*Click the checkmark (<fa-icon [icon]="['fas','check']">
-                                    </fa-icon>) to select address</small>
-                                <div class="form-group">
-                                    <a class="plain-link accent-color" (click)="showAddressForm=true">
-                                        <fa-icon [icon]="['fas','plus']"></fa-icon> Add Address
-                                    </a>
-                                </div>
-                                <app-alert></app-alert>
-                                <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="showAddressForm"
-                                    (ngsubmit)="saveAndEditAddress()">
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-6">
-                                            <input type="text" formControlName="firstName" class="form-control"
-                                                [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
-                                                placeholder="First Name" />
-                                            <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                                                <div *ngIf="f.firstName.errors.required">First Name is required</div>
-                                            </div>
-                                        </div><!-- form-group -->
-                                        <div class="form-group col-sm-6">
-                                            <input type="text" formControlName="lastName" class="form-control"
-                                                [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
-                                                placeholder="Last Name" />
-                                            <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                                                <div *ngIf="f.lastName.errors.required">Last Name is required</div>
-                                            </div>
-                                        </div><!-- form-group -->
-                                    </div><!-- form-row -->
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-6">
-                                            <input type="text" formControlName="mobile" class="form-control"
-                                                [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }"
-                                                placeholder="Mobile number" />
-                                            <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
-                                                <div *ngIf="f.mobile.errors.required">Mobile number is required</div>
-                                                <div *ngIf="f.mobile.errors.pattern">Enter 10
-                                                    digit Mobile number</div>
-                                            </div>
-                                        </div><!-- form-group -->
-                                        <div class="form-group col-sm-6">
-                                            <input type="text" formControlName="postalCode" class="form-control"
-                                                [ngClass]="{ 'is-invalid': submitted && f.postalCode.errors }"
-                                                placeholder="Pincode" />
-                                            <div *ngIf="submitted && f.postalCode.errors" class="invalid-feedback">
-                                                <div *ngIf="f.postalCode.errors.required">Postal Code is required</div>
-                                            </div>
-                                        </div><!-- form-group -->
-                                    </div><!-- form-row -->
-                                    <div class="form-group">
-                                        <input type="text" formControlName="address" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.address.errors }"
-                                            placeholder="Full Address" />
-                                        <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
-                                            <div *ngIf="f.address.errors.required">Address is required</div>
+                    <div id="collapseShipping" class="collapse show" aria-labelledby="shipping" data-parent="#checkout">
+                        <div class="card-body">
+                            <h2 class="content-heading accent-color">Saved Addresses</h2>
+                            <small class="content-text-sm">*Click the checkmark (<fa-icon [icon]="['fas','check']">
+                                </fa-icon>) to select address</small>
+                            <div class="form-group">
+                                <a class="plain-link accent-color" (click)="showAddressForm=true">
+                                    <fa-icon [icon]="['fas','plus']"></fa-icon> Add Address
+                                </a>
+                            </div>
+                            <app-alert></app-alert>
+                            <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="showAddressForm"
+                                (ngsubmit)="saveAndEditAddress()">
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" formControlName="firstName" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
+                                            placeholder="First Name" />
+                                        <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                                            <div *ngIf="f.firstName.errors.required">First Name is required</div>
                                         </div>
                                     </div><!-- form-group -->
-                                    <div class="form-row">
-                                        <div class="form-group col-sm-6">
-                                            <input type="text" formControlName="city" class="form-control"
-                                                [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
-                                                placeholder="City Name" />
-                                            <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
-                                                <div *ngIf="f.city.errors.required">City is required</div>
-                                            </div>
-                                        </div><!-- form-group -->
-                                        <div class="form-group col-sm-6">
-                                            <select formControlName="state" class="form-control"
-                                                [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
-                                                <option value="">State</option>
-                                                <option [value]="state" *ngFor="let state of utility.states">{{state}}
-                                                </option>
-                                            </select>
-                                            <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
-                                                <div *ngIf="f.state.errors.required">State is required</div>
-                                            </div>
-                                        </div><!-- form-group -->
-                                    </div><!-- form-row -->
-                                    <span class="content-text">
-                                        <fa-icon [icon]="['fas', 'lock']"></fa-icon> Your privacy is important to us. We
-                                        will only
-                                        contact you if there is an issue with your order.
-                                    </span>
-                                    <br><br>
-                                    <div class="form-group">
-                                        <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
-                                            (click)="saveAndEditAddress()">
-                                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                            {{isEditing ? 'Update' : 'Save &amp;
-                                            Continue'}}
-                                        </button>
-                                        <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
-                                            (click)="cancel()"> Cancel </button>
-                                    </div>
-                                </form>
-                                <div *ngIf="user$ | async;let user" class="clearfix saved-addresses">
-                                    <p class="content-text text-center"
-                                        *ngIf="!showAddressForm && user.addresses.length == 0">No Saved
-                                        Addresses</p>
-                                    <div *ngFor="let address of user.addresses;index as i" class="address-item"
-                                        [ngClass]="{'selected-item': address._id === utility.order.address._id}">
-                                        <div class="address-actions">
-                                            <a (click)="editAddress(address)">Edit</a>
-                                            <span> | </span>
-                                            <a (click)="delete(address)">Delete</a>
-                                            <span> | </span>
-                                            <a (click)="selectAddress(address)">
-                                                <fa-icon [icon]="['fas','check']" class="accent-color">
-                                                </fa-icon>
-                                            </a>
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" formControlName="lastName" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+                                            placeholder="Last Name" />
+                                        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                                            <div *ngIf="f.lastName.errors.required">Last Name is required</div>
                                         </div>
-                                        <p class="content-text">Name: {{address.firstName}} {{address.lastName}}</p>
-                                        <p class="content-text">Address: <b>{{address.address}}</b></p>
-                                        <table class="table table-borderless">
-                                            <tr class="content-text">
-                                                <td>Mobile: <b>{{address.mobile}}</b></td>
-                                                <td>City: <b>{{address.city}}</b></td>
-                                            </tr>
-                                            <tr class="content-text">
-                                                <td>State: <b>{{address.state}}</b></td>
-                                                <td>Pincode: <b>{{address.postalCode}}</b></td>
-                                            </tr>
-                                        </table>
-                                        <hr *ngIf="i < user.addresses.length - 1">
+                                    </div><!-- form-group -->
+                                </div><!-- form-row -->
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" formControlName="mobile" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }"
+                                            placeholder="Mobile number" />
+                                        <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
+                                            <div *ngIf="f.mobile.errors.required">Mobile number is required</div>
+                                            <div *ngIf="f.mobile.errors.pattern">Enter 10
+                                                digit Mobile number</div>
+                                        </div>
+                                    </div><!-- form-group -->
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" formControlName="postalCode" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.postalCode.errors }"
+                                            placeholder="Pincode" />
+                                        <div *ngIf="submitted && f.postalCode.errors" class="invalid-feedback">
+                                            <div *ngIf="f.postalCode.errors.required">Postal Code is required</div>
+                                        </div>
+                                    </div><!-- form-group -->
+                                </div><!-- form-row -->
+                                <div class="form-group">
+                                    <input type="text" formControlName="address" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.address.errors }"
+                                        placeholder="Full Address" />
+                                    <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+                                        <div *ngIf="f.address.errors.required">Address is required</div>
                                     </div>
+                                </div><!-- form-group -->
+                                <div class="form-row">
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" formControlName="city" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
+                                            placeholder="City Name" />
+                                        <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                                            <div *ngIf="f.city.errors.required">City is required</div>
+                                        </div>
+                                    </div><!-- form-group -->
+                                    <div class="form-group col-sm-6">
+                                        <select formControlName="state" class="form-control"
+                                            [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
+                                            <option value="">State</option>
+                                            <option [value]="state" *ngFor="let state of utility.states">{{state}}
+                                            </option>
+                                        </select>
+                                        <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+                                            <div *ngIf="f.state.errors.required">State is required</div>
+                                        </div>
+                                    </div><!-- form-group -->
+                                </div><!-- form-row -->
+                                <span class="content-text">
+                                    <fa-icon [icon]="['fas', 'lock']"></fa-icon> Your privacy is important to us. We
+                                    will only
+                                    contact you if there is an issue with your order.
+                                </span>
+                                <br><br>
+                                <div class="form-group">
+                                    <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
+                                        (click)="saveAndEditAddress()">
+                                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                        {{isEditing ? 'Update' : 'Save &amp;
+                                            Continue'}}
+                                    </button>
+                                    <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
+                                        (click)="cancel()"> Cancel </button>
                                 </div>
-                            </div><!-- card-body -->
-                        </div><!-- collapse -->
-                    </div>
-                </div><!-- accordian -->
-            </div><!-- col-sm-7 -->
-            <div class="col-md-5 col-sm-12">
-                <div class="order-info">
-                    <table class="table">
+                            </form>
+                            <div *ngIf="user$ | async;let user" class="clearfix saved-addresses">
+                                <p class="content-text text-center"
+                                    *ngIf="!showAddressForm && user.addresses.length == 0">No Saved
+                                    Addresses</p>
+                                <div *ngFor="let address of user.addresses;index as i" class="address-item"
+                                    [ngClass]="{'selected-item': address._id === utility.order.address._id}">
+                                    <div class="address-actions">
+                                        <a (click)="editAddress(address)">Edit</a>
+                                        <span> | </span>
+                                        <a (click)="delete(address)">Delete</a>
+                                        <span> | </span>
+                                        <a (click)="selectAddress(address)">
+                                            <fa-icon [icon]="['fas','check']" class="accent-color">
+                                            </fa-icon>
+                                        </a>
+                                    </div>
+                                    <p class="content-text">Name: {{address.firstName}} {{address.lastName}}</p>
+                                    <p class="content-text">Address: <b>{{address.address}}</b></p>
+                                    <table class="table table-borderless">
+                                        <tr class="content-text">
+                                            <td>Mobile: <b>{{address.mobile}}</b></td>
+                                            <td>City: <b>{{address.city}}</b></td>
+                                        </tr>
+                                        <tr class="content-text">
+                                            <td>State: <b>{{address.state}}</b></td>
+                                            <td>Pincode: <b>{{address.postalCode}}</b></td>
+                                        </tr>
+                                    </table>
+                                    <hr *ngIf="i < user.addresses.length - 1">
+                                </div>
+                            </div>
+                        </div><!-- card-body -->
+                    </div><!-- collapse -->
+                </div>
+            </div><!-- accordian -->
+        </div><!-- col-sm-7 -->
+        <div class="col-md-5 col-sm-12">
+            <div class="order-info">
+                <table class="table">
+                    <tr>
+                        <td class="order-heading">ORDER INFO</td>
+                        <td class="content-text"><a routerLink="/cart" class="link float-right">Edit</a></td>
+                    </tr>
+                    <tr>
+                        <td class="content-text">Total Net Weight -</td>
+                        <td class="content-text text-right">
+                            {{utility.getFormattedWeight(utility.orderSummary.productNetWeight)}}</td>
+                    </tr>
+                    <tr>
+                        <td class="content-text">Total Gross Weight -</td>
+                        <td class="content-text text-right">
+                            {{utility.getFormattedWeight(utility.orderSummary.productGrossWeight)}}</td>
+                    </tr>
+                    <tr>
+                        <td class="content-text">Subtotal -</td>
+                        <td class="content-text text-right">Rs. {{utility.orderSummary.totalProductCost}}</td>
+                    </tr>
+                    <tr>
+                        <td class="content-text">Estimated Shipping -</td>
+                        <td class="content-text text-right">Rs. {{utility.orderSummary.shippingCost}}</td>
+                    </tr>
+                </table>
+                <hr>
+                <p class="text-right"><b>Grand total - </b><span class="accent-color grand-total">Rs.
+                        {{utility.orderSummary.grandTotal}}</span></p>
+            </div>
+            <div class="cart-items">
+                <h4 class="order-heading">IN YOUR CART</h4>
+                <div class="cart-item" *ngFor="let item of utility.orderSummary.cartItems.values();index as i">
+                    <h5 class="item-heading">{{item.product.name}}</h5>
+                    <p class="item-sub-heading">Product code - {{item.product.productCode}}</p>
+                    <table class="table order-table">
                         <tr>
-                            <td class="order-heading">ORDER INFO</td>
-                            <td class="content-text"><a routerLink="/cart" class="link float-right">Edit</a></td>
+                            <td><b>QTY: </b> {{item.noOfItems}}
+                            </td>
+                            <td class="text-right">
+                                <b>Weight: </b> {{utility.getFormattedWeight(item.itemsWeight)}}
+                            </td>
                         </tr>
                         <tr>
-                            <td class="content-text">Total Net Weight -</td>
-                            <td class="content-text text-right">
-                                {{utility.getFormattedWeight(utility.orderSummary.productNetWeight)}}</td>
-                        </tr>
-                        <tr>
-                            <td class="content-text">Total Gross Weight -</td>
-                            <td class="content-text text-right">
-                                {{utility.getFormattedWeight(utility.orderSummary.productGrossWeight)}}</td>
-                        </tr>
-                        <tr>
-                            <td class="content-text">Subtotal -</td>
-                            <td class="content-text text-right">Rs. {{utility.orderSummary.totalProductCost}}</td>
-                        </tr>
-                        <tr>
-                            <td class="content-text">Estimated Shipping -</td>
-                            <td class="content-text text-right">Rs. {{utility.orderSummary.shippingCost}}</td>
+                            <td><b>Subtotal: </b> Rs. {{item.itemsCost}}</td>
                         </tr>
                     </table>
-                    <hr>
-                    <p class="text-right"><b>Grand total - </b><span class="accent-color grand-total">Rs.
-                            {{utility.orderSummary.grandTotal}}</span></p>
-                </div>
-                <div class="cart-items">
-                    <h4 class="order-heading">IN YOUR CART</h4>
-                    <div class="cart-item" *ngFor="let item of utility.orderSummary.cartItems.values();index as i">
-                        <h5 class="item-heading">{{item.product.name}}</h5>
-                        <p class="item-sub-heading">Product code - {{item.product.productCode}}</p>
-                        <table class="table order-table">
-                            <tr>
-                                <td><b>QTY: </b> {{item.noOfItems}}
-                                </td>
-                                <td class="text-right">
-                                    <b>Weight: </b> {{utility.getFormattedWeight(item.itemsWeight)}}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><b>Subtotal: </b> Rs. {{item.itemsCost}}</td>
-                            </tr>
-                        </table>
-                        <hr *ngIf="i < utility.orderSummary.cartItems.size - 1">
-                    </div><!-- cart-item -->
-                </div><!-- cart-items -->
-                <div class="form-group mt-2">
-                    <button class="btn btn-pink center" (click)="completePurchase()"
-                        [disabled]="!utility.order.address._id" title="Select the address first"><span *ngIf="loading"
-                            class="spinner-border spinner-border-sm mr-1"></span> Pay Now</button>
-                </div>
-            </div><!-- .col-md-5 col-sm-12 -->
-        </div><!-- row -->
-    </div><!-- container -->
-</div>
+                    <hr *ngIf="i < utility.orderSummary.cartItems.size - 1">
+                </div><!-- cart-item -->
+            </div><!-- cart-items -->
+            <div class="form-group mt-2">
+                <button class="btn btn-pink center" (click)="completePurchase()" [disabled]="!utility.order.address._id"
+                    title="Select the address first"><span *ngIf="loading"
+                        class="spinner-border spinner-border-sm mr-1"></span> Pay Now</button>
+            </div>
+        </div><!-- .col-md-5 col-sm-12 -->
+    </div><!-- row -->
+</div><!-- container -->

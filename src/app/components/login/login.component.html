@@ -1,42 +1,39 @@
-<div class="nav-negative-margin">
-    <div class="nav-overlap"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-sm-8 offset-lg-3 offset-sm-2">
-                <div class="card login-form-container">
-                    <h4 class="card-title content-heading text-center">Login</h4>
-                    <app-alert></app-alert>
-                    <div class="card-body">
-                        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" formControlName="email" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
-                                <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                                    <div *ngIf="f.email.errors.required">Email is required</div>
-                                </div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 col-sm-8 offset-lg-3 offset-sm-2">
+            <div class="card login-form-container">
+                <h4 class="card-title content-heading text-center">Login</h4>
+                <app-alert></app-alert>
+                <div class="card-body">
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" formControlName="email" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+                            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                                <div *ngIf="f.email.errors.required">Email is required</div>
                             </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" formControlName="password" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
-                                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                    <div *ngIf="f.password.errors.required">Password is required</div>
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" formControlName="password" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                <div *ngIf="f.password.errors.required">Password is required</div>
                             </div>
-                            <div class="form-group">
-                                <button [disabled]="loading" class="btn btn-pink">
-                                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                    Login
-                                </button>
-                            </div>
-                        </form>
-                        <p class="content-text"><a routerLink="" class="link">Forgot Password?</a></p>
-                        <p class="content-text">Not a member yet? Click <a routerLink="/signup" class="link">here</a> to
-                            signup</p>
-                    </div>
+                        </div>
+                        <div class="form-group">
+                            <button [disabled]="loading" class="btn btn-pink">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                    <p class="content-text"><a routerLink="" class="link">Forgot Password?</a></p>
+                    <p class="content-text">Not a member yet? Click <a routerLink="/signup" class="link">here</a> to
+                        signup</p>
                 </div>
             </div>
-        </div><!-- ṛow -->
-    </div><!-- container -->
-</div><!-- nav-negative-margin -->
+        </div>
+    </div><!-- ṛow -->
+</div><!-- container -->

@@ -1,15 +1,16 @@
 .navbar {
     z-index   : 1;
     padding   : 0;
-    margin-top: 5px;
+    background: url("/assets/images/topbg.png") no-repeat;
 }
 
 .navbar-brand {
     padding-top: 0;
+    margin-top : -1vh;
 }
 
 .navbar-nav {
-    margin-top : 4vh;
+    margin-top : 10vh;
     margin-left: 4%;
 }
 
@@ -41,8 +42,8 @@
     color           : white;
     position        : absolute;
     top             : -35%;
-    right           : 0;
-    padding         : 1px 5px;
+    right           : -30%;
+    padding         : 1px 5.5px;
     border-radius   : 55px;
 }
 
@@ -72,6 +73,7 @@
 
     .nav-right-container {
         padding-bottom: 18vh;
+        margin-top    : 2vh;
         display       : flex;
         flex-flow     : column wrap;
         align-items   : flex-start;

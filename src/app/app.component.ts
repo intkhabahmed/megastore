@@ -25,7 +25,11 @@ export class AppComponent {
   currentUser$: Observable<User>
   categories$: Observable<any[]>
   showDropdown = false
-
+  homeIcon = "homeicon.png"
+  shoppingIcon = "shoppingicon.png"
+  fbIcon = "fbicon.png"
+  instaIcon = "instaicon.png"
+  ytIcon = "yticon.png"
   ngOnInit(): void {
     this.dataService.orderSummary.subscribe(summary => this.cartItemCount = summary.cartItems.size);
     this.searchForm = this.fb.group({

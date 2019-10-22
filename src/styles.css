@@ -133,16 +133,6 @@ a {
     color: #2F2F2F;
 }
 
-.nav-overlap {
-    background: #EEEDF3;
-    height    : 105px;
-    width     : 100%;
-}
-
-.nav-negative-margin {
-    margin-top: -105px;
-}
-
 .card-body {
     padding: 0.5rem;
 }

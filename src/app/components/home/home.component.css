@@ -11,19 +11,23 @@
 }
 
 .carousel-indicators .active {
-    background-color: rgb(252, 1, 177);
+    background-color: #000000;
     border          : 0px;
     height          : 12px;
     width           : 12px;
 }
 
 #mainCarousel {
-    max-height: 978px;
+    max-height: 823px;
 }
 
 .product-slider-container {
     overflow-x: hidden;
     margin-top: 20px;
+}
+
+.products-container {
+    background: url("/assets/images/midbg.png");
 }
 
 .product-slider {
@@ -60,13 +64,15 @@
 
 .carousel-caption {
     position  : absolute;
-    max-width : 200px;
+    width: max-content;
+    max-width : 440px;
     bottom    : 35%;
     left      : 13vw;
     z-index   : 10;
     color     : #333333;
     text-align: left;
-    padding   : 5px;
+    padding   : 2%;
+    background-color: #FFFFFF;
 }
 
 .card-img-top {
@@ -76,6 +82,14 @@
 .card-img-top-na {
     max-height: 160px;
     overflow  : hidden;
+}
+
+.bottom-background {
+    background: url("/assets/images/botbg.png") no-repeat;
+    width: 100%;
+    min-height: 176px;
+    margin-bottom: -6%;
+    position: relative;
 }
 
 @media(max-width: 992px) {

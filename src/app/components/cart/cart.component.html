@@ -1,167 +1,163 @@
-<div class="nav-negative-margin">
-    <div class="nav-overlap"></div>
-    <div class="container" *ngIf="utility.orderSummary.cartItems.size > 0">
-        <h3 class="order-title">Order Summary</h3>
-        <app-alert class="alert-window"></app-alert>
-        <div class="cart-items-container">
-            <div class="row cart-item" *ngFor="let item of utility.orderSummary.cartItems.values()">
-                <div class="col-sm-4">
-                    <div class="card-img-top">
-                        <img [src]="item.product.imageUrl[0]" class="img img-responsive center" height="250" alt="...">
-                    </div>
-                </div><!-- col-sm-4 -->
-                <div class="col-sm-8">
-                    <a class="plain-link" [routerLink]="['/products', item.product._id]">
-                        <h5 class="order-heading">{{item.product.name}}</h5>
-                    </a>
-                    <p class="order-sub-heading">Product code - <b>{{item.product.productCode}}</b></p>
-                    <table class="table order-table">
-                        <tr>
-                            <td>Selected Color - <b>{{item.product.colors[item.product.selectedIndex]}}</b></td>
-                            <td>Selected Size -
-                                <b>{{item.product.size[item.product.selectedIndex][item.product.subIndex]}}</b></td>
-                        </tr>
-                        <tr>
-                            <td><b>QTY: </b>
-                                <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity accent-color"
-                                    (click)="utility.decreaseProductQuantity(item)">
-                                </fa-icon> <span class="disabled-box">{{item.noOfItems}}</span>
-                                <fa-icon [icon]="['fas', 'plus']" class="increase_quantity accent-color"
-                                    (click)="utility.increaseProductQuantity(item)">
-                                </fa-icon>
-                            </td>
-                            <td>
-                                Weight -
-                                <b>{{utility.getFormattedWeight(item.product.weight[item.product.selectedIndex][item.product.subIndex])}}</b>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>Product Cost - </b><span class="accent-color"><b>Rs.
-                                        {{item.product.price[item.product.selectedIndex][item.product.subIndex]}}</b>
-                                </span></td>
-
-                        </tr>
-                    </table>
-                    <div class="float-right cart-actions">
-                        <a (click)="utility.removeItemFromCart(item)" class="link">Remove</a> | <a
-                            (click)="editCartItem(item)" class="link">Edit</a>
-                    </div><!-- cart-actions -->
-                </div><!-- col-sm-8 -->
-                <hr class="w-100">
-            </div><!-- row cart-item-->
-            <div class="row order-total">
-                <div class="col-sm-12 col-md-6">
-                    <table class="table order-table">
-                        <tr>
-                            <td>Product Net weight</td>
-                            <td><b>{{utility.getFormattedWeight(utility.orderSummary.productNetWeight)}}</b></td>
-                        </tr>
-                        <tr>
-                            <td>Gross Weight -</td>
-                            <td><b>{{utility.getFormattedWeight(utility.orderSummary.productGrossWeight)}}</b>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Total Prodcut Cost -</td>
-                            <td><b>Rs. {{utility.orderSummary.totalProductCost}}</b></td>
-                        </tr>
-                    </table>
+<div class="container" *ngIf="utility.orderSummary.cartItems.size > 0">
+    <h3 class="order-title">Order Summary</h3>
+    <app-alert class="alert-window"></app-alert>
+    <div class="cart-items-container">
+        <div class="row cart-item" *ngFor="let item of utility.orderSummary.cartItems.values()">
+            <div class="col-sm-4">
+                <div class="card-img-top">
+                    <img [src]="item.product.imageUrl[0]" class="img img-responsive center" height="250" alt="...">
                 </div>
-                <div class="col-sm-12 col-md-6 shipping-calculator">
-                    <p class="content-heading accent-color">Shipping Charges Calculator</p>
-                    <p class="content-text">Select delivery type</p>
-                    <div class="shipping-options">
-                        <button class="btn btn-danger"
-                            (click)="changeDeliveryMethod(shippingMethod.REGISTERED_POST);deliveryMethodSelected=true;calculateShippingCost()">Register
-                            Post</button>
-                        <button class="btn btn-info"
-                            (click)="changeDeliveryMethod(shippingMethod.SPEED_POST);deliveryMethodSelected=true">Speed
-                            Post</button>
-                        <button class="btn btn-primary"
-                            (click)="changeDeliveryMethod(shippingMethod.DTDC);deliveryMethodSelected=true;getDTDCDetails()">DTDC</button>
-                        <button class="btn btn-warning"
-                            (click)="changeDeliveryMethod(shippingMethod.PROFESSIONAL);deliveryMethodSelected=true">Professional</button>
-                        <button class="btn btn-success"
-                            (click)="changeDeliveryMethod(shippingMethod.SHREE_MAHAVIR);deliveryMethodSelected=true">Shree
-                            Mahavir</button>
-                    </div><!-- shipping options -->
-                    <div class="w-100">
-                        <p class="content-text text-right">Shipping Cost - Rs <span
-                                class="disabled-box">{{utility.orderSummary.shippingCost}}</span>
-                        </p>
-                        <p class="content-text text-right"
-                            *ngIf="deliveryMethodSelected && ( utility.orderSummary.shippingMethod || utility.orderSummary.shippingMethod === 0)">
-                            <i>Selected delivery type is {{shippingMethod[utility.orderSummary.shippingMethod]}}</i></p>
-                    </div><!-- w-100 -->
-                    <div class="shipping-distance-dialog" *ngIf="showDistanceDialog">
-                        <fa-icon [icon]="['fas', 'times']" class="float-right" (click)="cancelledShippingMethod()">
-                        </fa-icon>
-                        <p class="content-heading accent-color">
-                            {{shippingMethod[utility.orderSummary.shippingMethod]}}
-                        </p>
-                        <div class="form-group"
-                            *ngIf="utility.orderSummary.shippingMethod === shippingMethod.SPEED_POST">
-                            <select name="distance" class="form-control"
-                                (change)="calculateShippingCost($event.target.value)">
-                                <option value="">Select Distance</option>
-                                <option value="-1">Within Goa</option>
-                                <option value="0-200">Upto 200 kms</option>
-                                <option value="201-1000">201 to 1000 kms</option>
-                                <option value="1001-2000">1001 to 2000 kms</option>
-                                <option value="2000">Above 2000 kms</option>
-                            </select>
-                        </div><!-- form-group -->
-                        <div class="form-group" *ngIf="utility.orderSummary.shippingMethod === shippingMethod.PROFESSIONAL || 
-                            utility.orderSummary.shippingMethod === shippingMethod.SHREE_MAHAVIR">
-                            <select name="distance" class="form-control"
-                                (change)="calculateShippingCost($event.target.value)">
-                                <option value="">Select Delivery Location</option>
-                                <option value="true">Maharashtra</option>
-                                <option value="false">Rest Of India</option>
-                            </select>
-                        </div><!-- form-group -->
-                        <div class="form-group" *ngIf="utility.orderSummary.shippingMethod === shippingMethod.DTDC">
-                            <select name="distance" class="form-control"
-                                (change)="calculateShippingCost($event.target.value)">
-                                <option value="">Select Delivery Location</option>
-                                <option [value]="shippingRate.area" *ngFor="let shippingRate of shippingRates$ | async">
-                                    {{shippingRate.area}}</option>
-                            </select>
-                        </div><!-- form-group -->
-                        <p *ngIf="loading"><span class="spinner-border spinner-border-sm mr-1 accent-color"></span>
-                            Calculating</p>
-                        <p class="content-text-lg mb-1" *ngIf="utility.orderSummary.shippingCost !== 0">Your
-                            calculated Shipping Charge is Rs
-                            <span class="accent-color content-heading">{{utility.orderSummary.shippingCost}}</span></p>
-                        <p class="content-text-sm"
-                            *ngIf="utility.orderSummary.shippingMethod === shippingMethod.REGISTERED_POST">
-                            Shipping Charge calculated on Gross Weight
-                        </p>
-                        <p class="content-text-sm"
-                            *ngIf="utility.orderSummary.shippingMethod === shippingMethod.SPEED_POST">Select
-                            Delivery Location distance from Panaji</p>
-                        <div class="form-group row">
-                            <div class="col-12">
-                                <button class="btn btn-pink float-right" (click)="showDistanceDialog=false">OK</button>
-                            </div>
-                        </div>
-                    </div><!-- shipping-distance-dialog -->
-                </div><!-- col-sm-12 col-md-6 shipping-calculator -->
-            </div><!-- order-total -->
-            <hr>
-            <div class="row">
-                <p class="col-12 text-right"><b>Grand total - </b><span class="accent-color grand-total">Rs.
-                        {{utility.orderSummary.grandTotal}}</span></p>
+            </div><!-- col-sm-4 -->
+            <div class="col-sm-8">
+                <a class="plain-link" [routerLink]="['/products', item.product._id]">
+                    <h5 class="order-heading">{{item.product.name}}</h5>
+                </a>
+                <p class="order-sub-heading">Product code - <b>{{item.product.productCode}}</b></p>
+                <table class="table order-table">
+                    <tr>
+                        <td>Selected Color - <b>{{item.product.colors[item.product.selectedIndex]}}</b></td>
+                        <td>Selected Size -
+                            <b>{{item.product.size[item.product.selectedIndex][item.product.subIndex]}}</b></td>
+                    </tr>
+                    <tr>
+                        <td><b>QTY: </b>
+                            <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity accent-color"
+                                (click)="utility.decreaseProductQuantity(item)">
+                            </fa-icon> <span class="disabled-box">{{item.noOfItems}}</span>
+                            <fa-icon [icon]="['fas', 'plus']" class="increase_quantity accent-color"
+                                (click)="utility.increaseProductQuantity(item)">
+                            </fa-icon>
+                        </td>
+                        <td>
+                            Weight -
+                            <b>{{utility.getFormattedWeight(item.product.weight[item.product.selectedIndex][item.product.subIndex])}}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Product Cost - </b><span class="accent-color"><b>Rs.
+                                    {{item.product.price[item.product.selectedIndex][item.product.subIndex]}}</b>
+                            </span></td>
+
+                    </tr>
+                </table>
+                <div class="float-right cart-actions">
+                    <a (click)="utility.removeItemFromCart(item)" class="link">Remove</a> | <a
+                        (click)="editCartItem(item)" class="link">Edit</a>
+                </div><!-- cart-actions -->
+            </div><!-- col-sm-8 -->
+            <hr class="w-100">
+        </div><!-- row cart-item-->
+        <div class="row order-total">
+            <div class="col-sm-12 col-md-6">
+                <table class="table order-table">
+                    <tr>
+                        <td>Product Net weight</td>
+                        <td><b>{{utility.getFormattedWeight(utility.orderSummary.productNetWeight)}}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Gross Weight -</td>
+                        <td><b>{{utility.getFormattedWeight(utility.orderSummary.productGrossWeight)}}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total Prodcut Cost -</td>
+                        <td><b>Rs. {{utility.orderSummary.totalProductCost}}</b></td>
+                    </tr>
+                </table>
             </div>
-        </div><!-- cart-item -->
-        <br><a (click)="goToCheckout()" class="btn btn-pink buy-btn float-right"
-            *ngIf="utility.orderSummary.shippingCost">Proceed
-            to Checkout</a>
-    </div><!-- container -->
-    <div class="container empty-cart" *ngIf="utility.orderSummary.cartItems.size == 0">
-        <h1 class="heading text-center">
-            <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon><br> No Items in Cart!! <br>
-            <a routerLink="/" class="btn btn-pink">Go Home</a>
-        </h1>
-    </div>
+            <div class="col-sm-12 col-md-6 shipping-calculator">
+                <p class="content-heading accent-color">Shipping Charges Calculator</p>
+                <p class="content-text">Select delivery type</p>
+                <div class="shipping-options">
+                    <button class="btn btn-danger"
+                        (click)="changeDeliveryMethod(shippingMethod.REGISTERED_POST);deliveryMethodSelected=true;calculateShippingCost()">Register
+                        Post</button>
+                    <button class="btn btn-info"
+                        (click)="changeDeliveryMethod(shippingMethod.SPEED_POST);deliveryMethodSelected=true">Speed
+                        Post</button>
+                    <button class="btn btn-primary"
+                        (click)="changeDeliveryMethod(shippingMethod.DTDC);deliveryMethodSelected=true;getDTDCDetails()">DTDC</button>
+                    <button class="btn btn-warning"
+                        (click)="changeDeliveryMethod(shippingMethod.PROFESSIONAL);deliveryMethodSelected=true">Professional</button>
+                    <button class="btn btn-success"
+                        (click)="changeDeliveryMethod(shippingMethod.SHREE_MAHAVIR);deliveryMethodSelected=true">Shree
+                        Mahavir</button>
+                </div><!-- shipping options -->
+                <div class="w-100">
+                    <p class="content-text text-right">Shipping Cost - Rs <span
+                            class="disabled-box">{{utility.orderSummary.shippingCost}}</span>
+                    </p>
+                    <p class="content-text text-right"
+                        *ngIf="deliveryMethodSelected && ( utility.orderSummary.shippingMethod || utility.orderSummary.shippingMethod === 0)">
+                        <i>Selected delivery type is {{shippingMethod[utility.orderSummary.shippingMethod]}}</i></p>
+                </div><!-- w-100 -->
+                <div class="shipping-distance-dialog" *ngIf="showDistanceDialog">
+                    <fa-icon [icon]="['fas', 'times']" class="float-right" (click)="cancelledShippingMethod()">
+                    </fa-icon>
+                    <p class="content-heading accent-color">
+                        {{shippingMethod[utility.orderSummary.shippingMethod]}}
+                    </p>
+                    <div class="form-group" *ngIf="utility.orderSummary.shippingMethod === shippingMethod.SPEED_POST">
+                        <select name="distance" class="form-control"
+                            (change)="calculateShippingCost($event.target.value)">
+                            <option value="">Select Distance</option>
+                            <option value="-1">Within Goa</option>
+                            <option value="0-200">Upto 200 kms</option>
+                            <option value="201-1000">201 to 1000 kms</option>
+                            <option value="1001-2000">1001 to 2000 kms</option>
+                            <option value="2000">Above 2000 kms</option>
+                        </select>
+                    </div><!-- form-group -->
+                    <div class="form-group" *ngIf="utility.orderSummary.shippingMethod === shippingMethod.PROFESSIONAL || 
+                            utility.orderSummary.shippingMethod === shippingMethod.SHREE_MAHAVIR">
+                        <select name="distance" class="form-control"
+                            (change)="calculateShippingCost($event.target.value)">
+                            <option value="">Select Delivery Location</option>
+                            <option value="true">Maharashtra</option>
+                            <option value="false">Rest Of India</option>
+                        </select>
+                    </div><!-- form-group -->
+                    <div class="form-group" *ngIf="utility.orderSummary.shippingMethod === shippingMethod.DTDC">
+                        <select name="distance" class="form-control"
+                            (change)="calculateShippingCost($event.target.value)">
+                            <option value="">Select Delivery Location</option>
+                            <option [value]="shippingRate.area" *ngFor="let shippingRate of shippingRates$ | async">
+                                {{shippingRate.area}}</option>
+                        </select>
+                    </div><!-- form-group -->
+                    <p *ngIf="loading"><span class="spinner-border spinner-border-sm mr-1 accent-color"></span>
+                        Calculating</p>
+                    <p class="content-text-lg mb-1" *ngIf="utility.orderSummary.shippingCost !== 0">Your
+                        calculated Shipping Charge is Rs
+                        <span class="accent-color content-heading">{{utility.orderSummary.shippingCost}}</span></p>
+                    <p class="content-text-sm"
+                        *ngIf="utility.orderSummary.shippingMethod === shippingMethod.REGISTERED_POST">
+                        Shipping Charge calculated on Gross Weight
+                    </p>
+                    <p class="content-text-sm"
+                        *ngIf="utility.orderSummary.shippingMethod === shippingMethod.SPEED_POST">Select
+                        Delivery Location distance from Panaji</p>
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <button class="btn btn-pink float-right" (click)="showDistanceDialog=false">OK</button>
+                        </div>
+                    </div>
+                </div><!-- shipping-distance-dialog -->
+            </div><!-- col-sm-12 col-md-6 shipping-calculator -->
+        </div><!-- order-total -->
+        <hr>
+        <div class="row">
+            <p class="col-12 text-right"><b>Grand total - </b><span class="accent-color grand-total">Rs.
+                    {{utility.orderSummary.grandTotal}}</span></p>
+        </div>
+    </div><!-- cart-item -->
+    <br><a (click)="goToCheckout()" class="btn btn-pink buy-btn float-right"
+        *ngIf="utility.orderSummary.shippingCost">Proceed
+        to Checkout</a>
+</div><!-- container -->
+<div class="container empty-cart" *ngIf="utility.orderSummary.cartItems.size == 0">
+    <h1 class="heading text-center">
+        <fa-icon [icon]="['fas', 'shopping-cart']"></fa-icon><br> No Items in Cart!! <br>
+        <a routerLink="/" class="btn btn-pink">Go Home</a>
+    </h1>
 </div>

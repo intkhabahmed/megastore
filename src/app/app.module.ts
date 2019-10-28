@@ -8,6 +8,7 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AboutComponent } from './components/about/about.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { CartComponent } from './components/cart/cart.component';
@@ -38,7 +39,8 @@ import { JwtInterceptor } from './utils/jwt-interceptor';
     AlertComponent,
     AdminComponent,
     OrderSuccessComponent,
-    SearchComponent
+    SearchComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

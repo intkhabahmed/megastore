@@ -1,4 +1,4 @@
-<div id="mainCarousel" class="carousel slide nav-negative-margin" data-ride="carousel">
+<div id="mainCarousel" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#mainCarousel" [attr.data-slide-to]="i" [ngClass]="{'active': i == 0}"
             *ngFor="let banner of banners$| async;index as i"></li>
@@ -13,8 +13,8 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <div id="product-types-container">
+<div class="products-container">
+    <div class="container">
         <div class="row">
             <h3 class="heading">Products</h3>
             <div class="product-slider-container w-100">
@@ -40,36 +40,39 @@
                     </div><!-- card -->
                 </div><!-- product-slider -->
             </div><!-- product-slider-container -->
-
-            <div class="indicators-container">
-                <fa-icon [icon]="['fas', 'chevron-right']" pull="right" size="2x" class="indicators-btn"
-                    id="pp_next_btn"></fa-icon>
-                <fa-icon [icon]="['fas', 'chevron-left']" pull="right" size="2x" class="indicators-btn"
-                    id="pp_prev_btn"></fa-icon>
-            </div>
         </div><!-- row -->
-
-        <div *ngIf="newArrivals$| async;let newArrivals">
-            <div class="row" id="new-arrivals-container" *ngIf="newArrivals.length > 0">
-                <h3 class="heading">New Arrivals</h3>
-                <div class="product-slider-container w-100">
-                    <div class="product-slider" id="new-arrivals-slider">
-                        <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let newArrival of newArrivals">
-                            <div class="card-img-top-na">
-                                <img [src]="newArrival.imageUrl" class="img img-responsive w-100"
-                                    [alt]="newArrival.name" height="160">
-                            </div>
-                        </div><!-- card -->
-                    </div><!-- product-slider -->
-                </div><!-- product-slider-container -->
-                <div class="indicators-container">
-                    <fa-icon [icon]="['fas', 'chevron-right']" pull="right" size="2x" class="indicators-btn"
-                        id="na_next_btn"></fa-icon>
-                    <fa-icon [icon]="['fas', 'chevron-left']" pull="right" size="2x" class="indicators-btn"
-                        id="na_prev_btn"></fa-icon>
-                </div>
-            </div><!-- row -->
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="indicators-container">
+            <fa-icon [icon]="['fas', 'chevron-right']" pull="right" size="2x" class="indicators-btn" id="pp_next_btn">
+            </fa-icon>
+            <fa-icon [icon]="['fas', 'chevron-left']" pull="right" size="2x" class="indicators-btn" id="pp_prev_btn">
+            </fa-icon>
         </div>
-    </div><!-- product-types-container -->
+    </div>
+</div>
+<div class="container">
+    <div class="row" id="new-arrivals-container" *ngIf="newArrivalsLength > 0">
+        <h3 class="heading">New Arrivals</h3>
+        <div class="product-slider-container w-100">
+            <div class="product-slider" id="new-arrivals-slider">
+                <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let newArrival of newArrivals$| async">
+                    <div class="card-img-top-na">
+                        <img [src]="newArrival.imageUrl" class="img img-responsive w-100" [alt]="newArrival.name"
+                            height="160">
+                    </div>
+                </div><!-- card -->
+            </div><!-- product-slider -->
+        </div><!-- product-slider-container -->
+        <div class="indicators-container">
+            <fa-icon [icon]="['fas', 'chevron-right']" pull="right" size="2x" class="indicators-btn" id="na_next_btn"
+                (click)="next()"></fa-icon>
+            <fa-icon [icon]="['fas', 'chevron-left']" pull="right" size="2x" class="indicators-btn" id="na_prev_btn"
+                (click)="prev()"></fa-icon>
+        </div>
+    </div><!-- row -->
 </div><!-- Container -->
+<div class="bottom-background"></div>
 <span *ngIf="loading" class="spinner-border spinner-border-lg center"></span>

@@ -1,311 +1,303 @@
-<div class="nav-negative-margin">
-    <div class="nav-overlap"></div>
-    <div class="container mt-3" *ngIf="user$ | async;let user">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <app-alert class="alert-window"></app-alert>
-                        <div class="form-group clearfix">
-                            <h3 class="content-heading float-left">{{user.firstName}} {{user.lastName}}</h3>
-                            <a class="btn btn-pink float-right" (click)="editing='message'">Write to Craft Megastore</a>
-                        </div>
-                        <form *ngIf="editing==='message'" [formGroup]="messageForm">
-                            <div class="form-group">
-                                <textarea formControlName="message" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.message.errors }"
-                                    placeholder="Type your message here"></textarea>
-                                <div *ngIf="submitted && f.message.errors" class="invalid-feedback">
-                                    <div *ngIf="f.message.errors.required">Message is required</div>
-                                </div>
-                            </div>
-                            <div class="form-group clearfix">
-                                <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
-                                    (click)="saveOrEditUser('message')">
-                                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                    Send
-                                </button>
-                                <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
-                                    (click)="cancel()">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                        <p class="content-text"><b>Email</b>: {{user.email}}</p>
-                        <p class="content-text"><b>Password</b>: <a class="plain-link accent-color"
-                                (click)="editing='password'">
-                                <fa-icon [icon]="['far', 'edit']"></fa-icon> Change Password
-                            </a></p>
-                        <form *ngIf="editing==='password'" [formGroup]="passwordForm"
-                            (keydown.enter)="saveOrEditUser('password')">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <input type="password" formControlName="oldPassword" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.oldPassword.errors }"
-                                        placeholder="old password" />
-                                    <div *ngIf="submitted && f.oldPassword.errors" class="invalid-feedback">
-                                        <div *ngIf="f.oldPassword.errors.required">Old Password is required</div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input type="password" formControlName="newPassword" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.newPassword.errors }"
-                                        placeholder="new password" />
-                                    <div *ngIf="submitted && f.newPassword.errors" class="invalid-feedback">
-                                        <div *ngIf="f.newPassword.errors.required">New Password is required</div>
-                                        <div *ngIf="f.newPassword.errors.pattern">Password must have at least one of
-                                            [a-z] [A-Z] [0-9] [!@#$%^&*] characters and be at least 8 characters in
-                                            length
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6 offset-md-6">
-                                    <div class="float-right">
-                                        <a (click)="cancel()">
-                                            <fa-icon [icon]="['fas', 'times']" class="accent-color ml-1"></fa-icon>
-                                        </a>
-                                        <a (click)="saveOrEditUser('password')">
-                                            <fa-icon [icon]="['fas', 'check']" class="accent-color ml-3"></fa-icon>
-                                        </a>
-                                        <span *ngIf="loading" class="spinner-border spinner-border-sm ml-3"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <p class="content-text"><b>Phone</b>: <span *ngIf="user.mobile">{{user.mobile}}</span>
-                            <a class="plain-link accent-color ml-2" (click)="editing='phone'"
-                                *ngIf="!user.mobile">+Add</a>
-                            <a class="plain-link accent-color ml-2" (click)="populateForm(user.mobile, 'phone')"
-                                *ngIf="user.mobile">Edit</a>
-                        </p>
-                        <form *ngIf="editing==='phone'" [formGroup]="phoneForm"
-                            (keydown.enter)="saveOrEditUser('phone')">
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <input type="text" formControlName="mobile" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }"
-                                        placeholder="10 digit Mobile number" />
-                                    <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
-                                        <div *ngIf="f.mobile.errors.required">Mobile number is required</div>
-                                        <div *ngIf="f.mobile.errors.pattern">Enter 10
-                                            digit Mobile number</div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <div class="mt-2">
-                                        <a (click)="cancel()">
-                                            <fa-icon [icon]="['fas', 'times']" class="accent-color ml-1"></fa-icon>
-                                        </a>
-                                        <a (click)="saveOrEditUser('phone')">
-                                            <fa-icon [icon]="['fas', 'check']" class="accent-color ml-3"></fa-icon>
-                                        </a>
-                                        <span *ngIf="loading" class="spinner-border spinner-border-sm ml-3"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <h2 class="content-heading">Saved Addresses</h2>
+<div class="container mt-3" *ngIf="user$ | async;let user">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <app-alert class="alert-window"></app-alert>
+                    <div class="form-group clearfix">
+                        <h3 class="content-heading float-left">{{user.firstName}} {{user.lastName}}</h3>
+                        <a class="btn btn-pink float-right" (click)="editing='message'">Write to Craft Megastore</a>
+                    </div>
+                    <form *ngIf="editing==='message'" [formGroup]="messageForm">
                         <div class="form-group">
-                            <a class="plain-link accent-color" (click)="editing='address'">
-                                <fa-icon [icon]="['fas','plus']"></fa-icon> Add Address
-                            </a>
+                            <textarea formControlName="message" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.message.errors }"
+                                placeholder="Type your message here"></textarea>
+                            <div *ngIf="submitted && f.message.errors" class="invalid-feedback">
+                                <div *ngIf="f.message.errors.required">Message is required</div>
+                            </div>
                         </div>
-                        <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="editing=='address'"
-                            (ngsubmit)="saveAndEditAddress()">
-                            <div class="form-row">
-                                <div class="form-group col-sm-6">
-                                    <input type="text" formControlName="firstName" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
-                                        placeholder="First Name" />
-                                    <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                                        <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                        <div class="form-group clearfix">
+                            <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
+                                (click)="saveOrEditUser('message')">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Send
+                            </button>
+                            <button [disabled]="loading" class="btn btn-pink buy-btn float-right" (click)="cancel()">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                    <p class="content-text"><b>Email</b>: {{user.email}}</p>
+                    <p class="content-text"><b>Password</b>: <a class="plain-link accent-color"
+                            (click)="editing='password'">
+                            <fa-icon [icon]="['far', 'edit']"></fa-icon> Change Password
+                        </a></p>
+                    <form *ngIf="editing==='password'" [formGroup]="passwordForm"
+                        (keydown.enter)="saveOrEditUser('password')">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input type="password" formControlName="oldPassword" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.oldPassword.errors }"
+                                    placeholder="old password" />
+                                <div *ngIf="submitted && f.oldPassword.errors" class="invalid-feedback">
+                                    <div *ngIf="f.oldPassword.errors.required">Old Password is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input type="password" formControlName="newPassword" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.newPassword.errors }"
+                                    placeholder="new password" />
+                                <div *ngIf="submitted && f.newPassword.errors" class="invalid-feedback">
+                                    <div *ngIf="f.newPassword.errors.required">New Password is required</div>
+                                    <div *ngIf="f.newPassword.errors.pattern">Password must have at least one of
+                                        [a-z] [A-Z] [0-9] [!@#$%^&*] characters and be at least 8 characters in
+                                        length
                                     </div>
-                                </div><!-- form-group -->
-                                <div class="form-group col-sm-6">
-                                    <input type="text" formControlName="lastName" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
-                                        placeholder="Last Name" />
-                                    <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                                        <div *ngIf="f.lastName.errors.required">Last Name is required</div>
-                                    </div>
-                                </div><!-- form-group -->
-                            </div><!-- form-row -->
-                            <div class="form-row">
-                                <div class="form-group col-sm-6">
-                                    <input type="text" formControlName="mobile" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }"
-                                        placeholder="10 digit Mobile number" />
-                                    <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
-                                        <div *ngIf="f.mobile.errors.required">Mobile number is required</div>
-                                        <div *ngIf="f.mobile.errors.pattern">Enter 10
-                                            digit Mobile number</div>
-                                    </div>
-                                </div><!-- form-group -->
-                                <div class="form-group col-sm-6">
-                                    <input type="text" formControlName="postalCode" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.postalCode.errors }"
-                                        placeholder="Pincode" />
-                                    <div *ngIf="submitted && f.postalCode.errors" class="invalid-feedback">
-                                        <div *ngIf="f.postalCode.errors.required">Postal Code is required</div>
-                                    </div>
-                                </div><!-- form-group -->
-                            </div><!-- form-row -->
-                            <div class="form-group">
-                                <input type="text" formControlName="address" class="form-control"
-                                    [ngClass]="{ 'is-invalid': submitted && f.address.errors }"
-                                    placeholder="Full Address" />
-                                <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
-                                    <div *ngIf="f.address.errors.required">Address is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6 offset-md-6">
+                                <div class="float-right">
+                                    <a (click)="cancel()">
+                                        <fa-icon [icon]="['fas', 'times']" class="accent-color ml-1"></fa-icon>
+                                    </a>
+                                    <a (click)="saveOrEditUser('password')">
+                                        <fa-icon [icon]="['fas', 'check']" class="accent-color ml-3"></fa-icon>
+                                    </a>
+                                    <span *ngIf="loading" class="spinner-border spinner-border-sm ml-3"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <p class="content-text"><b>Phone</b>: <span *ngIf="user.mobile">{{user.mobile}}</span>
+                        <a class="plain-link accent-color ml-2" (click)="editing='phone'" *ngIf="!user.mobile">+Add</a>
+                        <a class="plain-link accent-color ml-2" (click)="populateForm(user.mobile, 'phone')"
+                            *ngIf="user.mobile">Edit</a>
+                    </p>
+                    <form *ngIf="editing==='phone'" [formGroup]="phoneForm" (keydown.enter)="saveOrEditUser('phone')">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <input type="text" formControlName="mobile" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }"
+                                    placeholder="10 digit Mobile number" />
+                                <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
+                                    <div *ngIf="f.mobile.errors.required">Mobile number is required</div>
+                                    <div *ngIf="f.mobile.errors.pattern">Enter 10
+                                        digit Mobile number</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="mt-2">
+                                    <a (click)="cancel()">
+                                        <fa-icon [icon]="['fas', 'times']" class="accent-color ml-1"></fa-icon>
+                                    </a>
+                                    <a (click)="saveOrEditUser('phone')">
+                                        <fa-icon [icon]="['fas', 'check']" class="accent-color ml-3"></fa-icon>
+                                    </a>
+                                    <span *ngIf="loading" class="spinner-border spinner-border-sm ml-3"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <h2 class="content-heading">Saved Addresses</h2>
+                    <div class="form-group">
+                        <a class="plain-link accent-color" (click)="editing='address'">
+                            <fa-icon [icon]="['fas','plus']"></fa-icon> Add Address
+                        </a>
+                    </div>
+                    <form [formGroup]="addressForm" class="form-horizontal mb-5" *ngIf="editing=='address'"
+                        (ngsubmit)="saveAndEditAddress()">
+                        <div class="form-row">
+                            <div class="form-group col-sm-6">
+                                <input type="text" formControlName="firstName" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"
+                                    placeholder="First Name" />
+                                <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.firstName.errors.required">First Name is required</div>
                                 </div>
                             </div><!-- form-group -->
-                            <div class="form-row">
-                                <div class="form-group col-sm-6">
-                                    <input type="text" formControlName="city" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.city.errors }"
-                                        placeholder="City Name" />
-                                    <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
-                                        <div *ngIf="f.city.errors.required">City is required</div>
-                                    </div>
-                                </div><!-- form-group -->
-                                <div class="form-group col-sm-6">
-                                    <select formControlName="state" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
-                                        <option value="">State</option>
-                                        <option [value]="state" *ngFor="let state of utility.states">{{state}}
-                                        </option>
-                                    </select>
-                                    <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
-                                        <div *ngIf="f.state.errors.required">State is required</div>
-                                    </div>
-                                </div><!-- form-group -->
-                            </div><!-- form-row -->
-                            <span class="content-text">
-                                <fa-icon [icon]="['fas', 'lock']"></fa-icon> Your privacy is important to us. We
-                                will only
-                                contact you if there is an issue with your order.
-                            </span>
-                            <br><br>
-                            <div class="form-group">
-                                <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
-                                    (click)="saveAndEditAddress()">
-                                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                    {{isEditing ? 'Update' : 'Save'}}
-                                </button>
-                                <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
-                                    (click)="cancel()">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                        <div class="clearfix saved-addresses overflow-auto">
-                            <p class="content-text text-center" *ngIf="editing=='' && user.addresses.length == 0">
-                                No Saved
-                                Addresses</p>
-                            <div *ngFor="let address of user.addresses;index as i" class="address-item">
-                                <div class="address-actions">
-                                    <a (click)="populateForm(address, 'address')">Edit</a>
-                                    <span> | </span>
-                                    <a (click)="delete(address._id, 'address')">Delete</a>
+                            <div class="form-group col-sm-6">
+                                <input type="text" formControlName="lastName" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"
+                                    placeholder="Last Name" />
+                                <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+                                    <div *ngIf="f.lastName.errors.required">Last Name is required</div>
                                 </div>
-                                <p class="content-text">Name: {{address.firstName}} {{address.lastName}}</p>
-                                <p class="content-text">Address: <b>{{address.address}}</b></p>
-                                <table class="table table-borderless">
-                                    <tr class="content-text">
-                                        <td>Mobile: <b>{{address.mobile}}</b></td>
-                                        <td>City: <b>{{address.city}}</b></td>
-                                    </tr>
-                                    <tr class="content-text">
-                                        <td>State: <b>{{address.state}}</b></td>
-                                        <td>Pincode: <b>{{address.postalCode}}</b></td>
-                                    </tr>
-                                </table>
-                                <hr *ngIf="i < user.addresses.length - 1">
+                            </div><!-- form-group -->
+                        </div><!-- form-row -->
+                        <div class="form-row">
+                            <div class="form-group col-sm-6">
+                                <input type="text" formControlName="mobile" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.mobile.errors }"
+                                    placeholder="10 digit Mobile number" />
+                                <div *ngIf="submitted && f.mobile.errors" class="invalid-feedback">
+                                    <div *ngIf="f.mobile.errors.required">Mobile number is required</div>
+                                    <div *ngIf="f.mobile.errors.pattern">Enter 10
+                                        digit Mobile number</div>
+                                </div>
+                            </div><!-- form-group -->
+                            <div class="form-group col-sm-6">
+                                <input type="text" formControlName="postalCode" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.postalCode.errors }"
+                                    placeholder="Pincode" />
+                                <div *ngIf="submitted && f.postalCode.errors" class="invalid-feedback">
+                                    <div *ngIf="f.postalCode.errors.required">Postal Code is required</div>
+                                </div>
+                            </div><!-- form-group -->
+                        </div><!-- form-row -->
+                        <div class="form-group">
+                            <input type="text" formControlName="address" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.address.errors }"
+                                placeholder="Full Address" />
+                            <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+                                <div *ngIf="f.address.errors.required">Address is required</div>
                             </div>
+                        </div><!-- form-group -->
+                        <div class="form-row">
+                            <div class="form-group col-sm-6">
+                                <input type="text" formControlName="city" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.city.errors }" placeholder="City Name" />
+                                <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+                                    <div *ngIf="f.city.errors.required">City is required</div>
+                                </div>
+                            </div><!-- form-group -->
+                            <div class="form-group col-sm-6">
+                                <select formControlName="state" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.state.errors }">
+                                    <option value="">State</option>
+                                    <option [value]="state" *ngFor="let state of utility.states">{{state}}
+                                    </option>
+                                </select>
+                                <div *ngIf="submitted && f.state.errors" class="invalid-feedback">
+                                    <div *ngIf="f.state.errors.required">State is required</div>
+                                </div>
+                            </div><!-- form-group -->
+                        </div><!-- form-row -->
+                        <span class="content-text">
+                            <fa-icon [icon]="['fas', 'lock']"></fa-icon> Your privacy is important to us. We
+                            will only
+                            contact you if there is an issue with your order.
+                        </span>
+                        <br><br>
+                        <div class="form-group">
+                            <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
+                                (click)="saveAndEditAddress()">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                {{isEditing ? 'Update' : 'Save'}}
+                            </button>
+                            <button [disabled]="loading" class="btn btn-pink buy-btn float-right" (click)="cancel()">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                    <div class="clearfix saved-addresses overflow-auto">
+                        <p class="content-text text-center" *ngIf="editing=='' && user.addresses.length == 0">
+                            No Saved
+                            Addresses</p>
+                        <div *ngFor="let address of user.addresses;index as i" class="address-item">
+                            <div class="address-actions">
+                                <a (click)="populateForm(address, 'address')">Edit</a>
+                                <span> | </span>
+                                <a (click)="delete(address._id, 'address')">Delete</a>
+                            </div>
+                            <p class="content-text">Name: {{address.firstName}} {{address.lastName}}</p>
+                            <p class="content-text">Address: <b>{{address.address}}</b></p>
+                            <table class="table table-borderless">
+                                <tr class="content-text">
+                                    <td>Mobile: <b>{{address.mobile}}</b></td>
+                                    <td>City: <b>{{address.city}}</b></td>
+                                </tr>
+                                <tr class="content-text">
+                                    <td>State: <b>{{address.state}}</b></td>
+                                    <td>Pincode: <b>{{address.postalCode}}</b></td>
+                                </tr>
+                            </table>
+                            <hr *ngIf="i < user.addresses.length - 1">
                         </div>
                     </div>
-                </div><!-- card profile-details -->
-            </div><!-- col-md-6 -->
-            <div class="col-md-6">
-                <div class="card orders overflow-auto">
-                    <h2 class="content-heading mb-3">Order History</h2>
-                    <div class="card-body">
-                        <p class="content-text text-center" *ngIf="user.orders.length == 0">
-                            No Orders!!</p>
-                        <div class="row" *ngFor="let order of user.orders;index as i">
-                            <div class="col-sm-9">
-                                <p class="content-text mb-0"><b>Order#</b> {{order.orderNo}}</p>
-                                <p class="content-text mb-0"><b>Order Placed on</b>
-                                    {{order.orderDate | date:'dd MMM yyyy hh:mm a'}}</p>
-                                <p class="content-text mb-0"><b>Courier Type:
-                                    </b>{{courierType[jsonUtils.parseJson(order.orderSummary).shippingMethod]}}</p>
-                                <p class="content-text"><b>Tracking No</b>: {{order.trackingNo || 'Processing order'}}
+                </div>
+            </div><!-- card profile-details -->
+        </div><!-- col-md-6 -->
+        <div class="col-md-6">
+            <div class="card orders overflow-auto">
+                <h2 class="content-heading mb-3">Order History</h2>
+                <div class="card-body">
+                    <p class="content-text text-center" *ngIf="user.orders.length == 0">
+                        No Orders!!</p>
+                    <div class="row" *ngFor="let order of user.orders;index as i">
+                        <div class="col-sm-9">
+                            <p class="content-text mb-0"><b>Order#</b> {{order.orderNo}}</p>
+                            <p class="content-text mb-0"><b>Order Placed on</b>
+                                {{order.orderDate | date:'dd MMM yyyy hh:mm a'}}</p>
+                            <p class="content-text mb-0"><b>Courier Type:
+                                </b>{{courierType[jsonUtils.parseJson(order.orderSummary).shippingMethod]}}</p>
+                            <p class="content-text"><b>Tracking No</b>: {{order.trackingNo || 'Processing order'}}
+                            </p>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="link" (click)="pdf.printPdf(order)" class="text-center">
+                                <p class="m-0">
+                                    <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
+                                    </fa-icon>
                                 </p>
-                            </div>
-                            <div class="col-sm-3">
-                                <a class="link" (click)="pdf.printPdf(order)" class="text-center">
-                                    <p class="m-0">
-                                        <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
-                                        </fa-icon>
-                                    </p>
-                                    <p class="m-0">Invoice</p>
-                                </a>
-                            </div>
-                            <hr class="w-100 mx-3" *ngIf="i < user.orders.length - 1">
+                                <p class="m-0">Invoice</p>
+                            </a>
                         </div>
+                        <hr class="w-100 mx-3" *ngIf="i < user.orders.length - 1">
                     </div>
-                </div><!-- card order-history -->
-            </div><!-- col-md-6 -->
-        </div><!-- row -->
-        <hr>
-        <h2 class="content-heading mt-4">Wishlist</h2>
-        <div class="row">
-            <div class="form-group col-sm-12 wishlist">
-                <p class="content-text center" *ngIf="user.wishlist.length == 0">
-                    Nothing in wishlist!!</p>
-                <div class="card col-lg-3 col-md-4 col-sm-5 col-7 p-0" *ngFor="let product of user.wishlist">
-                    <div class="card-img-top">
-                        <a [routerLink]="['/products', product._id]" class="plain-link float-left">
-                            <img src="{{product.imageUrl[0]}}" class="img img-responsive w-100" [alt]="product.name">
-                        </a>
+                </div>
+            </div><!-- card order-history -->
+        </div><!-- col-md-6 -->
+    </div><!-- row -->
+    <hr>
+    <h2 class="content-heading mt-4">Wishlist</h2>
+    <div class="row">
+        <div class="form-group col-sm-12 wishlist">
+            <p class="content-text center" *ngIf="user.wishlist.length == 0">
+                Nothing in wishlist!!</p>
+            <div class="card col-lg-3 col-md-4 col-sm-5 col-7 p-0" *ngFor="let product of user.wishlist">
+                <div class="card-img-top">
+                    <a [routerLink]="['/products', product._id]" class="plain-link float-left">
+                        <img src="{{product.imageUrl[0]}}" class="img img-responsive w-100" [alt]="product.name">
+                    </a>
+                </div>
+                <div class="card-body clearfix">
+                    <a [routerLink]="['/products', product._id]" class="plain-link float-left">
+                        <h4 class="card-title content-heading">{{product.name}}</h4>
+                    </a>
+                    <div class="w-max-content float-right">
+                        <button class="btn btn-pink center mt-1" [disabled]="loading"
+                            (click)="delete(product._id, 'wishlist')"><span *ngIf="loading"
+                                class="spinner-border spinner-border-sm mr-1"></span> Remove</button>
                     </div>
-                    <div class="card-body clearfix">
-                        <a [routerLink]="['/products', product._id]" class="plain-link float-left">
-                            <h4 class="card-title content-heading">{{product.name}}</h4>
-                        </a>
-                        <div class="w-max-content float-right">
-                            <button class="btn btn-pink center mt-1" [disabled]="loading"
-                                (click)="delete(product._id, 'wishlist')"><span *ngIf="loading"
-                                    class="spinner-border spinner-border-sm mr-1"></span> Remove</button>
-                        </div>
-                    </div>
-                </div><!-- card -->
-            </div>
-        </div><!-- row -->
-        <hr>
-        <h2 class="content-heading mt-4">Messages</h2>
-        <div class="row">
-            <div class="col-sm-12 form-group">
-                <p class="content-text text-center" *ngIf="user.messages.length == 0">
-                    No Messages sent yet!!</p>
-                <table class="table table-bordered" *ngIf="user.messages.length > 0">
-                    <tr class="table-primary">
-                        <th>Message</th>
-                        <th>Reply</th>
-                        <th>Sent At</th>
-                        <th>Operation</th>
-                    </tr>
-                    <tr *ngFor="let message of user.messages;index as i">
-                        <td>{{message.message}}</td>
-                        <td [ngClass]="{'text-danger': !message.reply}">{{message.reply || 'Waiting for reply..!!'}}
-                        </td>
-                        <td>{{message.sentAt | date:'dd MMM yyyy hh:mm a'}}</td>
-                        <td><a class="link" (click)="delete(message._id, 'message')">Delete</a></td>
-                    </tr>
-                </table>
-            </div>
-        </div><!-- row -->
-    </div><!-- container -->
-</div>
+                </div>
+            </div><!-- card -->
+        </div>
+    </div><!-- row -->
+    <hr>
+    <h2 class="content-heading mt-4">Messages</h2>
+    <div class="row">
+        <div class="col-sm-12 form-group">
+            <p class="content-text text-center" *ngIf="user.messages.length == 0">
+                No Messages sent yet!!</p>
+            <table class="table table-bordered" *ngIf="user.messages.length > 0">
+                <tr class="table-primary">
+                    <th>Message</th>
+                    <th>Reply</th>
+                    <th>Sent At</th>
+                    <th>Operation</th>
+                </tr>
+                <tr *ngFor="let message of user.messages;index as i">
+                    <td>{{message.message}}</td>
+                    <td [ngClass]="{'text-danger': !message.reply}">{{message.reply || 'Waiting for reply..!!'}}
+                    </td>
+                    <td>{{message.sentAt | date:'dd MMM yyyy hh:mm a'}}</td>
+                    <td><a class="link" (click)="delete(message._id, 'message')">Delete</a></td>
+                </tr>
+            </table>
+        </div>
+    </div><!-- row -->
+</div><!-- container -->
 <span *ngIf="loading" class="spinner-border spinner-border-lg center"></span>

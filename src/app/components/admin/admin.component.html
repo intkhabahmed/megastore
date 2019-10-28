@@ -1,561 +1,576 @@
-<div class="nav-negative-margin">
-    <div class="nav-overlap"></div>
-    <div class="container-fluid admin-container">
-        <div class="row">
-            <div class="col-lg-2 col-md-2 col-sm-12">
-                <div class="left-nav">
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.NEW_PRODUCT_UPLOAD, 'btn-gray': currentTab !== adminTab.NEW_PRODUCT_UPLOAD}"
-                        (click)="showTab(adminTab.NEW_PRODUCT_UPLOAD)">New
-                        Product
-                        Upload</button>
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.PRODUCT_LIST, 'btn-gray': currentTab !== adminTab.PRODUCT_LIST}"
-                        (click)="showTab(adminTab.PRODUCT_LIST)">Live
-                        Product List</button>
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.CATEGORIES, 'btn-gray': currentTab !== adminTab.CATEGORIES}"
-                        (click)="showTab(adminTab.CATEGORIES)">Categories</button>
-                    <!-- <button class="btn"
+<div class="container-fluid admin-container">
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-12">
+            <div class="left-nav">
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.NEW_PRODUCT_UPLOAD, 'btn-gray': currentTab !== adminTab.NEW_PRODUCT_UPLOAD}"
+                    (click)="showTab(adminTab.NEW_PRODUCT_UPLOAD)">New
+                    Product
+                    Upload</button>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.PRODUCT_LIST, 'btn-gray': currentTab !== adminTab.PRODUCT_LIST}"
+                    (click)="showTab(adminTab.PRODUCT_LIST)">Live
+                    Product List</button>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.CATEGORIES, 'btn-gray': currentTab !== adminTab.CATEGORIES}"
+                    (click)="showTab(adminTab.CATEGORIES)">Categories</button>
+                <!-- <button class="btn"
                         [ngClass]="{'btn-pink': currentTab === adminTab.POPULAR_PRODUCTS, 'btn-gray': currentTab !== adminTab.POPULAR_PRODUCTS}"
                         (click)="showTab(adminTab.POPULAR_PRODUCTS)">Popular
                         Products</button> -->
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.ORDER_INVOICE, 'btn-gray': currentTab !== adminTab.ORDER_INVOICE}"
-                        (click)="showTab(adminTab.ORDER_INVOICE)">Order
-                        / Invoice</button>
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.SHIPPING_RATES, 'btn-gray': currentTab !== adminTab.SHIPPING_RATES}"
-                        (click)="showTab(adminTab.SHIPPING_RATES)">Shipping
-                        Rates</button>
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.GROSS_WEIGHT_CALCULATOR, 'btn-gray': currentTab !== adminTab.GROSS_WEIGHT_CALCULATOR}"
-                        (click)="showTab(adminTab.GROSS_WEIGHT_CALCULATOR)">Gross
-                        Weight Calculator</button>
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.REGISTERED_USERS, 'btn-gray': currentTab !== adminTab.REGISTERED_USERS}"
-                        (click)="showTab(adminTab.REGISTERED_USERS)">Registered
-                        Users</button>
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.MESSAGES, 'btn-gray': currentTab !== adminTab.MESSAGES}"
-                        (click)="showTab(adminTab.MESSAGES)">Messages</button>
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.BANNERS, 'btn-gray': currentTab !== adminTab.BANNERS}"
-                        (click)="showTab(adminTab.BANNERS)">Banners</button>
-                    <button class="btn"
-                        [ngClass]="{'btn-pink': currentTab === adminTab.NEW_ARRIVALS, 'btn-gray': currentTab !== adminTab.NEW_ARRIVALS}"
-                        (click)="showTab(adminTab.NEW_ARRIVALS)">New Arrivalas/Offers</button>
-                </div>
-            </div><!-- col-md-4 col-sm-12 -->
-            <div class="col-lg-10 col-md-10 col-sm-12">
-                <div class="card">
-                    <app-alert></app-alert>
-                    <div *ngIf="currentTab == adminTab.NEW_PRODUCT_UPLOAD">
-                        <h4>Add New Product</h4>
-                        <form class="add-product-form" [formGroup]="productForm" (ngSubmit)="addOrUpdateProduct()">
-                            <div class="form-row">
-                                <div class="form-group col-md-4 col-lg-2 no-padding">
-                                    <select formControlName="category" class="form-control"
-                                        [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
-                                        <option value="">Select Category</option>
-                                        <option [value]="category.name" *ngFor="let category of categories$ | async">
-                                            {{category.name}}</option>
-                                    </select>
-                                    <div *ngIf="submitted && f.category.errors" class="invalid-feedback">
-                                        <div *ngIf="f.category.errors.required">Category is required</div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <select class="form-control" formControlName="productStatus">
-                                        <option value="false">Inactive</option>
-                                        <option value="true">Active</option>
-                                    </select>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.ORDER_INVOICE, 'btn-gray': currentTab !== adminTab.ORDER_INVOICE}"
+                    (click)="showTab(adminTab.ORDER_INVOICE)">Order
+                    / Invoice</button>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.SHIPPING_RATES, 'btn-gray': currentTab !== adminTab.SHIPPING_RATES}"
+                    (click)="showTab(adminTab.SHIPPING_RATES)">Shipping
+                    Rates</button>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.GROSS_WEIGHT_CALCULATOR, 'btn-gray': currentTab !== adminTab.GROSS_WEIGHT_CALCULATOR}"
+                    (click)="showTab(adminTab.GROSS_WEIGHT_CALCULATOR)">Gross
+                    Weight Calculator</button>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.REGISTERED_USERS, 'btn-gray': currentTab !== adminTab.REGISTERED_USERS}"
+                    (click)="showTab(adminTab.REGISTERED_USERS)">Registered
+                    Users</button>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.MESSAGES, 'btn-gray': currentTab !== adminTab.MESSAGES}"
+                    (click)="showTab(adminTab.MESSAGES)">Messages</button>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.BANNERS, 'btn-gray': currentTab !== adminTab.BANNERS}"
+                    (click)="showTab(adminTab.BANNERS)">Banners</button>
+                <button class="btn"
+                    [ngClass]="{'btn-pink': currentTab === adminTab.NEW_ARRIVALS, 'btn-gray': currentTab !== adminTab.NEW_ARRIVALS}"
+                    (click)="showTab(adminTab.NEW_ARRIVALS)">New Arrivalas/Offers</button>
+            </div>
+        </div><!-- col-md-4 col-sm-12 -->
+        <div class="col-lg-10 col-md-10 col-sm-12">
+            <div class="card">
+                <app-alert></app-alert>
+                <div *ngIf="currentTab == adminTab.NEW_PRODUCT_UPLOAD">
+                    <h4>Add New Product</h4>
+                    <form class="add-product-form" [formGroup]="productForm" (ngSubmit)="addOrUpdateProduct()">
+                        <div class="form-row">
+                            <div class="form-group col-md-4 col-lg-2 no-padding">
+                                <select formControlName="category" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
+                                    (change)="loadSubCategories($event.srcElement.value)">
+                                    <option value="">Select Category</option>
+                                    <option [value]="category.name" *ngFor="let category of categories$ | async">
+                                        {{category.name}}</option>
+                                </select>
+                                <div *ngIf="submitted && f.category.errors" class="invalid-feedback">
+                                    <div *ngIf="f.category.errors.required">Category is required</div>
                                 </div>
                             </div>
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Image Links <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                            (click)="addField('imageUrl', {isNotDeep: true})">
-                                        </fa-icon>
-                                    </th>
-                                    <th>Product Name</th>
-                                    <th>Product Code</th>
-                                    <th>Product Description</th>
-                                    <th>Colors <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                            (click)="addField('colors', {isNotDeep: true});addField('properties',{})">
-                                        </fa-icon>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-group" formArrayName="imageUrl"
-                                            *ngFor="let image of formArray('imageUrl', {isNotDeep: true}).controls; index as i">
-                                            <div class="form-row"><input type="text" [formControlName]="i"
-                                                    class="form-control col-md-10"
-                                                    [ngClass]="{ 'is-invalid': submitted && image.errors }" />
-                                                <a (click)="removeField('imageUrl', {isNotDeep: true, index: i})"
-                                                    class="col-md-1 v-center" *ngIf="i != 0">
-                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                </a>
-                                                <div *ngIf="submitted && image.errors" class="invalid-feedback">
-                                                    <div *ngIf="image.errors.required">Image Url is required</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" formControlName="name" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
-                                        <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
-                                            <div *ngIf="f.name.errors.required">Product Name is required</div>
-                                        </div>
-                                    </td>
-                                    <td><input type="text" formControlName="productCode" class="form-control"
-                                            [ngClass]="{ 'is-invalid': submitted && f.productCode.errors }" />
-                                        <div *ngIf="submitted && f.productCode.errors" class="invalid-feedback">
-                                            <div *ngIf="f.productCode.errors.required">Product code is required</div>
-                                        </div>
-                                    </td>
-                                    <td><textarea formControlName="description" class="form-control no-resize"
-                                            [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
-                                        <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
-                                            <div *ngIf="f.description.errors.required">Description is required</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-group" formArrayName="colors"
-                                            *ngFor="let color of formArray('colors', {isNotDeep: true}).controls; index as i">
-                                            <div class="form-row"><input type="text" [formControlName]="i"
-                                                    class="form-control col-md-10"
-                                                    [ngClass]="{ 'is-invalid': submitted && color.errors }" />
-                                                <a (click)="removeField('colors', {isNotDeep: true, index: i});removeField('properties', {index: i})"
-                                                    class="col-md-1 v-center" *ngIf="i != 0">
-                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                </a>
-                                                <div *ngIf="submitted && color.errors" class="invalid-feedback">
-                                                    <div *ngIf="color.errors.required">Color is required</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div formArrayName="properties"
-                                *ngFor="let property of formArray('properties', {isNotDeep: true}).controls;index as i">
-                                <table class="table table-bordered">
-                                    <tr class="table-primary">
-                                        <th>Sizes <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                                (click)="addField('size', {index: i})"></fa-icon>
-                                        </th>
-                                        <th>Prices (Rs) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                                (click)="addField('price', {index: i})">
-                                            </fa-icon>
-                                        </th>
-                                        <th>Net Weights (Gm) <fa-icon [icon]="['fas', 'plus']"
-                                                class="accent-bg round-btn" (click)="addField('weight', {index: i})">
-                                            </fa-icon>
-                                        </th>
-                                        <th>Quantities <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                                                (click)="addField('quantity', {index: i})">
-                                            </fa-icon>
-                                        </th>
-                                    </tr>
-                                    <tr [formGroupName]="i">
-                                        <td>
-                                            <div class="form-group" formArrayName="size"
-                                                *ngFor="let size of formArray('size', {index: i}).controls; index as j">
-                                                <div class="form-row"><input type="text" [formControlName]="j"
-                                                        class="form-control col-md-10"
-                                                        [ngClass]="{ 'is-invalid': submitted && size.errors }" />
-                                                    <a (click)="removeField('size', {index: i, index1: j})"
-                                                        class="col-md-1 v-center" *ngIf="j != 0">
-                                                        <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                    </a>
-                                                    <div *ngIf="submitted && size.errors" class="invalid-feedback">
-                                                        <div *ngIf="size.errors.required">Size is required</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group" formArrayName="price"
-                                                *ngFor="let price of formArray('price', {index: i}).controls; index as j">
-                                                <div class="form-row"><input type="text" [formControlName]="j"
-                                                        class="form-control col-md-10"
-                                                        [ngClass]="{ 'is-invalid': submitted && price.errors }" />
-                                                    <a (click)="removeField('price', {index: i, index1: j})"
-                                                        class="col-md-1 v-center" *ngIf="j != 0">
-                                                        <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                    </a>
-                                                    <div *ngIf="submitted && price.errors" class="invalid-feedback">
-                                                        <div *ngIf="price.errors.required">Price is required</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group" formArrayName="weight"
-                                                *ngFor="let weight of formArray('weight', {index: i}).controls; index as j">
-                                                <div class="form-row"><input type="text" [formControlName]="j"
-                                                        class="form-control col-md-10"
-                                                        [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
-                                                    <a (click)="removeField('weight', {index: i, index1: j})"
-                                                        class="col-md-1 v-center" *ngIf="j != 0">
-                                                        <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                    </a>
-                                                    <div *ngIf="submitted && weight.errors" class="invalid-feedback">
-                                                        <div *ngIf="weight.errors.required">Weight is required</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-group" formArrayName="quantity"
-                                                *ngFor="let quantity of formArray('quantity', {index: i}).controls; index as j">
-                                                <div class="form-row"><input type="text" [formControlName]="j"
-                                                        class="form-control col-md-10"
-                                                        [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
-                                                    <a (click)="removeField('quantity', {index: i, index1: j})"
-                                                        class="col-md-1 v-center" *ngIf="j != 0">
-                                                        <fa-icon [icon]="['fas','times']"></fa-icon>
-                                                    </a>
-                                                    <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
-                                                        <div *ngIf="quantity.errors.required">Quantity is required
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
+                            <div class="form-group col-md-4 col-lg-3">
+                                <select formControlName="subCategory" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.subCategory.errors }">
+                                    <option value="">Select Sub-Category</option>
+                                    <option [value]="subCategory" *ngFor="let subCategory of subCategories$ | async">
+                                        {{subCategory}}</option>
+                                </select>
+                                <div *ngIf="submitted && f.subCategory.errors" class="invalid-feedback">
+                                    <div *ngIf="f.subCategory.errors.required">Sub Category is required</div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <button [disabled]="loading" class="btn btn-pink float-right">
-                                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                                    Upload
-                                </button>
+                                <select class="form-control" formControlName="productStatus">
+                                    <option value="false">Inactive</option>
+                                    <option value="true">Active</option>
+                                </select>
                             </div>
-                        </form>
-                    </div><!-- add product -->
-                    <div *ngIf="currentTab == adminTab.PRODUCT_LIST">
-                        <h4>Live Product List</h4>
-                        <div class="overflow-scroll">
+                        </div>
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Image Links <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                        (click)="addField('imageUrl', {isNotDeep: true})">
+                                    </fa-icon>
+                                </th>
+                                <th>Product Name</th>
+                                <th>Product Code</th>
+                                <th>Product Description</th>
+                                <th>Colors <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                        (click)="addField('colors', {isNotDeep: true});addField('properties',{})">
+                                    </fa-icon>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group" formArrayName="imageUrl"
+                                        *ngFor="let image of formArray('imageUrl', {isNotDeep: true}).controls; index as i">
+                                        <div class="form-row"><input type="text" [formControlName]="i"
+                                                class="form-control col-md-10"
+                                                [ngClass]="{ 'is-invalid': submitted && image.errors }" />
+                                            <a (click)="removeField('imageUrl', {isNotDeep: true, index: i})"
+                                                class="col-md-1 v-center" *ngIf="i != 0">
+                                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                                            </a>
+                                            <div *ngIf="submitted && image.errors" class="invalid-feedback">
+                                                <div *ngIf="image.errors.required">Image Url is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><input type="text" formControlName="name" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+                                    <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+                                        <div *ngIf="f.name.errors.required">Product Name is required</div>
+                                    </div>
+                                </td>
+                                <td><input type="text" formControlName="productCode" class="form-control"
+                                        [ngClass]="{ 'is-invalid': submitted && f.productCode.errors }" />
+                                    <div *ngIf="submitted && f.productCode.errors" class="invalid-feedback">
+                                        <div *ngIf="f.productCode.errors.required">Product code is required</div>
+                                    </div>
+                                </td>
+                                <td><textarea formControlName="description" class="form-control no-resize"
+                                        [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
+                                    <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                                        <div *ngIf="f.description.errors.required">Description is required</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group" formArrayName="colors"
+                                        *ngFor="let color of formArray('colors', {isNotDeep: true}).controls; index as i">
+                                        <div class="form-row"><input type="text" [formControlName]="i"
+                                                class="form-control col-md-10"
+                                                [ngClass]="{ 'is-invalid': submitted && color.errors }" />
+                                            <a (click)="removeField('colors', {isNotDeep: true, index: i});removeField('properties', {index: i})"
+                                                class="col-md-1 v-center" *ngIf="i != 0">
+                                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                                            </a>
+                                            <div *ngIf="submitted && color.errors" class="invalid-feedback">
+                                                <div *ngIf="color.errors.required">Color is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <div formArrayName="properties"
+                            *ngFor="let property of formArray('properties', {isNotDeep: true}).controls;index as i">
                             <table class="table table-bordered">
                                 <tr class="table-primary">
-                                    <th>Product Name</th>
-                                    <th>Product Code</th>
-                                    <th>Category</th>
-                                    <th>Status</th>
-                                    <th>Colors</th>
-                                    <th>Price</th>
-                                    <th>Weight</th>
-                                    <th>Size</th>
-                                    <th>Quantity</th>
-                                    <th>Operations</th>
+                                    <th>Sizes <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('size', {index: i})"></fa-icon>
+                                    </th>
+                                    <th>Prices (Rs) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('price', {index: i})">
+                                        </fa-icon>
+                                    </th>
+                                    <th>Net Weights (Gm) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('weight', {index: i})">
+                                        </fa-icon>
+                                    </th>
+                                    <th>Quantities <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                            (click)="addField('quantity', {index: i})">
+                                        </fa-icon>
+                                    </th>
                                 </tr>
-                                <tr *ngFor="let product of products$ | async;index as i"
-                                    [ngClass]="{'muted-item': !product.productStatus}">
-                                    <td>{{product.name}} </td>
-                                    <td>{{product.productCode}} </td>
-                                    <td>{{product.category}} </td>
-                                    <td>{{product.productStatus ? 'Active': 'Inactive'}}</td>
+                                <tr [formGroupName]="i">
                                     <td>
-                                        <p *ngFor="let color of product.colors">{{color}}
+                                        <div class="form-group" formArrayName="size"
+                                            *ngFor="let size of formArray('size', {index: i}).controls; index as j">
+                                            <div class="form-row"><input type="text" [formControlName]="j"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && size.errors }" />
+                                                <a (click)="removeField('size', {index: i, index1: j})"
+                                                    class="col-md-1 v-center" *ngIf="j != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && size.errors" class="invalid-feedback">
+                                                    <div *ngIf="size.errors.required">Size is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                        <p *ngFor="let price of product.price">{{price}}</p>
+                                        <div class="form-group" formArrayName="price"
+                                            *ngFor="let price of formArray('price', {index: i}).controls; index as j">
+                                            <div class="form-row"><input type="text" [formControlName]="j"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && price.errors }" />
+                                                <a (click)="removeField('price', {index: i, index1: j})"
+                                                    class="col-md-1 v-center" *ngIf="j != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && price.errors" class="invalid-feedback">
+                                                    <div *ngIf="price.errors.required">Price is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                        <p *ngFor="let weight of product.weight">{{weight}}</p>
+                                        <div class="form-group" formArrayName="weight"
+                                            *ngFor="let weight of formArray('weight', {index: i}).controls; index as j">
+                                            <div class="form-row"><input type="text" [formControlName]="j"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
+                                                <a (click)="removeField('weight', {index: i, index1: j})"
+                                                    class="col-md-1 v-center" *ngIf="j != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && weight.errors" class="invalid-feedback">
+                                                    <div *ngIf="weight.errors.required">Weight is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                        <p *ngFor="let size of product.size">{{size}}</p>
+                                        <div class="form-group" formArrayName="quantity"
+                                            *ngFor="let quantity of formArray('quantity', {index: i}).controls; index as j">
+                                            <div class="form-row"><input type="text" [formControlName]="j"
+                                                    class="form-control col-md-10"
+                                                    [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
+                                                <a (click)="removeField('quantity', {index: i, index1: j})"
+                                                    class="col-md-1 v-center" *ngIf="j != 0">
+                                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                                </a>
+                                                <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
+                                                    <div *ngIf="quantity.errors.required">Quantity is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td>
-                                        <p *ngFor="let quantity of product.quantity">{{quantity}}</p>
-                                    </td>
-                                    <td><a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="delete(product._id, 'product')">Delete</a></td>
                                 </tr>
                             </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- product list -->
-                    <div *ngIf="currentTab == adminTab.POPULAR_PRODUCTS">
-                        <h4>Popular Product List</h4>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Product Name</th>
-                                    <th>Product Code</th>
-                                    <th>Category</th>
-                                    <th>Colors</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                    <th>Quantity</th>
-                                    <th>Operations</th>
-                                </tr>
-                                <tr *ngFor="let product of products$ | async;index as i">
-                                    <td>{{product.name}} </td>
-                                    <td>{{product.productCode}} </td>
-                                    <td>{{product.category}} </td>
-                                    <td>{{product.color}} </td>
-                                    <td>{{product.price}} </td>
-                                    <td>{{product.status}} </td>
-                                    <td>{{product.quantity}} </td>
-                                    <td><a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="delete(product._id, 'product')">Delete</a></td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- popular products -->
-                    <div *ngIf="currentTab == adminTab.CATEGORIES">
-                        <h4>Categories</h4>
+                        </div>
                         <div class="form-group">
-                            <button (click)="showOverlay=true;editing='category'" class="btn btn-pink">Add
-                                New</button>
+                            <button [disabled]="loading" class="btn btn-pink float-right">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Upload
+                            </button>
                         </div>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Category Name</th>
-                                    <th>Operations</th>
-                                </tr>
-                                <tr *ngFor="let category of categories$ | async;index as i">
-                                    <td>{{category.name}}</td>
-                                    <td><a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='category';populateEditForm(category)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link">Delete</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- gross weight calculator -->
-                    <div *ngIf="currentTab == adminTab.ORDER_INVOICE">
-                        <h4>Orders/Invoices</h4>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Order No</th>
-                                    <th>User Name</th>
-                                    <th>Paid Rs.</th>
-                                    <th>Order date</th>
-                                    <th>Courier Type</th>
-                                    <th>Tracking No.</th>
-                                    <th>Invoice</th>
-                                    <th>Operations</th>
-                                </tr>
-                                <tr *ngFor="let order of orders$ | async;index as i">
-                                    <td>{{order.orderNo}}</td>
-                                    <td>{{order.user.firstName}} {{order.user.lastName}} </td>
-                                    <td>{{order.orderSummary.grandTotal}} </td>
-                                    <td>{{order.orderDate | date:'dd MMM yyyy hh:mm a'}} </td>
-                                    <td>{{courierType[order.orderSummary.shippingMethod]}} </td>
-                                    <td>{{order.trackingNo}}</td>
-                                    <td>
-                                        <a class="link" (click)="pdf.printPdf(order)">
-                                            <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
-                                            </fa-icon>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='order';populateEditForm(order)">Edit</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- order/invoice -->
-                    <div *ngIf="currentTab == adminTab.SHIPPING_RATES">
-                        <h4>Shipping Rates</h4>
-                        <div class="form-group">
-                            <button (click)="showOverlay=true;editing='shippingRate'" class="btn btn-pink">Add
-                                New</button>
-                        </div>
-                        <div class="form-group col-md-4 col-lg-5 no-padding">
-                            <select (change)="filterShippingRates($event.srcElement.value)"
-                                class="form-control col-md-6">
-                                <option value="" selected>Filter By</option>
-                                <option [value]="courierType.REGISTERED_POST">Registered Post</option>
-                                <option [value]="courierType.SPEED_POST">Speed Post</option>
-                                <option [value]="courierType.DTDC">DTDC</option>
-                                <option [value]="courierType.PROFESSIONAL">Professional</option>
-                                <option [value]="courierType.SHREE_MAHAVIR">Shree Mahavir</option>
-                            </select>
-                        </div>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Shipping Method</th>
-                                    <th>Min Weight</th>
-                                    <th>Max Weight</th>
-                                    <th>Min Distance</th>
-                                    <th>Max Distance</th>
-                                    <th>Rate</th>
-                                    <th>Local Rate (Goa)</th>
-                                    <th>Per KG Rate</th>
-                                    <th>Upto Half KG Rate</th>
-                                    <th>Area</th>
-                                    <th>Operations</th>
-                                </tr>
-                                <tr *ngFor="let shippingRate of shippingRates$ | async;index as i">
-                                    <td>{{courierType[shippingRate.shippingMethod]}} </td>
-                                    <td>{{shippingRate.minWeight}} </td>
-                                    <td>{{shippingRate.maxWeight}} </td>
-                                    <td>{{shippingRate.minDistance}} </td>
-                                    <td>{{shippingRate.maxDistance}} </td>
-                                    <td>{{shippingRate.rate}} </td>
-                                    <td>{{shippingRate.isLocal}} </td>
-                                    <td>{{shippingRate.perKgRate}} </td>
-                                    <td>{{shippingRate.halfKgRate}} </td>
-                                    <td>{{shippingRate.area}} </td>
-                                    <td><a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='shippingRate';populateEditForm(shippingRate)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="delete(shippingRate._id, 'shippingRate')">Delete</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- shipping rates -->
-                    <div *ngIf="currentTab == adminTab.GROSS_WEIGHT_CALCULATOR">
-                        <h4>Gross Weight Mapping</h4>
-                        <div class="form-group">
-                            <button (click)="showOverlay=true;editing='grossWeight'" class="btn btn-pink">Add
-                                New</button>
-                        </div>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Min Weight</th>
-                                    <th>Max Weight</th>
-                                    <th>To be added</th>
-                                    <th>Operation</th>
-                                </tr>
-                                <tr *ngFor="let grossWeight of grossWeights$ | async;index as i">
-                                    <td>{{grossWeight.minWeight}}</td>
-                                    <td>{{grossWeight.maxWeight}}</td>
-                                    <td>{{grossWeight.toBeAdded}}</td>
-                                    <td><a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='grossWeight';populateEditForm(grossWeight)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="delete(grossWeight._id, 'grossWeight')">Delete</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- gross weight calculator -->
-                    <div *ngIf="currentTab == adminTab.REGISTERED_USERS">
-                        <h4>Registered Users</h4>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Registered On</th>
-                                </tr>
-                                <tr *ngFor="let user of users$ | async;index as i">
-                                    <td>{{user.firstName}} </td>
-                                    <td>{{user.lastName}} </td>
-                                    <td>{{user.email}} </td>
-                                    <td>
-                                        <p *ngFor="let address of user.addresses">{{address.address}}, {{address.city}},
-                                            {{address.state}} - {{address.postalCode}}</p>
-                                    </td>
-                                    <td>{{user.createdAt | date:'dd MMM yyyy'}}</td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- registered users -->
-                    <div *ngIf="currentTab == adminTab.MESSAGES">
-                        <h4>Messages</h4>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>From</th>
-                                    <th>Message</th>
-                                    <th>Reply</th>
-                                    <th>Sent At</th>
-                                    <th>Operation</th>
-                                </tr>
-                                <tr *ngFor="let message of messages$ | async;index as i">
-                                    <td>{{message.from}}</td>
-                                    <td>{{message.message}}</td>
-                                    <td>{{message.reply}}</td>
-                                    <td>{{message.sentAt}}</td>
-                                    <td>
-                                        <a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='message';populateEditForm(message)">Reply</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- messages -->
-                    <div *ngIf="currentTab == adminTab.BANNERS">
-                        <h4>Banners</h4>
-                        <div class="form-group">
-                            <button (click)="showOverlay=true;editing='banner'" class="btn btn-pink">Add
-                                New</button>
-                        </div>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Image</th>
-                                    <th>Title</th>
-                                    <th>Subtitle</th>
-                                    <th>Operation</th>
-                                </tr>
-                                <tr *ngFor="let banner of banners$ | async;index as i">
-                                    <td><img [src]="banner.imageUrl" [alt]="banner.title" height="150" class="img"></td>
-                                    <td>{{banner.title}}</td>
-                                    <td>{{banner.subTitle}}</td>
-                                    <td>
-                                        <a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='banner';populateEditForm(banner)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="delete(banner._id, 'banner')">Delete</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- banners -->
-                    <div *ngIf="currentTab == adminTab.NEW_ARRIVALS">
-                        <h4>New Arrivals</h4>
-                        <div class="form-group">
-                            <button (click)="showOverlay=true;editing='newArrival'" class="btn btn-pink">Add
-                                New</button>
-                        </div>
-                        <div class="overflow-scroll">
-                            <table class="table table-bordered">
-                                <tr class="table-primary">
-                                    <th>Image</th>
-                                    <th>Offer Name</th>
-                                    <th>Operation</th>
-                                </tr>
-                                <tr *ngFor="let newArrival of newArrivals$ | async;index as i">
-                                    <td><img [src]="newArrival.imageUrl" [alt]="newArrival.name" height="150"
-                                            class="img"></td>
-                                    <td>{{newArrival.name}}</td>
-                                    <td>
-                                        <a class="link"
-                                            (click)="isEditing=true;showOverlay=true;editing='newArrival';populateEditForm(newArrival)">Edit</a>&nbsp;&nbsp;<a
-                                            class="link" (click)="delete(newArrival._id, 'newArrival')">Delete</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div><!-- overflow-scroll -->
-                    </div><!-- new arrivals -->
-                </div><!-- card -->
-            </div><!-- col-md-8 col-sm-12 -->
-        </div><!-- ṛow -->
-    </div><!-- container -->
-</div><!-- nav-negative-margin -->
+                    </form>
+                </div> <!-- add product -->
+                <div *ngIf="currentTab == adminTab.PRODUCT_LIST">
+                    <h4>Live Product List</h4>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Product Name</th>
+                                <th>Product Code</th>
+                                <th>Category</th>
+                                <th>Sub Category</th>
+                                <th>Status</th>
+                                <th>Colors</th>
+                                <th>Price</th>
+                                <th>Weight</th>
+                                <th>Size</th>
+                                <th>Quantity</th>
+                                <th>Operations</th>
+                            </tr>
+                            <tr *ngFor="let product of products$ | async;index as i"
+                                [ngClass]="{'muted-item': !product.productStatus}">
+                                <td>{{product.name}} </td>
+                                <td>{{product.productCode}} </td>
+                                <td>{{product.category}} </td>
+                                <td>{{product.subCategory}} </td>
+                                <td>{{product.productStatus ? 'Active': 'Inactive'}}</td>
+                                <td>
+                                    <p *ngFor="let color of product.colors">{{color}}
+                                </td>
+                                <td>
+                                    <p *ngFor="let price of product.price">{{price}}</p>
+                                </td>
+                                <td>
+                                    <p *ngFor="let weight of product.weight">{{weight}}</p>
+                                </td>
+                                <td>
+                                    <p *ngFor="let size of product.size">{{size}}</p>
+                                </td>
+                                <td>
+                                    <p *ngFor="let quantity of product.quantity">{{quantity}}</p>
+                                </td>
+                                <td><a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
+                                        class="link" (click)="delete(product._id, 'product')">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- product list -->
+                <div *ngIf="currentTab == adminTab.POPULAR_PRODUCTS">
+                    <h4>Popular Product List</h4>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Product Name</th>
+                                <th>Product Code</th>
+                                <th>Category</th>
+                                <th>Colors</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Quantity</th>
+                                <th>Operations</th>
+                            </tr>
+                            <tr *ngFor="let product of products$ | async;index as i">
+                                <td>{{product.name}} </td>
+                                <td>{{product.productCode}} </td>
+                                <td>{{product.category}} </td>
+                                <td>{{product.color}} </td>
+                                <td>{{product.price}} </td>
+                                <td>{{product.status}} </td>
+                                <td>{{product.quantity}} </td>
+                                <td><a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
+                                        class="link" (click)="delete(product._id, 'product')">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- popular products -->
+                <div *ngIf="currentTab == adminTab.CATEGORIES">
+                    <h4>Categories</h4>
+                    <div class="form-group">
+                        <button (click)="showOverlay=true;editing='category'" class="btn btn-pink">Add
+                            New</button>
+                    </div>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Category Name</th>
+                                <th>Sub Categories</th>
+                                <th>Operations</th>
+                            </tr>
+                            <tr *ngFor="let category of categories$ | async;index as i">
+                                <td>{{category.name}}</td>
+                                <td>{{category.subCategories}}</td>
+                                <td><a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='category';populateEditForm(category)">Edit</a>&nbsp;&nbsp;<a
+                                        class="link">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- gross weight calculator -->
+                <div *ngIf="currentTab == adminTab.ORDER_INVOICE">
+                    <h4>Orders/Invoices</h4>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Order No</th>
+                                <th>User Name</th>
+                                <th>Paid Rs.</th>
+                                <th>Order date</th>
+                                <th>Courier Type</th>
+                                <th>Tracking No.</th>
+                                <th>Invoice</th>
+                                <th>Operations</th>
+                            </tr>
+                            <tr *ngFor="let order of orders$ | async;index as i">
+                                <td>{{order.orderNo}}</td>
+                                <td>{{order.user.firstName}} {{order.user.lastName}} </td>
+                                <td>{{order.orderSummary.grandTotal}} </td>
+                                <td>{{order.orderDate | date:'dd MMM yyyy hh:mm a'}} </td>
+                                <td>{{courierType[order.orderSummary.shippingMethod]}} </td>
+                                <td>{{order.trackingNo}}</td>
+                                <td>
+                                    <a class="link" (click)="pdf.printPdf(order)">
+                                        <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
+                                        </fa-icon>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='order';populateEditForm(order)">Edit</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- order/invoice -->
+                <div *ngIf="currentTab == adminTab.SHIPPING_RATES">
+                    <h4>Shipping Rates</h4>
+                    <div class="form-group">
+                        <button (click)="showOverlay=true;editing='shippingRate'" class="btn btn-pink">Add
+                            New</button>
+                    </div>
+                    <div class="form-group col-md-4 col-lg-5 no-padding">
+                        <select (change)="filterShippingRates($event.srcElement.value)" class="form-control col-md-6">
+                            <option value="" selected>Filter By</option>
+                            <option [value]="courierType.REGISTERED_POST">Registered Post</option>
+                            <option [value]="courierType.SPEED_POST">Speed Post</option>
+                            <option [value]="courierType.DTDC">DTDC</option>
+                            <option [value]="courierType.PROFESSIONAL">Professional</option>
+                            <option [value]="courierType.SHREE_MAHAVIR">Shree Mahavir</option>
+                        </select>
+                    </div>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Shipping Method</th>
+                                <th>Min Weight</th>
+                                <th>Max Weight</th>
+                                <th>Min Distance</th>
+                                <th>Max Distance</th>
+                                <th>Rate</th>
+                                <th>Local Rate (Goa)</th>
+                                <th>Per KG Rate</th>
+                                <th>Upto Half KG Rate</th>
+                                <th>Area</th>
+                                <th>Operations</th>
+                            </tr>
+                            <tr *ngFor="let shippingRate of shippingRates$ | async;index as i">
+                                <td>{{courierType[shippingRate.shippingMethod]}} </td>
+                                <td>{{shippingRate.minWeight}} </td>
+                                <td>{{shippingRate.maxWeight}} </td>
+                                <td>{{shippingRate.minDistance}} </td>
+                                <td>{{shippingRate.maxDistance}} </td>
+                                <td>{{shippingRate.rate}} </td>
+                                <td>{{shippingRate.isLocal}} </td>
+                                <td>{{shippingRate.perKgRate}} </td>
+                                <td>{{shippingRate.halfKgRate}} </td>
+                                <td>{{shippingRate.area}} </td>
+                                <td><a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='shippingRate';populateEditForm(shippingRate)">Edit</a>&nbsp;&nbsp;<a
+                                        class="link" (click)="delete(shippingRate._id, 'shippingRate')">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- shipping rates -->
+                <div *ngIf="currentTab == adminTab.GROSS_WEIGHT_CALCULATOR">
+                    <h4>Gross Weight Mapping</h4>
+                    <div class="form-group">
+                        <button (click)="showOverlay=true;editing='grossWeight'" class="btn btn-pink">Add
+                            New</button>
+                    </div>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Min Weight</th>
+                                <th>Max Weight</th>
+                                <th>To be added</th>
+                                <th>Operation</th>
+                            </tr>
+                            <tr *ngFor="let grossWeight of grossWeights$ | async;index as i">
+                                <td>{{grossWeight.minWeight}}</td>
+                                <td>{{grossWeight.maxWeight}}</td>
+                                <td>{{grossWeight.toBeAdded}}</td>
+                                <td><a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='grossWeight';populateEditForm(grossWeight)">Edit</a>&nbsp;&nbsp;<a
+                                        class="link" (click)="delete(grossWeight._id, 'grossWeight')">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- gross weight calculator -->
+                <div *ngIf="currentTab == adminTab.REGISTERED_USERS">
+                    <h4>Registered Users</h4>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Registered On</th>
+                            </tr>
+                            <tr *ngFor="let user of users$ | async;index as i">
+                                <td>{{user.firstName}} </td>
+                                <td>{{user.lastName}} </td>
+                                <td>{{user.email}} </td>
+                                <td>
+                                    <p *ngFor="let address of user.addresses">{{address.address}},
+                                        {{address.city}},
+                                        {{address.state}} - {{address.postalCode}}</p>
+                                </td>
+                                <td>{{user.createdAt | date:'dd MMM yyyy'}}</td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- registered users -->
+                <div *ngIf="currentTab == adminTab.MESSAGES">
+                    <h4>Messages</h4>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>From</th>
+                                <th>Message</th>
+                                <th>Reply</th>
+                                <th>Sent At</th>
+                                <th>Operation</th>
+                            </tr>
+                            <tr *ngFor="let message of messages$ | async;index as i">
+                                <td>{{message.from}}</td>
+                                <td>{{message.message}}</td>
+                                <td>{{message.reply}}</td>
+                                <td>{{message.sentAt}}</td>
+                                <td>
+                                    <a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='message';populateEditForm(message)">Reply</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- messages -->
+                <div *ngIf="currentTab == adminTab.BANNERS">
+                    <h4>Banners</h4>
+                    <div class="form-group">
+                        <button (click)="showOverlay=true;editing='banner'" class="btn btn-pink">Add
+                            New</button>
+                    </div>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Subtitle</th>
+                                <th>Operation</th>
+                            </tr>
+                            <tr *ngFor="let banner of banners$ | async;index as i">
+                                <td><img [src]="banner.imageUrl" [alt]="banner.title" height="150" class="img"></td>
+                                <td>{{banner.title}}</td>
+                                <td>{{banner.subTitle}}</td>
+                                <td>
+                                    <a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='banner';populateEditForm(banner)">Edit</a>&nbsp;&nbsp;<a
+                                        class="link" (click)="delete(banner._id, 'banner')">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- banners -->
+                <div *ngIf="currentTab == adminTab.NEW_ARRIVALS">
+                    <h4>New Arrivals</h4>
+                    <div class="form-group">
+                        <button (click)="showOverlay=true;editing='newArrival'" class="btn btn-pink">Add
+                            New</button>
+                    </div>
+                    <div class="overflow-scroll">
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th>Image</th>
+                                <th>Offer Name</th>
+                                <th>Operation</th>
+                            </tr>
+                            <tr *ngFor="let newArrival of newArrivals$ | async;index as i">
+                                <td><img [src]="newArrival.imageUrl" [alt]="newArrival.name" height="150" class="img">
+                                </td>
+                                <td>{{newArrival.name}}</td>
+                                <td>
+                                    <a class="link"
+                                        (click)="isEditing=true;showOverlay=true;editing='newArrival';populateEditForm(newArrival)">Edit</a>&nbsp;&nbsp;<a
+                                        class="link" (click)="delete(newArrival._id, 'newArrival')">Delete</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!-- overflow-scroll -->
+                </div><!-- new arrivals -->
+            </div><!-- card -->
+        </div><!-- col-md-8 col-sm-12 -->
+    </div><!-- ṛow -->
+</div><!-- container -->
 <div class="overlay" *ngIf="showOverlay"></div>
 <div class="overlay-body" *ngIf="showOverlay">
     <fa-icon [icon]="['fas', 'times']" size="2x" class="round-btn close-btn close" (click)="cancel()"></fa-icon>
     <div *ngIf="editing == 'product'">
         <form class="add-product-form" [formGroup]="productForm" (ngSubmit)="addOrUpdateProduct()">
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label for="name">Product Name</label>
                     <input type="text" formControlName="name" class="form-control"
                         [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
@@ -563,16 +578,29 @@
                         <div *ngIf="f.name.errors.required">Product Name is required</div>
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label for="category">Category</label>
                     <select formControlName="category" class="form-control"
-                        [ngClass]="{ 'is-invalid': submitted && f.category.errors }">
+                        [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
+                        (change)="loadSubCategories($event.srcElement.value)">
                         <option value="">Select Category</option>
                         <option [value]="category.name" *ngFor="let category of categories$ | async">
                             {{category.name}}</option>
                     </select>
                     <div *ngIf="submitted && f.category.errors" class="invalid-feedback">
                         <div *ngIf="f.category.errors.required">Category is required</div>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="subCategory">Sub Category</label>
+                    <select formControlName="subCategory" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.subCategory.errors }">
+                        <option value="">Select Sub-Category</option>
+                        <option [value]="subCategory" *ngFor="let subCategory of subCategories$ | async">
+                            {{subCategory}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.subCategory.errors" class="invalid-feedback">
+                        <div *ngIf="f.subCategory.errors.required">Sub Category is required</div>
                     </div>
                 </div>
             </div><!-- form-row -->
@@ -867,12 +895,31 @@
     <div *ngIf="editing == 'category'">
         <form class="add-product-form" [formGroup]="categoryForm" (ngSubmit)="addOrUpdateCategory()">
             <div class="form-row">
-                <div class="form-group col-md-6 offset-md-3">
+                <div class="form-group col-md-6">
                     <label for="name">Category Name</label>
                     <input type="text" formControlName="name" class="form-control"
                         [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
                     <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
                         <div *ngIf="f.name.errors.required">Category name is required</div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="colors">Sub Categories</label>&nbsp;
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                        (click)="addField('subCategories', {}, 'category')">
+                    </fa-icon>
+                    <div class="form-group" formArrayName="subCategories"
+                        *ngFor="let subCategory of formArray('subCategories', {}, 'category').controls; index as i">
+                        <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
+                                [ngClass]="{ 'is-invalid': submitted && subCategory.errors }" />
+                            <a (click)="removeField('subCategories', {index: i}, 'category')" class="col-md-1 v-center"
+                                *ngIf="i != 0">
+                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                            </a>
+                            <div *ngIf="submitted && subCategory.errors" class="invalid-feedback">
+                                <div *ngIf="subCategory.errors.required">Sub Category is required</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div><!-- form-row -->

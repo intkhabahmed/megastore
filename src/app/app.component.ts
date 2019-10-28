@@ -1,10 +1,10 @@
-import { ApiService } from './services/api.service';
-import { Observable } from 'rxjs';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
+import { Observable } from 'rxjs';
 import { User } from './models/user';
+import { ApiService } from './services/api.service';
 import { AuthenticationService } from './services/authentication.service';
 import { DataService } from './services/data.service';
 
@@ -24,7 +24,11 @@ export class AppComponent {
   searchForm: FormGroup
   currentUser$: Observable<User>
   categories$: Observable<any[]>
-
+  showDropdown = false
+  homeIcon = "homeicon.png"
+  shoppingIcon = "shoppingicon.png"
+  fbIcon = "fbicon.png"
+  instaIcon = "instaicon.png"
   ngOnInit(): void {
     this.dataService.orderSummary.subscribe(summary => this.cartItemCount = summary.cartItems.size);
     this.searchForm = this.fb.group({
@@ -39,14 +43,18 @@ export class AppComponent {
     this.categories$ = this.api.getCategories()
   }
 
-  ngAfterViewInit(): void {
+  collapseNavBar() {
     if ($(window).width() < 992) {
-      $('.linkc').on('click', () => {
-        $('.collapse.navbar-collapse').removeClass('show');
-      });
+      $('.collapse.navbar-collapse').removeClass('show');
     }
   }
 
+  scrollToBottom() {
+    $('html, body').animate({
+      scrollTop: $('footer').offset().top - 120
+    }, 1500);
+  }
+  
   isActive(path) {
     return location.pathname == path
   }
@@ -64,7 +72,7 @@ export class AppComponent {
     this.router.navigate(['/']);
   }
 
-  openProductsWithQuery(query?) {
-    this.router.navigate(['/products'], { queryParams: { 'category': query } })
+  openProductsWithQuery(query?, subCategory?) {
+    this.router.navigate(['/products'], { queryParams: { 'category': query, 'subCategory': subCategory } })
   }
 }

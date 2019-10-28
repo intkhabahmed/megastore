@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
     <a class="navbar-brand" routerLink=""><img src="/assets/images/logo.png" alt="Maa Taluja Creations"
-        height="130"></a>
+        class="d-md-none" height="130"><img src="/assets/images/new_logo.png" alt="Maa Taluja Creations"
+        class="d-none d-md-block" height="130"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -21,15 +22,15 @@
             <p class="text-center">Categories</p>
             <div class="dropdown-divider"></div>
             <ul class="list-unstyled">
-              <li class="nav-item"><a class="dropdown-item linkc"
-                  (click)="openProductsWithQuery();showDropdown=false">All</a>
+              <li class="nav-item"><a class="dropdown-item" (click)="openProductsWithQuery();showDropdown=false">All</a>
               </li>
               <li class="nav-item" *ngFor="let category of categories$ | async">
-                <a class="dropdown-item" (click)="openProductsWithQuery(category.name);showDropdown=false">
+                <a class="dropdown-item"
+                  (click)="openProductsWithQuery(category.name);showDropdown=false;collapseNavBar()">
                   {{category.name}} </a>
                 <ul>
                   <li class="nav-item dropdown-item" *ngFor="let subCategory of category.subCategories"><a class="linkc"
-                      (click)="openProductsWithQuery(category.name, subCategory);showDropdown=false">{{subCategory}}</a>
+                      (click)="openProductsWithQuery(category.name, subCategory);showDropdown=false;collapseNavBar()">{{subCategory}}</a>
                   </li>
                 </ul>
                 <div class="dropdown-divider"></div>
@@ -38,26 +39,30 @@
           </div><!-- dropdown-menu -->
         </li>
         <li class="nav-item" (mouseenter)="showDropdown=false">
-          <a class="nav-link linkc btn btn-pink " href="#">ABOUT US <span class="sr-only">(current)</span></a>
+          <a class="nav-link btn btn-pink " (click)="collapseNavBar()" routerLink="/about">ABOUT US <span
+              class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item" (mouseenter)="showDropdown=false">
-          <a class="nav-link linkc btn btn-pink " href="#">CONTACT <span class="sr-only">(current)</span></a>
+          <a class="nav-link btn btn-pink " (click)="scrollToBottom();collapseNavBar()">CONTACT <span
+              class="sr-only">(current)</span></a>
         </li>
       </ul>
       <div class="nav-right-container">
         <div class="nav-top">
-          <a routerLink="" class="nav-right-btn linkc" id="cart-btn" (mouseenter)="homeIcon = 'homeicon_hover.png'"
-            (mouseleave)="homeIcon='homeicon.png'">
+          <a routerLink="" class="nav-right-btn" id="cart-btn" (mouseenter)="homeIcon = 'homeicon_hover.png'"
+            (mouseleave)="homeIcon='homeicon.png'" (click)="collapseNavBar()">
             <img [src]="'/assets/images/' + homeIcon" width="30" height="30" alt="">
           </a>
           &nbsp;
-          <a routerLink="cart" class="nav-right-btn linkc" id="cart-btn"
-            (mouseenter)="shoppingIcon = 'shoppingicon_hover.png'" (mouseleave)="shoppingIcon='shoppingicon.png'">
+          <a routerLink="cart" class="nav-right-btn" id="cart-btn"
+            (mouseenter)="shoppingIcon = 'shoppingicon_hover.png'" (mouseleave)="shoppingIcon='shoppingicon.png'"
+            (click)="collapseNavBar()">
             <img [src]="'/assets/images/' + shoppingIcon" width="30" height="30" alt="">
             <span class="cart-item-count">{{cartItemCount}}</span>
           </a>
           &nbsp;
-          <a routerLink="/login" class="btn btn-gray nav-right-btn linkc" id="login-btn" *ngIf="!currentToken">LOGIN</a>
+          <a routerLink="/login" class="btn btn-gray nav-right-btn" id="login-btn" *ngIf="!currentToken"
+            (click)="collapseNavBar()">LOGIN</a>
           <li class="nav-item dropdown nav-right-btn" *ngIf="currentToken">
             <a class="nav-link dropdown-toggle plain-link" data-toggle="dropdown" href="#" role="button"
               aria-haspopup="true" aria-expanded="false">
@@ -65,10 +70,12 @@
                 *ngIf="currentUser$ | async;let user">{{user.firstName}}</span>
             </a>
             <div class="dropdown-menu" *ngIf="currentUser$ | async;let user">
-              <a class="dropdown-item linkc" routerLink="/profile" *ngIf="!user.isAdmin">View Profile</a>
-              <a class="dropdown-item linkc" routerLink="/admin-panel-cms" *ngIf="user.isAdmin">Admin Panel</a>
+              <a class="dropdown-item" routerLink="/profile" *ngIf="!user.isAdmin" (click)="collapseNavBar()">View
+                Profile</a>
+              <a class="dropdown-item" routerLink="/admin-panel-cms" *ngIf="user.isAdmin"
+                (click)="collapseNavBar()">Admin Panel</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" (click)="logout()">Logout</a>
+              <a class="dropdown-item" (click)="logout();collapseNavBar()">Logout</a>
             </div>
           </li>
         </div><!-- nav-top -->
@@ -76,7 +83,7 @@
           <div id="search-form">
             <input class="form-control mr-sm-2 w-100" type="search" formControlName="keyword"
               placeholder="Search for items" aria-label="Search">
-            <fa-icon [icon]="['fas', 'search']" id="search_btn" (click)="search()"></fa-icon>
+            <fa-icon [icon]="['fas', 'search']" id="search_btn" (click)="search();collapseNavBar()"></fa-icon>
           </div>
         </form>
       </div><!-- nav-right-container -->
@@ -98,8 +105,6 @@
             &nbsp;<a href="https://instagram.com/craftmegastore?igshid=1mleu2mtljq6o" target="_blank"
               (mouseenter)="instaIcon = 'insta_hover.png'" (mouseleave)="instaIcon='instaicon.png'"><img
                 [src]="'/assets/images/' + instaIcon" id="icon2" width="24"></a>
-            &nbsp;<a href="" target="_blank" (mouseenter)="ytIcon = 'yticon_hover.png'"
-              (mouseleave)="ytIcon='yticon.png'"><img [src]="'/assets/images/' + ytIcon" id="icon3" width="24"></a>
           </p>
           <p class="content-text">&copy; 2019 Maa Tulja Creations. All rights reserved.</p>
         </div>
@@ -108,8 +113,8 @@
           <p class="content-text">Rane Vihar, House No 264/218, Savlem, Alto-Pilerne, Bardez, GOA-40251
             <br> GSTIN/UIN: 30AWXPS1609N1ZY <br> State Name: Goa, Code: 30
           </p>
-          <p class="content-text"><img src="/assets/images/emailicon.png"> vishaldata78@gmail.com</p>
-          <p class="content-text"><img src="/assets/images/phoneicon.png"> 1234567</p>
+          <p class="content-text"><img src="/assets/images/emailicon.png"> maatuljacreations@gmail.com</p>
+          <p class="content-text"><img src="/assets/images/phoneicon.png"> +91-9890367761</p>
         </div>
       </div>
     </div>

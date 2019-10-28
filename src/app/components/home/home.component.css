@@ -63,15 +63,15 @@
 }
 
 .carousel-caption {
-    position  : absolute;
-    width: max-content;
-    max-width : 440px;
-    bottom    : 35%;
-    left      : 13vw;
-    z-index   : 10;
-    color     : #333333;
-    text-align: left;
-    padding   : 2%;
+    position        : absolute;
+    width           : max-content;
+    max-width       : 440px;
+    bottom          : 35%;
+    left            : 13vw;
+    z-index         : 10;
+    color           : #333333;
+    text-align      : left;
+    padding         : 2%;
     background-color: #FFFFFF;
 }
 
@@ -85,11 +85,11 @@
 }
 
 .bottom-background {
-    background: url("/assets/images/botbg.png") no-repeat;
-    width: 100%;
-    min-height: 176px;
+    background   : url("/assets/images/botbg.png") no-repeat;
+    width        : 100%;
+    min-height   : 176px;
     margin-bottom: -6%;
-    position: relative;
+    position     : relative;
 }
 
 @media(max-width: 992px) {

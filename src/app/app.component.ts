@@ -29,7 +29,6 @@ export class AppComponent {
   shoppingIcon = "shoppingicon.png"
   fbIcon = "fbicon.png"
   instaIcon = "instaicon.png"
-  ytIcon = "yticon.png"
   ngOnInit(): void {
     this.dataService.orderSummary.subscribe(summary => this.cartItemCount = summary.cartItems.size);
     this.searchForm = this.fb.group({
@@ -44,12 +43,16 @@ export class AppComponent {
     this.categories$ = this.api.getCategories()
   }
 
-  ngAfterViewInit(): void {
+  collapseNavBar() {
     if ($(window).width() < 992) {
-      $('.linkc').on('click', () => {
-        $('.collapse.navbar-collapse').removeClass('show');
-      });
+      $('.collapse.navbar-collapse').removeClass('show');
     }
+  }
+
+  scrollToBottom() {
+    $('html, body').animate({
+      scrollTop: $('footer').offset().top - 120
+    }, 1500);
   }
 
   isActive(path) {

@@ -1,3 +1,4 @@
+import { AboutComponent } from './components/about/about.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './components/admin/admin.component';
@@ -65,6 +66,10 @@ const routes: Routes = [
   {
     path: "search",
     component: SearchComponent
+  },
+  {
+    path: "about",
+    component: AboutComponent
   }
 ];
 

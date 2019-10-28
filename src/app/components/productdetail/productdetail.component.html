@@ -1,7 +1,8 @@
 <div class="container" *ngIf="product$ | async; let product;">
     <div class="row">
         <div class="col-md-10">
-            <p class="content-text mt-2">Products >> {{product.category}} >> {{product.name}}</p>
+            <p class="content-text mt-2">Products >> {{product.category}} >> {{product.subCategory}} >> {{product.name}}
+            </p>
         </div>
     </div>
     <div class="row">
@@ -106,7 +107,42 @@
                     </td>
                 </tr>
             </table>
-        </div>
+        </div><!-- col-md-8 -->
     </div><!-- row -->
+    <div class="row">
+        <h2 class="content-heading">Product Terms and Conditions</h2>
+        <ol>
+            <li class="content-text">Order once placed cannot be cancelled.</li>
+
+            <li class="content-text">Processing and dispatch depends on the order size, small orders 24 to 48 hours,
+                medium orders 48 to 72
+                hours, big orders within a week. All time mentioned above is for processing. After dispatch, shipping
+                time will be as per the customers choice of shipment.</li>
+
+            <li class="content-text">We are not liable for any theft, loss or damage in shipping, as it is a third party
+                service.</li>
+
+            <li class="content-text">Any items which are out of stock will be dispatched when available.</li>
+
+            <li class="content-text">Dispatch will strictly be done only after full payment received against order.</li>
+
+            <li class="content-text">Costume Jewelry, Beads, Jewelry Findings materials are all imitation/artificial
+                jewelry and they do not
+                last a life time. Such materials have a tendency to react when exposed to moisture, sweat, water,
+                temperature and chemicals. Maintenance of such jewelry is essential. We will not accept any returns of
+                such jewelry or materials. So please make an informed decision before buying.</li>
+
+            <li class="content-text">Products may appear bigger than actual in images. Please refer to dimensions given
+                with each image.</li>
+
+            <li class="content-text">Colors of products may vary slightly from images.</li>
+
+            <li class="content-text">Postage/Courier charges extra. This will be actual based on location and weight as
+                charged by the
+                service provider.</li>
+
+            <li class="content-text">Packaging weight be at actuals and will be added to shipping charge.</li>
+        </ol>
+    </div>
 </div><!-- container-fluid -->
 <span *ngIf="loading" class="spinner-border spinner-border-lg center"></span>

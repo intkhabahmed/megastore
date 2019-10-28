@@ -71,6 +71,10 @@
         margin-left: 0;
     }
 
+    .nav-link {
+        margin-top: 1%;
+    }
+
     .nav-right-container {
         padding-bottom: 18vh;
         margin-top    : 2vh;

@@ -54,7 +54,7 @@ export class AppComponent {
       scrollTop: $('footer').offset().top - 120
     }, 1500);
   }
-
+  
   isActive(path) {
     return location.pathname == path
   }

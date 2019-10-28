@@ -245,7 +245,7 @@
                             </button>
                         </div>
                     </form>
-                </div><!-- add product -->
+                </div> <!-- add product -->
                 <div *ngIf="currentTab == adminTab.PRODUCT_LIST">
                     <h4>Live Product List</h4>
                     <div class="overflow-scroll">
@@ -287,7 +287,8 @@
                                 </td>
                                 <td><a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="delete(product._id, 'product')">Delete</a></td>
+                                        class="link" (click)="delete(product._id, 'product')">Delete</a>
+                                </td>
                             </tr>
                         </table>
                     </div><!-- overflow-scroll -->
@@ -316,7 +317,8 @@
                                 <td>{{product.quantity}} </td>
                                 <td><a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="delete(product._id, 'product')">Delete</a></td>
+                                        class="link" (click)="delete(product._id, 'product')">Delete</a>
+                                </td>
                             </tr>
                         </table>
                     </div><!-- overflow-scroll -->
@@ -472,7 +474,8 @@
                                 <td>{{user.lastName}} </td>
                                 <td>{{user.email}} </td>
                                 <td>
-                                    <p *ngFor="let address of user.addresses">{{address.address}}, {{address.city}},
+                                    <p *ngFor="let address of user.addresses">{{address.address}},
+                                        {{address.city}},
                                         {{address.state}} - {{address.postalCode}}</p>
                                 </td>
                                 <td>{{user.createdAt | date:'dd MMM yyyy'}}</td>

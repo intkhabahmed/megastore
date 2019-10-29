@@ -5,7 +5,9 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item" *ngFor="let banner of banners$ | async;index as i" [ngClass]="{'active': i == 0}">
-            <img [src]="banner.imageUrl" class="d-block w-100 banner-image" [alt]="banner.title">
+            <div class="banner-image">
+                <img [src]="banner.imageUrl" class="d-block w-100 " [alt]="banner.title">
+            </div>
             <div class="carousel-caption d-none d-md-block" *ngIf="banner.title || banner.subTitle">
                 <h4 class="display-4 font-weight-bold mb-0">{{banner.title}}</h4>
                 <p class="content-heading">{{banner.subTitle}}</p>
@@ -74,5 +76,4 @@
         </div>
     </div><!-- row -->
 </div><!-- Container -->
-<div class="bottom-background"></div>
 <span *ngIf="loading" class="spinner-border spinner-border-lg center"></span>

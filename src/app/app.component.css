@@ -4,11 +4,6 @@
     background: url("/assets/images/topbg.png") no-repeat;
 }
 
-.navbar-brand {
-    padding-top: 0;
-    margin-top : -1vh;
-}
-
 .navbar-nav {
     margin-top : 10vh;
     margin-left: 4%;
@@ -28,7 +23,7 @@
 }
 
 #footer footer {
-    margin-top: 30px;
+    margin-top: 5%;
 }
 
 #footer p {
@@ -66,9 +61,24 @@
     overflow  : auto;
 }
 
+.bottom-background {
+    background   : url("/assets/images/botbg.png") no-repeat;
+    width        : 100%;
+    min-height   : 176px;
+    margin-bottom: -10%;
+    position     : relative;
+}
+
+.navbar-brand {
+    width      : 30%;
+    padding-top: 0;
+    margin-top : -1vh;
+}
+
 @media(max-width: 992px) {
     .navbar-nav {
         margin-left: 0;
+        margin-top : 2vh;
     }
 
     .nav-link {
@@ -76,10 +86,23 @@
     }
 
     .nav-right-container {
-        padding-bottom: 18vh;
-        margin-top    : 2vh;
-        display       : flex;
-        flex-flow     : column wrap;
-        align-items   : flex-start;
+        padding    : 2vh;
+        margin-top : 2vh;
+        display    : flex;
+        flex-flow  : column wrap;
+        align-items: flex-start;
+    }
+
+    .navbar-brand {
+        float      : left;
+        width      : 50%;
+        padding-top: 0;
+        margin-top : 0vh;
+    }
+}
+
+@media(min-width: 993px) and (max-width: 1200px) {
+    .navbar-brand {
+        margin-top: -2.5vh;
     }
 }

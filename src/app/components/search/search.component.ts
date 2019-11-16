@@ -16,7 +16,8 @@ export class SearchComponent implements OnInit {
     router.events.subscribe(event => {
       if (event instanceof ActivationEnd) {
         this.loading = true
-        this.results$ = this.api.getProducts({ $text: { $search: event.snapshot.queryParams['query'] }, productStatus: true })
+        this.query = event.snapshot.queryParams['query'] || ""
+        this.results$ = this.api.getProducts({ $text: { $search:  this.query}, productStatus: true })
         this.results$.subscribe(products => {
           this.count = products.length
           this.loading = false
@@ -27,10 +28,12 @@ export class SearchComponent implements OnInit {
   results$: Observable<Product[]>
   count = 0
   loading = false
+  query = ""
   ngOnInit() {
   }
 
   search(value) {
+    this.query = value
     this.loading = true
     this.results$ = this.api.getProducts({ $text: { $search: value } })
     this.results$.subscribe(products => {

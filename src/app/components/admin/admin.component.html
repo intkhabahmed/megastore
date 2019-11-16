@@ -912,8 +912,7 @@
                         *ngFor="let subCategory of formArray('subCategories', {}, 'category').controls; index as i">
                         <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
                                 [ngClass]="{ 'is-invalid': submitted && subCategory.errors }" />
-                            <a (click)="removeField('subCategories', {index: i}, 'category')" class="col-md-1 v-center"
-                                *ngIf="i != 0">
+                            <a (click)="removeField('subCategories', {index: i}, 'category')" class="col-md-1 v-center">
                                 <fa-icon [icon]="['fas','times']"></fa-icon>
                             </a>
                             <div *ngIf="submitted && subCategory.errors" class="invalid-feedback">

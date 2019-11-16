@@ -117,7 +117,6 @@ export class AdminComponent implements OnInit {
       name: ['', Validators.required],
       subCategories: this.fb.array([])
     })
-    this.addField('subCategories', {}, 'category')
 
     this.orderForm = this.fb.group({
       trackingNo: ['', Validators.required]

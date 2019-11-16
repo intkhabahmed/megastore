@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { User } from './models/user';
 import { ApiService } from './services/api.service';
 import { AuthenticationService } from './services/authentication.service';
@@ -23,7 +23,7 @@ export class AppComponent {
   currentToken: any
   searchForm: FormGroup
   currentUser$: Observable<User>
-  categories$: Observable<any[]>
+  categories$: Observable<any[][]>
   showDropdown = false
   homeIcon = "homeicon.png"
   shoppingIcon = "shoppingicon.png"
@@ -40,7 +40,13 @@ export class AppComponent {
         this.currentUser$ = this.api.getUserById()
       }
     });
-    this.categories$ = this.api.getCategories()
+    this.api.getCategories().subscribe(categories => {
+      var slicedCategories = []
+      for (var i = 0; i < categories.length; i += 4) {
+        slicedCategories.push(categories.slice(i, i + 4))
+      }
+      this.categories$ = of(slicedCategories)
+    })
   }
 
   collapseNavBar() {
@@ -54,7 +60,7 @@ export class AppComponent {
       scrollTop: $('footer').offset().top - 120
     }, 1500);
   }
-  
+
   isActive(path) {
     return location.pathname == path
   }

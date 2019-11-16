@@ -1,13 +1,12 @@
 .product-list {
     display        : flex;
     flex-flow      : row wrap;
-    justify-content: flex-start;
+    justify-content: flex-start
 }
 
 .card {
     max-height: 350px;
     padding   : 0;
-    margin    : 1rem;
 }
 
 .card-img-top {
@@ -16,12 +15,32 @@
 
 @media(max-width: 767px) {
     .card {
-        margin: 1rem auto;
+        margin: 0.5rem auto;
     }
 }
 
 @media(max-width: 992px) {
     .product-list {
         justify-content: flex-start;
+    }
+
+    .card {
+        margin: 0.6rem;
+    }
+}
+
+@media(min-width: 768px) {
+    .product-card {
+        max-width: 30%;
+    }
+}
+
+@media(min-width: 992px) {
+    .product-card {
+        max-width: 22%;
+    }
+
+    .card {
+        margin: 0.7rem;
     }
 }

@@ -18,15 +18,16 @@
 <div class="products-container">
     <div class="container">
         <div class="row">
-            <h3 class="heading">Products</h3>
+            <h3 class="heading ml-3">Products</h3>
             <div class="product-slider-container w-100">
                 <div class="product-slider" id="popular-product-slider">
-                    <div class="card col-lg-2 col-md-4 col-sm-5 col-7" *ngFor="let product of products | async">
+                    <div class="card product-card col-lg-2 col-md-4 col-sm-5 col-7"
+                        *ngFor="let product of products | async">
                         <div class="card-img-top">
                             <img src="{{product.imageUrl[0]}}" class="img img-responsive w-100" [alt]="product.name">
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title content-heading">{{product.name}}</h4>
+                            <h4 class="card-title content-heading max-lines">{{product.name}}</h4>
                             <p class="content-text">Product code - {{product.productCode}}</p>
                             <p class="content-text">Avialable from Rs. {{utility.getMinPrice(product.price)}}</p>
                             <p class="content-text text-danger font-weight-bold"
@@ -48,32 +49,19 @@
 <div class="container">
     <div class="row">
         <div class="indicators-container">
-            <fa-icon [icon]="['fas', 'chevron-right']" pull="right" size="2x" class="indicators-btn" id="pp_next_btn">
-            </fa-icon>
-            <fa-icon [icon]="['fas', 'chevron-left']" pull="right" size="2x" class="indicators-btn" id="pp_prev_btn">
-            </fa-icon>
+            <img src="/assets/images/next_arrow_active.jpg" class="float-right indicators-btn" alt="Next button"
+                id="pp_next_btn">
+            <img src="/assets/images/back_arrow_inactive.jpg" class="float-right mr-3 indicators-btn"
+                alt="Previous button" id="pp_prev_btn">
         </div>
     </div>
 </div>
 <div class="container">
+    <h3 class="heading">New Arrivals</h3>
     <div class="row" id="new-arrivals-container" *ngIf="newArrivalsLength > 0">
-        <h3 class="heading">New Arrivals</h3>
-        <div class="product-slider-container w-100">
-            <div class="product-slider" id="new-arrivals-slider">
-                <div class="card col-lg-3 col-md-4 col-sm-5 col-7" *ngFor="let newArrival of newArrivals$| async">
-                    <div class="card-img-top-na">
-                        <img [src]="newArrival.imageUrl" class="img img-responsive w-100" [alt]="newArrival.name"
-                            height="160">
-                    </div>
-                </div><!-- card -->
-            </div><!-- product-slider -->
-        </div><!-- product-slider-container -->
-        <div class="indicators-container">
-            <fa-icon [icon]="['fas', 'chevron-right']" pull="right" size="2x" class="indicators-btn" id="na_next_btn"
-                (click)="next()"></fa-icon>
-            <fa-icon [icon]="['fas', 'chevron-left']" pull="right" size="2x" class="indicators-btn" id="na_prev_btn"
-                (click)="prev()"></fa-icon>
-        </div>
+        <div class="na-card" *ngFor="let newArrival of newArrivals$| async">
+            <img [src]="newArrival.imageUrl" class="img img-responsive" [alt]="newArrival.name" height="200">
+        </div><!-- card -->
     </div><!-- row -->
 </div><!-- Container -->
 <span *ngIf="loading" class="spinner-border spinner-border-lg center"></span>

@@ -266,6 +266,21 @@ hr {
     padding-right: 9%;
 }
 
+.product-card {
+    border-radius: 0.5rem;
+}
+
+.product-card img {
+    border-top-left-radius : 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.max-lines {
+    text-overflow: ellipsis;
+    overflow     : hidden;
+    max-height   : 1.8rem;
+}
+
 @media(max-width: 992px) {
     .overflow-scroll {
         overflow-x: auto;

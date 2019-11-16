@@ -42,14 +42,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (Math.abs($('#popular-product-slider').width() - $("#popular-product-slider div").width() * (this.productsLength + 0.5)) < 100) {
         if (pp_positionX < $("#popular-product-slider div").width()) {
           pp_positionX += $("#popular-product-slider div").width() + 20;
+          $('#pp_next_btn').attr("src", "/assets/images/next_arrow_active.jpg")
+          $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_active.jpg")
         } else {
-          pp_positionX = 0
+          $('#pp_next_btn').attr("src", "/assets/images/next_arrow_inactive.jpg")
+          $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_active.jpg")
         }
       } else {
         if (pp_positionX < $("#popular-product-slider div").width() * (this.productsLength - 1)) {
           pp_positionX += $("#popular-product-slider div").width() + 20;
+          $('#pp_next_btn').attr("src", "/assets/images/next_arrow_active.jpg")
+          $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_active.jpg")
         } else {
-          pp_positionX = 0
+          $('#pp_next_btn').attr("src", "/assets/images/next_arrow_inactive.jpg")
+          $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_active.jpg")
         }
       }
       $('#popular-product-slider').css({ 'transform': 'translate(-' + pp_positionX + 'px, 0px)' });
@@ -61,57 +67,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (pp_positionX > 0) {
         pp_positionX -= $("#popular-product-slider div").width() + 20;
         if (pp_positionX < 0) {
-          pp_positionX = 0;
+          pp_positionX = 0
+          $('#pp_next_btn').attr("src", "/assets/images/next_arrow_active.jpg")
+          $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_inactive.jpg")
+        } else {
+          $('#pp_next_btn').attr("src", "/assets/images/next_arrow_active.jpg")
+          $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_active.jpg")
         }
       } else {
         if (Math.abs($('#popular-product-slider').width() - $("#popular-product-slider div").width() * (this.productsLength + 1)) < 50) {
-          pp_positionX = $("#popular-product-slider div").width()
+          pp_positionX = 0
+          $('#pp_next_btn').attr("src", "/assets/images/next_arrow_active.jpg")
+          $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_inactive.jpg")
         } else {
-          pp_positionX = $("#popular-product-slider div").width() * (this.productsLength - 1)
+          $('#pp_next_btn').attr("src", "/assets/images/next_arrow_active.jpg")
+          $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_inactive.jpg")
         }
 
       }
       $('#popular-product-slider').css({ 'transform': 'translate(-' + pp_positionX + 'px, 0px)' });
     });
-  }
-
-  next() {
-    if ($('#new-arrivals-slider').width() > $("#new-arrivals-slider div").width() * (this.newArrivalsLength + 0.5)) {
-      return;
-    }
-    if (Math.abs($('#new-arrivals-slider').width() - $("#new-arrivals-slider div").width() * (this.newArrivalsLength + 0.5)) < 100) {
-      if (this.na_positionX < $("#new-arrivals-slider div").width()) {
-        this.na_positionX += $("#new-arrivals-slider div").width() + 20;
-      } else {
-        this.na_positionX = 0
-      }
-    } else {
-      if (this.na_positionX < $("#new-arrivals-slider div").width() * (this.newArrivalsLength - 1)) {
-        this.na_positionX += $("#new-arrivals-slider div").width() + 20;
-      } else {
-        this.na_positionX = 0
-      }
-    }
-    $('#new-arrivals-slider').css({ 'transform': 'translate(-' + this.na_positionX + 'px, 0px)' });
-  }
-
-  prev() {
-    if ($('#new-arrivals-slider').width() > $("#new-arrivals-slider div").width() * (this.newArrivalsLength + 0.5)) {
-      return;
-    }
-    if (this.na_positionX > 0) {
-      this.na_positionX -= $("#new-arrivals-slider div").width() + 20;
-      if (this.na_positionX < 0) {
-        this.na_positionX = 0;
-      }
-    } else {
-      if (Math.abs($('#new-arrivals-slider').width() - $("#new-arrivals-slider div").width() * (this.newArrivalsLength + 1)) < 50) {
-        this.na_positionX = $("#new-arrivals-slider div").width()
-      } else {
-        this.na_positionX = $("#new-arrivals-slider div").width() * (this.newArrivalsLength - 1);
-      }
-
-    }
-    $('#new-arrivals-slider').css({ 'transform': 'translate(-' + this.na_positionX + 'px, 0px)' });
   }
 }

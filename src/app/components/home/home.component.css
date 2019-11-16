@@ -19,6 +19,7 @@
 
 #mainCarousel {
     max-height: 823px;
+    margin-top: -1vh;
 }
 
 .product-slider-container {
@@ -43,9 +44,10 @@
 }
 
 .indicators-btn {
-    margin-right: 10px;
-    color       : #AAAAAA;
-    cursor      : pointer;
+    margin-right       : 10px;
+    color              : #AAAAAA;
+    cursor             : pointer;
+    -webkit-text-stroke: 1px #AAAAAA;
 }
 
 .indicators-btn:hover {
@@ -81,9 +83,16 @@
     max-height: 130px;
 }
 
-.card-img-top-na {
-    max-height: 160px;
-    overflow  : hidden;
+.na-card {
+    padding        : 0;
+    margin         : 1%;
+    display        : flex;
+    flex-flow      : row wrap;
+    justify-content: space-between;
+}
+
+.product-card {
+    box-shadow: 0px 0px 10px 0px grey;
 }
 
 @media(max-width: 992px) {
@@ -95,5 +104,9 @@
 @media(max-width: 767px) {
     .banner-image {
         max-height: 250px;
+    }
+
+    .na-card img {
+        width: 100%;
     }
 }

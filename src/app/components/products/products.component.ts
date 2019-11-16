@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivationEnd, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Product } from './../../models/product';
 import { ApiService } from './../../services/api.service';
@@ -17,13 +17,18 @@ export class ProductsComponent implements OnInit {
   currentCategory
   currentSubCategory
   loading = false
-  constructor(private api: ApiService, public utility: Utility, private route: ActivatedRoute) { }
+  constructor(private api: ApiService, public utility: Utility, private router: Router) {
+    router.events.subscribe(event => {
+      if (event instanceof ActivationEnd) {
+        this.currentCategory = event.snapshot.queryParams['category'] || 'All'
+        this.currentSubCategory = event.snapshot.queryParams['subCategory']
+        this.filterProduct(event.snapshot.queryParams['category'] || undefined, event.snapshot.queryParams['subCategory'] || undefined)
+      }
+    })
+  }
 
   ngOnInit() {
     this.categories$ = this.api.getCategories()
-    this.currentCategory = this.route.snapshot.queryParams['category'] || 'All'
-    this.currentSubCategory = this.route.snapshot.queryParams['subCategory']
-    this.filterProduct(this.route.snapshot.queryParams['category'] || undefined, this.route.snapshot.queryParams['subCategory'] || undefined)
   }
 
   filterProduct(categoryName?, subCategoryName?) {

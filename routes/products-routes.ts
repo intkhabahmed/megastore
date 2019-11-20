@@ -6,7 +6,9 @@ export class ProductsRoute {
 
     public productRoute(app): void {
         app.route('/api/products').post((req: Request, res: Response, next: NextFunction) => {
-            Product.find(req.body, (err, products) => {
+            var limit = req.body.limit || Number.MAX_SAFE_INTEGER
+            delete req.body.limit
+            Product.find(req.body).limit(limit).exec((err, products) => {
                 if (err) { return next(err); }
                 res.json(products);
             });

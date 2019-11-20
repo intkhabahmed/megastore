@@ -1,11 +1,15 @@
 <div class="container">
     <h3 class="heading mt-3">Order Status</h3>
-    <p class="content-text">
+    <p class="content-text" *ngIf="!loading && isSuccess==1">
         <fa-icon [icon]="['fas', 'check']" size="2x" class="text-success"></fa-icon> Your order has been placed
-        successfully!! You can check the status in your <a (click)="goToProfile()" class="link">Profile</a>
+        successfully!! You can check the status in your <a (click)="goToPage('profile')" class="link">Profile</a>
+    </p>
+    <p class="content-text" *ngIf="!loading && isSuccess==0">
+        <fa-icon [icon]="['fas', 'times']" size="2x" class="text-danger"></fa-icon> Your order has been failed
+        due to payment failure!! Please try again later.
     </p>
     <div class="p-5">
-        <button class="btn btn-pink center" (click)="goHome()">Go Home</button>
+        <button class="btn btn-pink center" (click)="goToPage('home')">Go Home</button>
     </div>
 
 </div><!-- container -->

@@ -281,8 +281,6 @@ hr {
     max-height   : 1.8rem;
 }
 
-@media(max-width: 992px) {
-    .overflow-scroll {
-        overflow-x: auto;
-    }
+.overflow-scroll {
+    overflow-x: auto;
 }

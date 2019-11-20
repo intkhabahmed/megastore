@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.loading = true
     this.banners$ = this.service.getBanners()
-    this.products = this.service.getProducts({ productStatus: true })
+    this.products = this.service.getProducts({ productStatus: true, limit: 20 })
     this.products.subscribe(products => {
       this.loading = false
       this.productsLength = products.length
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if ($('#popular-product-slider').width() > $("#popular-product-slider div").width() * (this.productsLength + 0.5)) {
         return;
       }
-      if (Math.abs($('#popular-product-slider').width() - $("#popular-product-slider div").width() * (this.productsLength + 0.5)) < 100) {
+      if (Math.abs($('#popular-product-slider').width() - $("#popular-product-slider div").width() * (this.productsLength)) < 100) {
         if (pp_positionX < $("#popular-product-slider div").width()) {
           pp_positionX += $("#popular-product-slider div").width() + 20;
           $('#pp_next_btn').attr("src", "/assets/images/next_arrow_active.jpg")
@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_active.jpg")
         }
       } else {
-        if (pp_positionX < $("#popular-product-slider div").width() * (this.productsLength - 1)) {
+        if (pp_positionX < $("#popular-product-slider div").width() * (this.productsLength - 0.5)) {
           pp_positionX += $("#popular-product-slider div").width() + 20;
           $('#pp_next_btn').attr("src", "/assets/images/next_arrow_active.jpg")
           $('#pp_prev_btn').attr("src", "/assets/images/back_arrow_active.jpg")

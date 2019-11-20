@@ -358,6 +358,7 @@
                                 <th>Order date</th>
                                 <th>Courier Type</th>
                                 <th>Tracking No.</th>
+                                <th>Order Status</th>
                                 <th>Invoice</th>
                                 <th>Operations</th>
                             </tr>
@@ -368,6 +369,7 @@
                                 <td>{{order.orderDate | date:'dd MMM yyyy hh:mm a'}} </td>
                                 <td>{{courierType[order.orderSummary.shippingMethod]}} </td>
                                 <td>{{order.trackingNo}}</td>
+                                <td>{{orderStatus[order.orderStatus]}}</td>
                                 <td>
                                     <a class="link" (click)="pdf.printPdf(order)">
                                         <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">

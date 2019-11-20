@@ -1,3 +1,4 @@
+import { PaymentsRoute } from './routes/payment-routes';
 /**
  * *** NOTE ON IMPORTING FROM ANGULAR AND NGUNIVERSAL IN THIS FILE ***
  *
@@ -49,6 +50,7 @@ const addressesRoute: AddressesRoute = new AddressesRoute()
 const categoriesRoute: CategoriesRoute = new CategoriesRoute()
 const bannersRoute: BannersRoute = new BannersRoute();
 const newArrivalRoute: NewArrivalsRoute = new NewArrivalsRoute();
+const paymentsRoute: PaymentsRoute = new PaymentsRoute();
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
@@ -81,6 +83,7 @@ addressesRoute.addressRoute(app);
 categoriesRoute.categoryRoute(app);
 bannersRoute.bannerRoute(app);
 newArrivalRoute.newArrivalRoute(app);
+paymentsRoute.paymentRoute(app);
 
 // Example Express Rest API endpoints
 // app.get('/api/**', (req, res) => { });
@@ -99,6 +102,6 @@ app.listen(PORT, () => {
   console.log(`Node Express server listening on http://localhost:${PORT}`);
 });
 
-mongoose.connect(dbUrl, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true })
+mongoose.connect(dbUrl, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true })
   .then(() => console.log('connection successful'))
   .catch((err) => console.error(err));

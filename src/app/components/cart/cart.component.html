@@ -151,9 +151,11 @@
                     {{utility.orderSummary.grandTotal}}</span></p>
         </div>
     </div><!-- cart-item -->
-    <br><a (click)="goToCheckout()" class="btn btn-pink buy-btn float-right"
-        *ngIf="utility.orderSummary.shippingCost">Proceed
-        to Checkout</a>
+    <div class="form-group clearfix">
+        <a (click)="goToCheckout()" class="btn btn-pink buy-btn float-right"
+            *ngIf="utility.orderSummary.shippingCost">Proceed
+            to Checkout</a>
+    </div>
 </div><!-- container -->
 <div class="container empty-cart" *ngIf="utility.orderSummary.cartItems.size == 0">
     <h1 class="heading text-center">

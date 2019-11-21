@@ -8,7 +8,7 @@ export class OrdersRoute {
             if (!req.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
-                Order.find().populate('user').exec((err, orders) => {
+                Order.find().populate('user').populate('payment').exec((err, orders) => {
                     if (err) {
                         return next(err)
                     }
@@ -28,7 +28,7 @@ export class OrdersRoute {
         })
 
         app.route('/api/orders/user/:id').get(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            Order.find({ user: req.params.id }).populate('user').exec((err, orders) => {
+            Order.find({ user: req.params.id, orderStatus: { $ne: 3 } }).populate('user').populate('payment').exec((err, orders) => {
                 if (err) { return next(err); }
                 res.json(orders);
             })
@@ -38,7 +38,7 @@ export class OrdersRoute {
             if (!req.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
-                Order.findByIdAndUpdate(req.params.id, req.body).populate('user').exec((err, order) => {
+                Order.findByIdAndUpdate(req.params.id, req.body).populate('user').populate('payment').exec((err, order) => {
                     if (err) { return next(err); }
                     res.json(order);
                 })
@@ -49,7 +49,7 @@ export class OrdersRoute {
             if (!req.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
-                Order.findByIdAndRemove(req.params.id, req.body).populate('user').exec((err, order) => {
+                Order.findByIdAndRemove(req.params.id, req.body).populate('user').populate('payment').exec((err, order) => {
                     if (err) { return next(err); }
                     res.json(order);
                 })

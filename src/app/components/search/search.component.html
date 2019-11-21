@@ -7,7 +7,7 @@
         </div>
     </form>
     <h3 class="content-heading mt-3">Search Results:</h3>
-    <p class="content-text-sm" *ngIf="!loading">{{count}} result(s) found</p>
+    <p class="content-text-sm" *ngIf="!loading">{{count}} result(s) found for {{query}}</p>
     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
     <p *ngIf="!loading && count === 0" class="content-text text-center m-5 p-5">No Results found</p>
     <div class="search-items" *ngFor="let product of results$ | async;let results;index as i">

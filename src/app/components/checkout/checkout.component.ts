@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as $ from 'jquery';
 import { Observable } from 'rxjs';
-import { Order } from 'src/app/models/order';
-import { OrderSummary } from 'src/app/models/order-summary';
+import { ccAccessCode, ccMerchantId } from './../../../../helpers/config';
 import { Address } from './../../models/address';
-import { Payment } from './../../models/payment';
 import { User } from './../../models/user';
 import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
@@ -30,12 +29,16 @@ export class CheckoutComponent implements OnInit {
   showAddressForm = false
   user$: Observable<User>
   id: any
+  @ViewChild('form', null) form: ElementRef;
+
+  encRequest: string;
+  accessCode: string;
   constructor(private dataService: DataService, public utility: Utility, private api: ApiService,
     private router: Router, private fb: FormBuilder, private authService: AuthenticationService, private cdr: ChangeDetectorRef,
     private alertService: AlertService, private jsonUtils: JsonUtils) { }
 
   ngOnInit() {
-
+    this.accessCode = ccAccessCode
     this.initForm()
     this.user$ = this.api.getUserById()
     if (this.utility.orderSummary.cartItems.size == 0) {
@@ -62,37 +65,32 @@ export class CheckoutComponent implements OnInit {
 
   completePurchase() {
     this.loading = true
-    this.utility.orderSummary.cartItems.forEach(item => {
-      item.product.quantity[item.product.selectedIndex][item.product.subIndex] -= item.noOfItems
-      this.api.updateProduct(item.product._id, item.product).subscribe(() => { })
-    })
     this.utility.order.orderStatus = OrderStatus.PROCESSING
     this.utility.order.address = this.jsonUtils.getJsonString(this.utility.order.address)
     this.utility.order.invoiceId = Math.random().toString(10).substring(2, 7)
     this.utility.order.orderSummary = this.jsonUtils.getJsonString(this.utility.orderSummary)
-    var payment = new Payment()
-    payment.amount = this.utility.orderSummary.grandTotal
-    payment.paymentMethod = "Credit Card"
-    payment.transactionId = Math.random().toString(36).substring(2, 15)
-    this.utility.order.payment = this.jsonUtils.getJsonString(payment)
     this.utility.order.orderNo = (`${Math.random().toString(36).substring(3, 6)}-${Math.random().toString(36).substring(7, 15)}-${Math.random().toString(36).substring(9, 17)}`).toLocaleUpperCase()
-    this.api.insertOrder(this.utility.order).subscribe(order => {
-      this.loading = false
-      this.user$.subscribe(user => {
-        user.orders.push(order._id)
-        this.api.updateUser(user).subscribe(user => {
+    this.dataService.changeOrder(this.utility.order)
+    this.user$.subscribe(user => {
+      var reqBody = {
+        merchant_id: ccMerchantId,
+        order_id: this.utility.order.orderNo,
+        currency: "INR",
+        amount: this.utility.orderSummary.grandTotal,
+        redirect_url: "https://craftmegastore.in/api/ccavResponseHandler",
+        cancel_url: "https://craftmegastore.in/api/ccavResponseHandler",
+        language: "EN",
+        customer_identifier: user._id
+      }
+      this.api.handlePaymentRequest(reqBody).subscribe(res => {
+        this.encRequest = res.encRequest
+        $('#encRequest').val(this.encRequest);
+        setTimeout(_ => {
           this.loading = false
-          this.submitted = false
-        })
-      })
-      this.dataService.changeOrder(new Order())
-      this.dataService.changeOrderDetails(new OrderSummary())
-      this.router.navigate(['/success', order._id], { replaceUrl: true })
-    },
-      error => {
-        this.loading = false
-        this.alertService.error("Could not complete order, please try again later", true)
-      })
+          this.form.nativeElement.submit()
+        });
+      }, error => { })
+    })
   }
 
   saveAndEditAddress() {

@@ -214,4 +214,22 @@ export class ApiService {
     return this.http.delete<any>(`${apiUrl}/newArrivals/${id}`, httpOptions)
   }
 
+  // Payment Gateway methods
+  handlePaymentRequest(body: any): Observable<any> {
+    return this.http.post<any>(`${apiUrl}/ccavRequestHandler`, body, httpOptions)
+  }
+
+  handlePaymentResponse(body: any) {
+    this.http.post<any>(`${apiUrl}/ccavResponseHandler`, body, httpOptions)
+  }
+
+  //Payments methods
+  getAllPayments(): Observable<any[]> {
+    return this.http.get<any[]>(`${apiUrl}/payments/all`, httpOptions)
+  }
+
+  getPaymentForUserByOrderId(orderId: any): Observable<any> {
+    return this.http.post<any>(`${apiUrl}/payments/order`, orderId, httpOptions)
+  }
+
 }

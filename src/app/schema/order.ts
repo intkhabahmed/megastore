@@ -7,7 +7,7 @@ const OrderSchema: Schema = new Schema({
     orderStatus: { type: Number, required: true },
     trackingNo: { type: String },
     invoiceId: { type: String, required: true },
-    payment: { type: String, required: true },
+    payment: { type: mongoose.Schema.ObjectId, ref: 'Payments' },
     address: { type: String, required: true },
     orderDate: { type: Date, default: Date.now }
 });

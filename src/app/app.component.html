@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
-    <a class="navbar-brand" routerLink=""><img src="/assets/images/new_logo.png" alt="Maa Taluja Creations"
+    <a class="navbar-brand" routerLink=""><img src="/assets/images/new_logo.png" alt="Maa Tulja Creations"
         class="img img-responsive w-100"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,25 +16,24 @@
             PRODUCTS <br>
           </a>
           <fa-icon [icon]="['fas', 'chevron-down']" class="m-0"></fa-icon>
-          <div class="dropdown-menu category-dropdown" [ngClass]="{'show': showDropdown || false}"
+          <div class="dropdown-menu category-dropdown content-text-sm" [ngClass]="{'show': showDropdown || false}"
             (mouseleave)="showDropdown=false">
             <p class="text-center">Categories</p>
             <div class="dropdown-divider"></div>
             <ul class="list-unstyled">
-              <li class="nav-item"><a class="dropdown-item" (click)="openProductsWithQuery();showDropdown=false">All</a>
-              </li>
-              <li class="nav-item" *ngFor="let category of categories$ | async">
-                <a class="dropdown-item"
-                  (click)="openProductsWithQuery(category.name);showDropdown=false;collapseNavBar()">
-                  {{category.name}} </a>
-                <ul>
-                  <li class="nav-item dropdown-item" *ngFor="let subCategory of category.subCategories"><a class="linkc"
-                      (click)="openProductsWithQuery(category.name, subCategory);showDropdown=false;collapseNavBar()">{{subCategory}}</a>
-                  </li>
-                </ul>
-                <div class="dropdown-divider"></div>
+              <li class="nav-item"><a class="dropdown-item text-center"
+                  (click)="openProductsWithQuery();showDropdown=false">All</a>
               </li>
             </ul>
+            <div class="float-left" *ngFor="let categories of categories$ | async">
+              <ul class="list-unstyled">
+                <li class="nav-item" *ngFor="let category of categories">
+                  <a class="dropdown-item text-center"
+                    (click)="openProductsWithQuery(category.name);showDropdown=false;collapseNavBar()">
+                    {{category.name}} </a>
+                </li>
+              </ul>
+            </div>
           </div><!-- dropdown-menu -->
         </li>
         <li class="nav-item" (mouseenter)="showDropdown=false">
@@ -50,13 +49,13 @@
         <div class="nav-top">
           <a routerLink="" class="nav-right-btn" id="cart-btn" (mouseenter)="homeIcon = 'homeicon_hover.png'"
             (mouseleave)="homeIcon='homeicon.png'" (click)="collapseNavBar()">
-            <img [src]="'/assets/images/' + homeIcon" width="30" height="30" alt="">
+            <img [src]="'/assets/images/' + homeIcon" width="37" height="37" alt="">
           </a>
           &nbsp;
           <a routerLink="cart" class="nav-right-btn" id="cart-btn"
             (mouseenter)="shoppingIcon = 'shoppingicon_hover.png'" (mouseleave)="shoppingIcon='shoppingicon.png'"
             (click)="collapseNavBar()">
-            <img [src]="'/assets/images/' + shoppingIcon" width="30" height="30" alt="">
+            <img [src]="'/assets/images/' + shoppingIcon" width="37" height="37" alt="">
             <span class="cart-item-count">{{cartItemCount}}</span>
           </a>
           &nbsp;
@@ -72,7 +71,8 @@
               <a class="dropdown-item" routerLink="/profile" *ngIf="!user.isAdmin" (click)="collapseNavBar()">View
                 Profile</a>
               <a class="dropdown-item" routerLink="/admin-panel-cms" *ngIf="user.isAdmin"
-                (click)="collapseNavBar()">Admin Panel</a>
+                (click)="collapseNavBar()">Admin
+                Panel</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" (click)="logout();collapseNavBar()">Logout</a>
             </div>
@@ -101,20 +101,21 @@
           <p class="content-text">Follow us on:
             <a href="https://www.facebook.com/craftmegastore/" target="_blank"
               (mouseenter)="fbIcon = 'fbicon_hover.png'" (mouseleave)="fbIcon='fbicon.png'"><img
-                [src]="'/assets/images/' + fbIcon" id="icon1" width="24"></a>
+                [src]="'/assets/images/' + fbIcon" id="icon1" width="37" height="37"></a>
             &nbsp;<a href="https://instagram.com/craftmegastore?igshid=1mleu2mtljq6o" target="_blank"
               (mouseenter)="instaIcon = 'insta_hover.png'" (mouseleave)="instaIcon='instaicon.png'"><img
-                [src]="'/assets/images/' + instaIcon" id="icon2" width="24"></a>
+                [src]="'/assets/images/' + instaIcon" id="icon2" width="37" height="37"></a>
           </p>
           <p class="content-text">&copy; 2019 Maa Tulja Creations. All rights reserved.</p>
         </div>
         <div class="col-sm-4 offset-sm-4">
           <p class="content-heading"><b>Contact Us</b></p>
-          <p class="content-text">Rane Vihar, House No 264/218, Savlem, Alto-Pilerne, Bardez, GOA-40251
+          <p class="content-text">Rane Vihar, House No 264/218, Savlem, <br> Alto-Pilerne, Bardez, GOA-40251
             <br> GSTIN/UIN: 30AWXPS1609N1ZY <br> State Name: Goa, Code: 30
           </p>
-          <p class="content-text"><img src="/assets/images/emailicon.png"> maatuljacreations@gmail.com</p>
-          <p class="content-text"><img src="/assets/images/phoneicon.png"> +91-9890367761</p>
+          <p class="content-text"><img src="/assets/images/emailicon.png" width="37" height="37">
+            maatuljacreations@gmail.com</p>
+          <p class="content-text"><img src="/assets/images/phoneicon.png" width="37" height="37"> +91-9890367761</p>
         </div>
       </div>
     </div>

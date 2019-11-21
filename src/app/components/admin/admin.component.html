@@ -358,6 +358,7 @@
                                 <th>Order date</th>
                                 <th>Courier Type</th>
                                 <th>Tracking No.</th>
+                                <th>Order Status</th>
                                 <th>Invoice</th>
                                 <th>Operations</th>
                             </tr>
@@ -368,6 +369,7 @@
                                 <td>{{order.orderDate | date:'dd MMM yyyy hh:mm a'}} </td>
                                 <td>{{courierType[order.orderSummary.shippingMethod]}} </td>
                                 <td>{{order.trackingNo}}</td>
+                                <td>{{orderStatus[order.orderStatus]}}</td>
                                 <td>
                                     <a class="link" (click)="pdf.printPdf(order)">
                                         <fa-icon [icon]="['far','file-pdf']" size="2x" [styles]="{'color': 'red'}">
@@ -912,8 +914,7 @@
                         *ngFor="let subCategory of formArray('subCategories', {}, 'category').controls; index as i">
                         <div class="form-row"><input type="text" [formControlName]="i" class="form-control col-md-10"
                                 [ngClass]="{ 'is-invalid': submitted && subCategory.errors }" />
-                            <a (click)="removeField('subCategories', {index: i}, 'category')" class="col-md-1 v-center"
-                                *ngIf="i != 0">
+                            <a (click)="removeField('subCategories', {index: i}, 'category')" class="col-md-1 v-center">
                                 <fa-icon [icon]="['fas','times']"></fa-icon>
                             </a>
                             <div *ngIf="submitted && subCategory.errors" class="invalid-feedback">

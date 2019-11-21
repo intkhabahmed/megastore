@@ -9,7 +9,9 @@
 }
 
 .images-container a {
-    margin: 2px;
+    margin    : 2px;
+    max-height: 75px;
+    overflow  : hidden;
 }
 
 @media(max-width: 992px) {

@@ -11,7 +11,7 @@ import { User } from './../../models/user';
 import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
 import { PdfGeneratorService } from './../../services/pdf-generator.service';
-import { AdminTab, ShippingMethod } from './../../utils/enums';
+import { AdminTab, OrderStatus, ShippingMethod } from './../../utils/enums';
 import { JsonUtils } from './../../utils/json-utils';
 
 @Component({
@@ -23,6 +23,7 @@ export class AdminComponent implements OnInit {
 
   currentTab: AdminTab
   courierType = ShippingMethod
+  orderStatus = OrderStatus
   row: number
   isEditing = false
   products$: Observable<Product[]>
@@ -117,7 +118,6 @@ export class AdminComponent implements OnInit {
       name: ['', Validators.required],
       subCategories: this.fb.array([])
     })
-    this.addField('subCategories', {}, 'category')
 
     this.orderForm = this.fb.group({
       trackingNo: ['', Validators.required]
@@ -223,7 +223,6 @@ export class AdminComponent implements OnInit {
     this.api.getOrders().subscribe(orders => {
       orders.forEach(order => {
         order.orderSummary = this.jsonUtils.parseJson(order.orderSummary)
-        order.payment = this.jsonUtils.parseJson(order.payment)
         order.address = this.jsonUtils.parseJson(order.address)
       })
       this.orders$ = of(orders)

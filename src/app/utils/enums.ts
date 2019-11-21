@@ -23,5 +23,6 @@ export enum ShippingMethod {
 export enum OrderStatus {
     PROCESSING,
     SHIPPED,
-    DELIVERED
+    DELIVERED,
+    FAILED,
 }

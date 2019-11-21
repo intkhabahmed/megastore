@@ -1,5 +1,14 @@
 export class Payment {
-    transactionId: string
-    paymentMethod: string
+    _id: string
+    orderId: string
+    trackingId: string
+    bankRefNo: string
+    orderStatus: string
+    failureMessage: string
+    paymentMode: string
+    cardName: string
+    statusCode: number
+    statusMessage: string
     amount: number
+    transDate: Date
 }

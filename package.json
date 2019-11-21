@@ -38,7 +38,7 @@
     "jquery": "^3.4.1",
     "jsonwebtoken": "^8.5.1",
     "localstorage-polyfill": "^1.0.1",
-    "mongoose": "^5.7.5",
+    "mongoose": "^5.7.12",
     "pdfmake": "^0.1.60",
     "popper.js": "^1.14.7",
     "rxjs": "~6.4.0",

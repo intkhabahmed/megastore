@@ -34,10 +34,10 @@ export class PaymentsRoute {
                     return next(err)
                 }
                 if (payment.orderStatus === 'Failure') {
-                    res.writeHead(200, { Location: 'https://craftmegastore.in/order-status?status=0' })
+                    res.writeHead(200, { Location: 'https://www.craftmegastore.in/order-status?status=0' })
                     res.end()
                 } else if (payment.orderStatus === 'Success') {
-                    res.writeHead(200, { Location: 'https://craftmegastore.in/order-status?status=1' })
+                    res.writeHead(200, { Location: 'https://www.craftmegastore.in/order-status?status=1' })
                     res.end()
                 }
             })

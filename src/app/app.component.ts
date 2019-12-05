@@ -14,7 +14,6 @@ import { DataService } from './services/data.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'maa-taluja-creations';
   constructor(private dataService: DataService, private authenticationService: AuthenticationService, public router: Router,
     private fb: FormBuilder, private api: ApiService) {
   }

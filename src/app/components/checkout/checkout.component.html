@@ -204,8 +204,7 @@
         </div><!-- .col-md-5 col-sm-12 -->
     </div><!-- row -->
 </div><!-- container -->
-<form #form ngNoForm id="nonseamless" method="post" name="redirect"
-    action="https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction">
+<form #form ngNoForm id="nonseamless" method="post" name="redirect" action="{{paymentGatewayUrl}}">
     <input type="hidden" id="encRequest" name="encRequest">
     <input type="hidden" name="access_code" id="access_code" [(ngModel)]="accessCode">
 </form>

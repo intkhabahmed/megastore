@@ -41,7 +41,7 @@
                             </div>
                         </div>
                     </div><!-- card -->
-                    <div class="form-group my-auto">
+                    <div class="form-group my-auto" *ngIf="productsLength > 6">
                         <button class="btn btn-pink w-max-content" routerLink="/products" *ngIf="!loading">View All
                             >></button>
                     </div>

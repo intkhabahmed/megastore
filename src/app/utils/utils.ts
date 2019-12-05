@@ -105,6 +105,7 @@ export class Utility {
         this.orderSummary.cartItems.delete(item.id)
         if (this.orderSummary.cartItems.size == 0) {
             this.dataService.changeOrderDetails(new OrderSummary())
+            this.dataService.changeOrder(new Order())
         } else {
             this.dataService.changeOrderDetails(this.orderSummary)
         }
@@ -148,7 +149,7 @@ export class Utility {
     findSameItemInCart(product: Product): CartItem {
         var sameItem = undefined
         this.orderSummary.cartItems.forEach(item => {
-            if (product.selectedIndex === item.product.selectedIndex && product.subIndex === item.product.subIndex) {
+            if (product._id === item.product._id && product.selectedIndex === item.product.selectedIndex && product.subIndex === item.product.subIndex) {
                 sameItem = item
             }
         })

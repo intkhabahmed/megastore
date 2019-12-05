@@ -3,12 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { Observable } from 'rxjs';
-import { ccAccessCode, ccMerchantId } from './../../../../helpers/config';
+import { ccAccessCode, ccMerchantId, paymentUrl } from './../../../../helpers/config';
 import { Address } from './../../models/address';
 import { User } from './../../models/user';
 import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
-import { AuthenticationService } from './../../services/authentication.service';
 import { DataService } from './../../services/data.service';
 import { OrderStatus } from './../../utils/enums';
 import { JsonUtils } from './../../utils/json-utils';
@@ -29,12 +28,13 @@ export class CheckoutComponent implements OnInit {
   showAddressForm = false
   user$: Observable<User>
   id: any
+  paymentGatewayUrl = paymentUrl
   @ViewChild('form', null) form: ElementRef;
 
   encRequest: string;
   accessCode: string;
   constructor(private dataService: DataService, public utility: Utility, private api: ApiService,
-    private router: Router, private fb: FormBuilder, private authService: AuthenticationService, private cdr: ChangeDetectorRef,
+    private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef,
     private alertService: AlertService, private jsonUtils: JsonUtils) { }
 
   ngOnInit() {
@@ -74,11 +74,11 @@ export class CheckoutComponent implements OnInit {
     this.user$.subscribe(user => {
       var reqBody = {
         merchant_id: ccMerchantId,
-        order_id: this.utility.order.orderNo,
         currency: "INR",
+        order_id: this.utility.order.orderNo,
         amount: this.utility.orderSummary.grandTotal,
-        redirect_url: "https://craftmegastore.in/api/ccavResponseHandler",
-        cancel_url: "https://craftmegastore.in/api/ccavResponseHandler",
+        redirect_url: "https://www.craftmegastore.in/api/ccavResponseHandler",
+        cancel_url: "https://www.craftmegastore.in/api/ccavResponseHandler",
         language: "EN",
         customer_identifier: user._id
       }

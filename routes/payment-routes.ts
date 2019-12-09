@@ -9,7 +9,7 @@ import Payments from './../src/app/schema/payment';
 export class PaymentsRoute {
     public paymentRoute(app) {
         app.route('/api/ccavRequestHandler').post((req: Request, res: Response, next: NextFunction) => {
-            var encRequest = encrypt(req.body, ccWorkingKey);
+            var encRequest = encrypt(req.body.unencReq, ccWorkingKey);
             res.send({ encRequest })
         })
 

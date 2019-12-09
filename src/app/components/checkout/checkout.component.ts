@@ -73,9 +73,9 @@ export class CheckoutComponent implements OnInit {
     this.dataService.changeOrder(this.utility.order)
     this.user$.subscribe(user => {
       var reqBody = {
-        unencReq: `merchant_id=${ccMerchantId}&currency="INR"&order_id=${this.utility.order.orderNo}&
-        amount=${this.utility.orderSummary.grandTotal}&redirect_url="https://www.craftmegastore.in/api/ccavResponseHandler"&
-        cancel_url="https://www.craftmegastore.in/api/ccavResponseHandler"&language="EN"&customer_identifier=${user._id}`
+        unencReq: `merchant_id=${ccMerchantId}&currency=INR&order_id=${this.utility.order.orderNo}&
+        amount=${this.utility.orderSummary.grandTotal}&redirect_url=https://www.craftmegastore.in/api/ccavResponseHandler&
+        cancel_url=https://www.craftmegastore.in/api/ccavResponseHandler&language=EN&customer_identifier=${user._id}`
       }
       this.api.handlePaymentRequest(reqBody).subscribe(res => {
         this.encRequest = res.encRequest

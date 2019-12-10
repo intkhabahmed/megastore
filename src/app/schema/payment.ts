@@ -5,7 +5,7 @@ export const PaymentSchema: Schema = new Schema({
     trackingId: { type: String, required: true },
     bankRefNo: { type: String, required: true },
     orderStatus: { type: String, required: true },
-    failureMessage: { type: String, required: true },
+    failureMessage: { type: String },
     paymentMode: { type: String, required: true },
     cardName: { type: String, required: true },
     statusCode: { type: String, required: true },

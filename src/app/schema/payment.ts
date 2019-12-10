@@ -8,7 +8,7 @@ export const PaymentSchema: Schema = new Schema({
     failureMessage: { type: String, required: true },
     paymentMode: { type: String, required: true },
     cardName: { type: String, required: true },
-    statusCode: { type: Number, required: true },
+    statusCode: { type: String, required: true },
     statusMessage: { type: String, required: true },
     amount: { type: String, required: true },
     transDate: { type: Date, required: true }

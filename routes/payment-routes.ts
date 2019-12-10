@@ -19,7 +19,7 @@ export class PaymentsRoute {
             payment.amount = ccavJson.amount
             payment.bankRefNo = ccavJson.bank_ref_no
             payment.cardName = ccavJson.card_name
-            payment.failureMessage = ccavJson.failure_message
+            payment.failureMessage = ccavJson.failure_message || ""
             payment.orderId = ccavJson.order_id
             payment.orderStatus = ccavJson.order_status
             payment.paymentMode = ccavJson.payment_mode

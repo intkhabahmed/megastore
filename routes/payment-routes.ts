@@ -14,7 +14,7 @@ export class PaymentsRoute {
         })
 
         app.route('/api/ccavResponseHandler').post((req: Request, res: Response, next: NextFunction) => {
-            var ccavResponse = decrypt(qs.parse(JSON.stringify(req.body)).encResp, ccWorkingKey);
+            var ccavResponse = decrypt(req.body.encResp, ccWorkingKey);
             var ccavJson = convertToJson(ccavResponse)
             var payment = new Payment()
             payment.amount = ccavJson.amount

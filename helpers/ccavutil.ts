@@ -24,8 +24,7 @@ export const decrypt = function (encText, workingKey) {
 
 export const convertToJson = function (response: any): any {
 	if (response) {
-		let ccavResponse = this.decrypt(response);
-		const responseArray = ccavResponse.split('&');
+		const responseArray = response.split('&');
 		const stringify = JSON.stringify(responseArray);
 		const removeQ = stringify.replace(/['"]+/g, '');
 		const removeS = removeQ.replace(/[[\]]/g, '');

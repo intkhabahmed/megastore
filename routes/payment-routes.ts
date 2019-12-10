@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import * as qs from 'querystring';
 import { convertToJson, decrypt, encrypt } from './../helpers/ccavutil';
 import { ccWorkingKey } from './../helpers/config';
 import { verifyToken } from './../helpers/jwt-helper';

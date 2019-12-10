@@ -41,7 +41,7 @@ export class PaymentsRoute {
         })
 
         app.route('/api/payments/order').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            Payments.findOne({ orderId: req.orderId }, (err, payment) => {
+            Payments.findOne(req.body, (err, payment) => {
                 if (err) return next(err)
                 res.json(payment)
             })

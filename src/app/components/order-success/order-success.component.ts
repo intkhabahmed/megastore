@@ -22,7 +22,7 @@ export class OrderSuccessComponent implements OnInit {
   ngOnInit() {
     this.isSuccess = this.route.snapshot.queryParams['status']
     this.api.getPaymentForUserByOrderId({orderId: this.utility.order.orderNo}).subscribe(payment => {
-      this.utility.order.orderStatus = this.isSuccess === 0 ? this.orderStatus.FAILED : this.orderStatus.PROCESSING
+      this.utility.order.orderStatus = this.isSuccess == 0 ? this.orderStatus.FAILED : this.orderStatus.PROCESSING
       this.utility.order.payment = payment._id
       this.api.insertOrder(this.utility.order).subscribe(order => {
         this.api.getUserById().subscribe(user => {

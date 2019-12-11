@@ -55,6 +55,12 @@ export class CartComponent implements OnInit {
   }
 
   calculateShippingCost(value?) {
+    if (value === "") {
+      this.utility.orderSummary.shippingCost = 0
+      this.utility.orderSummary.grandTotal = this.utility.orderSummary.totalProductCost + this.utility.orderSummary.shippingCost
+      this.dataService.changeOrderDetails(this.utility.orderSummary)
+      return
+    }
     this.loading = true
     if (this.utility.orderSummary.shippingMethod === this.shippingMethod.REGISTERED_POST) {
       this.api.calculateShippingCharge({
@@ -98,10 +104,13 @@ export class CartComponent implements OnInit {
         )
     } else if (this.utility.orderSummary.shippingMethod === this.shippingMethod.PROFESSIONAL ||
       this.utility.orderSummary.shippingMethod === this.shippingMethod.SHREE_MAHAVIR) {
-      this.api.calculateShippingCharge({
-        shippingMethod: this.utility.orderSummary.shippingMethod, minWeight: { $lte: this.utility.orderSummary.productGrossWeight },
-        maxWeight: { $gte: this.utility.orderSummary.productGrossWeight }, isLocal: value
-      }).subscribe(
+      var query = value === 'true' ? {
+        shippingMethod: this.utility.orderSummary.shippingMethod, isLocal: value
+      } : {
+          shippingMethod: this.utility.orderSummary.shippingMethod, minWeight: { $lte: this.utility.orderSummary.productGrossWeight },
+          maxWeight: { $gte: this.utility.orderSummary.productGrossWeight }, isLocal: value
+        }
+      this.api.calculateShippingCharge(query).subscribe(
         shippingRate => {
           if (value === 'true') {
             this.utility.orderSummary.shippingCost = shippingRate.perKgRate * this.utility.orderSummary.productGrossWeight / 1000

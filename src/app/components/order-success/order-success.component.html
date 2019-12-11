@@ -6,7 +6,7 @@
     </p>
     <p class="content-text" *ngIf="!loading && isSuccess==0">
         <fa-icon [icon]="['fas', 'times']" size="2x" class="text-danger"></fa-icon> Your order has been failed
-        due to payment failure!! Please try again later.
+        due to payment failure!! If any money got deducted, it will be refunded to you.
     </p>
     <div class="p-5">
         <button class="btn btn-pink center" (click)="goToPage('home')">Go Home</button>

@@ -17,17 +17,13 @@ export class ShippingRatesRoute {
             }
         })
 
-        app.route('/api/shippingRates/filter').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
-                res.status(401).send({ message: "Unauthorized request" })
-            } else {
-                ShippingRate.find(req.body, (err, shippingRate) => {
-                    if (err) {
-                        return next(err)
-                    }
-                    res.json(shippingRate)
-                })
-            }
+        app.route('/api/shippingRates/filter').post((req: Request, res: Response, next: NextFunction) => {
+            ShippingRate.find(req.body, (err, shippingRate) => {
+                if (err) {
+                    return next(err)
+                }
+                res.json(shippingRate)
+            })
         })
 
         app.route('/api/shippingRates/calculate').post((req: Request, res: Response, next: NextFunction) => {

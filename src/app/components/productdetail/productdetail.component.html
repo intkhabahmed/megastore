@@ -1,7 +1,7 @@
 <div class="container" *ngIf="product$ | async; let product;">
     <div class="row">
         <div class="col-md-10">
-            <p class="content-text mt-2">Products >> {{product.category}} >> {{product.subCategory}} >> {{product.name}}
+            <p class="content-text mt-2">{{getNavMap(product)}}
             </p>
         </div>
     </div>
@@ -20,7 +20,7 @@
             <h4 class="content-heading">{{product.name}}</h4>
             <p class="content-text"><b>Product code</b> - {{product.productCode}}</p>
             <p class="content-text"><b>Category</b> - {{product.category}}</p>
-            <p class="content-text"><b>Sub-Category</b> - {{product.subCategory}}</p>
+            <p class="content-text" *ngIf="product.subCategory"><b>Sub-Category</b> - {{product.subCategory}}</p>
             <p class="content-text">{{product.description}}</p>
             <div class="form-row">
                 <div class="form-group col-md-6">

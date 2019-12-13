@@ -82,7 +82,7 @@ export class AdminComponent implements OnInit {
   initializeFormGroups() {
     this.productForm = this.fb.group({
       category: ['', Validators.required],
-      subCategory: ['', Validators.required],
+      subCategory: [''],
       imageUrl: this.fb.array([]),
       name: ['', Validators.required],
       productCode: ['', Validators.required],

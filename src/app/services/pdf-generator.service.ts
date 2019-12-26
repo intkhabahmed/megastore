@@ -106,7 +106,7 @@ export class PdfGeneratorService {
       order.address = this.jsonUtils.parseJson(order.address)
     }
     this.rows = this.createRows(order.orderSummary)
-    pdfMake.createPdf(this.dd(order)).open({}, window)
+    pdfMake.createPdf(this.dd(order)).print()
   }
 
   dd(order: Order): any {

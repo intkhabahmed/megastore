@@ -121,4 +121,8 @@ export class ProductdetailComponent implements OnInit {
         })
     })
   }
+
+  getNavMap(product: Product) {
+    return !!product.subCategory ? `Products >> ${product.category} >> ${product.subCategory} >> ${product.name}` : `Products >> ${product.category} >> ${product.name}`
+  }
 }

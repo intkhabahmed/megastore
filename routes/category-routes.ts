@@ -12,7 +12,7 @@ export class CategoriesRoute {
         });
 
         app.route('/api/categories').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Category.create(req.body, (err, category) => {
@@ -25,7 +25,7 @@ export class CategoriesRoute {
         })
 
         app.route('/api/categories/:id').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Category.findByIdAndUpdate(req.params.id, req.body, (err, category) => {
@@ -36,7 +36,7 @@ export class CategoriesRoute {
         })
 
         app.route('/api/categories/:id').delete(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Category.findByIdAndRemove(req.params.id, req.body, (err, category) => {

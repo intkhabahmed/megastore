@@ -1,7 +1,7 @@
-import mongoose, { Schema } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-export const AddressSchema: Schema = new Schema({
-    user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+export const AddressSchema: mongoose.Schema = new mongoose.Schema({
+    user: { type: mongoose.Types.ObjectId, ref: 'User' },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     mobile: { type: Number, required: true },

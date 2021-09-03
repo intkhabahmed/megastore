@@ -14,7 +14,7 @@ export class MessagesRoute {
         })
 
         app.route('/api/messages/all').get(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Message.find().populate('user').exec((err, messages) => {

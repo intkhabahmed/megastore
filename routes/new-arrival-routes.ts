@@ -12,7 +12,7 @@ export class NewArrivalsRoute {
         });
 
         app.route('/api/newArrivals').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 NewArrival.create(req.body, (err, newArrival) => {
@@ -25,7 +25,7 @@ export class NewArrivalsRoute {
         })
 
         app.route('/api/newArrivals/:id').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 NewArrival.findByIdAndUpdate(req.params.id, req.body, (err, newArrival) => {
@@ -36,7 +36,7 @@ export class NewArrivalsRoute {
         })
 
         app.route('/api/newArrivals/:id').delete(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 NewArrival.findByIdAndRemove(req.params.id, req.body, (err, newArrival) => {

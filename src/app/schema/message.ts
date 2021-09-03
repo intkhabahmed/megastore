@@ -1,7 +1,7 @@
-import mongoose, { Schema } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-const MessageSchema: Schema = new Schema({
-    user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+const MessageSchema: mongoose.Schema = new mongoose.Schema({
+    user: { type: mongoose.Types.ObjectId, ref: 'User' },
     message: { type: String, required: true },
     reply: { type: String },
     sentAt: { type: Date, default: Date.now }

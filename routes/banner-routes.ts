@@ -12,7 +12,7 @@ export class BannersRoute {
         });
 
         app.route('/api/banners').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Banner.create(req.body, (err, banner) => {
@@ -25,7 +25,7 @@ export class BannersRoute {
         })
 
         app.route('/api/banners/:id').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Banner.findByIdAndUpdate(req.params.id, req.body, (err, banner) => {
@@ -36,7 +36,7 @@ export class BannersRoute {
         })
 
         app.route('/api/banners/:id').delete(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Banner.findByIdAndRemove(req.params.id, req.body, (err, banner) => {

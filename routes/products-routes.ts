@@ -22,7 +22,7 @@ export class ProductsRoute {
         });
 
         app.route('/api/').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Product.create(req.body, (err, product) => {
@@ -42,7 +42,7 @@ export class ProductsRoute {
         });
 
         app.route('/api/:id').delete(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Product.findByIdAndRemove(req.params.id, req.body, (err, product) => {

@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-export const PaymentSchema: Schema = new Schema({
+export const PaymentSchema: mongoose.Schema = new mongoose.Schema({
     orderId: { type: String, required: true },
     trackingId: { type: String, required: true },
     bankRefNo: { type: String, required: true },

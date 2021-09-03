@@ -190,7 +190,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><b>Subtotal: </b> Rs. {{item.itemsCost}}</td>
+                            <td><b>Color: </b> {{item.product.colors[item.product.selectedIndex]}}</td>
+                            <td class="text-right"><b>Subtotal: </b> Rs. {{item.itemsCost}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Size: </b>{{item.product.size[item.product.selectedIndex]}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Message: </b> {{item.product.message}}</td>
                         </tr>
                     </table>
                     <hr *ngIf="i < utility.orderSummary.cartItems.size - 1">

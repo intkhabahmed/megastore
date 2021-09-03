@@ -12,12 +12,22 @@
                 <a class="plain-link" [routerLink]="['/products', item.product._id]">
                     <h5 class="order-heading">{{item.product.name}}</h5>
                 </a>
-                <p class="order-sub-heading">Product code - <b>{{item.product.productCode}}</b></p>
+                <p class="order-sub-heading">Product code: <b>{{item.product.productCode}}</b></p>
                 <table class="table order-table">
                     <tr>
-                        <td>Selected Color - <b>{{item.product.colors[item.product.selectedIndex]}}</b></td>
-                        <td>Selected Size -
-                            <b>{{item.product.size[item.product.selectedIndex][item.product.subIndex]}}</b></td>
+                        <td>Selected Color: <b>{{item.product.colors[item.product.selectedIndex]}}</b></td>
+                        <td>Selected Size:
+                            <b>{{item.product.size[item.product.selectedIndex][item.product.subIndex]}}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cost per unit:
+                            <b>Rs. {{item.product.price[item.product.selectedIndex][item.product.subIndex]}}</b>
+                        </td>
+                        <td>
+                            Weight per unit:
+                            <b>{{utility.getFormattedWeight(item.product.weight[item.product.selectedIndex][item.product.subIndex])}}</b>
+                        </td>
                     </tr>
                     <tr>
                         <td><b>QTY: </b>
@@ -28,16 +38,19 @@
                                 (click)="utility.increaseProductQuantity(item)">
                             </fa-icon>
                         </td>
-                        <td>
-                            Weight -
-                            <b>{{utility.getFormattedWeight(item.product.weight[item.product.selectedIndex][item.product.subIndex])}}</b>
-                        </td>
+
                     </tr>
                     <tr>
-                        <td><b>Product Cost - </b><span class="accent-color"><b>Rs.
-                                    {{item.product.price[item.product.selectedIndex][item.product.subIndex]}}</b>
-                            </span></td>
-
+                        <td><b>Item cost: </b>
+                            <span class="accent-color">Rs. {{utility.orderSummary.cartItems.get(item.id).itemsCost}}</span>
+                        </td>
+                        <td>
+                            <b>Item Weight: </b>
+                            <span class="accent-color">{{utility.getFormattedWeight(utility.orderSummary.cartItems.get(item.id).itemsWeight)}}</span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="item.product.message !== ''">
+                        <td><b>Message for seller: </b><span class="accent-color">{{item.product.message}}</span></td>
                     </tr>
                 </table>
                 <div class="float-right cart-actions">
@@ -89,7 +102,8 @@
                     </p>
                     <p class="content-text text-right"
                         *ngIf="deliveryMethodSelected && ( utility.orderSummary.shippingMethod || utility.orderSummary.shippingMethod === 0)">
-                        <i>Selected delivery type is {{shippingMethod[utility.orderSummary.shippingMethod]}}</i></p>
+                        <i>Selected delivery type is {{shippingMethod[utility.orderSummary.shippingMethod]}}</i>
+                    </p>
                 </div><!-- w-100 -->
                 <div class="shipping-distance-dialog" *ngIf="showDistanceDialog">
                     <fa-icon [icon]="['fas', 'times']" class="float-right" (click)="cancelledShippingMethod()">
@@ -129,7 +143,8 @@
                         Calculating</p>
                     <p class="content-text-lg mb-1" *ngIf="utility.orderSummary.shippingCost !== 0">Your
                         calculated Shipping Charge is Rs
-                        <span class="accent-color content-heading">{{utility.orderSummary.shippingCost}}</span></p>
+                        <span class="accent-color content-heading">{{utility.orderSummary.shippingCost}}</span>
+                    </p>
                     <p class="content-text-sm"
                         *ngIf="utility.orderSummary.shippingMethod === shippingMethod.REGISTERED_POST">
                         Shipping Charge calculated on Gross Weight
@@ -152,9 +167,9 @@
         </div>
     </div><!-- cart-item -->
     <div class="form-group clearfix">
-        <a (click)="goToCheckout()" class="btn btn-pink buy-btn float-right"
-            *ngIf="utility.orderSummary.shippingCost">Proceed
-            to Checkout</a>
+        <button (click)="goToCheckout()" class="btn btn-pink buy-btn float-right"
+            [disabled]="!utility.orderSummary.shippingCost">Proceed
+            to Checkout</button>
     </div>
 </div><!-- container -->
 <div class="container empty-cart" *ngIf="utility.orderSummary.cartItems.size == 0">

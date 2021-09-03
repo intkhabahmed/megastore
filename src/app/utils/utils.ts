@@ -7,6 +7,7 @@ import { CartItem } from './../models/cart-item';
 import { GrossWeight } from './../models/gross-weight';
 import { AlertService } from './../services/alert.service';
 import { ApiService } from './../services/api.service';
+import { JsonUtils } from './json-utils';
 
 @Injectable({
     providedIn: "root"
@@ -15,11 +16,17 @@ export class Utility {
     orderSummary: OrderSummary
     order: Order
     grossWeights: GrossWeight[]
-    constructor(private dataService: DataService, private api: ApiService, private alertService: AlertService) {
+    constructor(
+        private dataService: DataService, 
+        private api: ApiService, 
+        private alertService: AlertService,
+        private jsonUtils: JsonUtils
+    ) {
         this.dataService.orderSummary.subscribe(summary => this.orderSummary = summary)
         dataService.order.subscribe(order => this.order = order)
         this.api.getGrossWeights().subscribe(weights => this.grossWeights = weights)
     }
+
     getFormattedWeight(weight) {
         if (weight < 1000) {
             return `${weight} Gms`
@@ -33,6 +40,8 @@ export class Utility {
     decreaseProductQuantity(item: CartItem) {
         if (item.noOfItems > 0) {
             item.noOfItems--
+            item.itemsWeight -= item.product.weight[item.product.selectedIndex][item.product.subIndex]
+            item.itemsCost -= item.product.price[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.cartItems.set(item.id, item)
             this.orderSummary.productNetWeight -= item.product.weight[item.product.selectedIndex][item.product.subIndex]
             this.orderSummary.totalProductCost -= item.product.price[item.product.selectedIndex][item.product.subIndex]
@@ -73,18 +82,14 @@ export class Utility {
         }
     }
 
-    addProductToCart(product: Product) {
-        var sameItem = this.findSameItemInCart(product)
+    addItemToCart(item: CartItem) {
+        var sameItem = this.findSameItemInCart(item.product)
         if (sameItem) {
-            this.alertService.success(`Same product already added, increased it's quantity to ${sameItem.noOfItems + 1}`)
+            sameItem.noOfItems += item.noOfItems
+            this.alertService.success(`Same product already added, increased item's quantity by ${item.noOfItems}`)
             this.increaseProductQuantity(sameItem)
         } else {
-            var item = new CartItem();
-            item.id = Math.random().toString(10).substring(2, 7)
-            item.product = product
-            item.noOfItems = 1
-            item.itemsWeight = product.weight[product.selectedIndex][product.subIndex]
-            item.itemsCost = product.price[product.selectedIndex][product.subIndex]
+            var product = item.product
             this.orderSummary.cartItems.set(item.id, item)
             this.orderSummary.productNetWeight += product.weight[product.selectedIndex][product.subIndex]
             this.orderSummary.totalProductCost += product.price[product.selectedIndex][product.subIndex]
@@ -92,6 +97,7 @@ export class Utility {
             this.orderSummary.shippingCost = 0
             this.calculateGrossWeight(this.orderSummary.productNetWeight)
             this.dataService.changeOrderDetails(this.orderSummary);
+            this.alertService.success(`Item added to cart`, true)
             return item.id
         }
     }
@@ -99,7 +105,7 @@ export class Utility {
     removeItemFromCart(item: CartItem) {
         this.orderSummary.productNetWeight -= item.itemsWeight
         this.orderSummary.totalProductCost -= item.itemsCost
-        this.orderSummary.grandTotal -= item.itemsCost// * item.noOfItems
+        this.orderSummary.grandTotal -= item.itemsCost
         this.calculateGrossWeight(this.orderSummary.productNetWeight)
         this.orderSummary.shippingCost = 0
         this.orderSummary.cartItems.delete(item.id)
@@ -154,6 +160,14 @@ export class Utility {
             }
         })
         return sameItem
+    }
+
+    generateShortId(): string {
+        return Math.random().toString(10).substring(2, 7)
+    }
+
+    clone(obj: any): any {
+        return this.jsonUtils.parseJson(this.jsonUtils.getJsonString(obj))
     }
 
     states = [

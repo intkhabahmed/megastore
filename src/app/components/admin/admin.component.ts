@@ -50,6 +50,7 @@ export class AdminComponent implements OnInit {
   banners$: Observable<any[]>;
   newArrivals$: Observable<any[]>;
   subCategories$: Observable<any[]>;
+  deleteType: string
 
   constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils,
     public pdf: PdfGeneratorService, private router: Router) {
@@ -76,6 +77,7 @@ export class AdminComponent implements OnInit {
     this.showOverlay = false
     this.editing = ""
     this.submitted = false
+    this.id = ""
     this.initializeFormGroups()
   }
 
@@ -278,11 +280,18 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  delete(id, type) {
+  showConfirmation(id: string, type: string) {
+    this.id = id
+    this.deleteType = type
+    this.editing = 'confirmation'
+    this.showOverlay = true
+  }
+
+  delete() {
     this.alertService.clear()
-    switch (type) {
+    switch (this.deleteType) {
       case 'product':
-        this.api.deleteProduct(id).subscribe(
+        this.api.deleteProduct(this.id).subscribe(
           data => {
             this.alertService.success("Product Deleted", true)
             this.products$ = this.api.getProducts()
@@ -293,7 +302,7 @@ export class AdminComponent implements OnInit {
         )
         break;
       case 'shippingRate':
-        this.api.deleteShippingRate(id).subscribe(
+        this.api.deleteShippingRate(this.id).subscribe(
           data => {
             this.alertService.success("Shipping Rate Deleted", true)
             this.shippingRates$ = this.api.getShippingRates('')
@@ -304,7 +313,7 @@ export class AdminComponent implements OnInit {
         )
         break;
       case 'grossWeight':
-        this.api.deleteGrossWeight(id).subscribe(
+        this.api.deleteGrossWeight(this.id).subscribe(
           data => {
             this.alertService.success("Grossweight Deleted", true)
             this.grossWeights$ = this.api.getGrossWeights()
@@ -315,7 +324,7 @@ export class AdminComponent implements OnInit {
         )
         break;
       case 'category':
-        this.api.deleteCategory(id).subscribe(
+        this.api.deleteCategory(this.id).subscribe(
           data => {
             this.alertService.success("Category Deleted", true)
             this.categories$ = this.api.getCategories()
@@ -326,7 +335,7 @@ export class AdminComponent implements OnInit {
         )
         break;
       case 'banner':
-        this.api.deleteBanner(id).subscribe(
+        this.api.deleteBanner(this.id).subscribe(
           data => {
             this.alertService.success("Banner Deleted", true)
             this.banners$ = this.api.getBanners()
@@ -337,7 +346,7 @@ export class AdminComponent implements OnInit {
         )
         break;
       case 'newArrival':
-        this.api.deleteNewArrival(id).subscribe(
+        this.api.deleteNewArrival(this.id).subscribe(
           data => {
             this.alertService.success("Offer Deleted", true)
             this.newArrivals$ = this.api.getNewArrivals()
@@ -348,6 +357,7 @@ export class AdminComponent implements OnInit {
         )
         break;
     }
+    this.cancel()
   }
 
   addOrUpdateGrossWeight() {

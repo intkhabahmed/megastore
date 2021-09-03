@@ -5,7 +5,7 @@ import { verifyToken } from './../helpers/jwt-helper';
 export class ShippingRatesRoute {
     public shippingRoute(app) {
         app.route('/api/shippingRates').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 ShippingRate.create(req.body, (err, shippingRate) => {
@@ -40,7 +40,7 @@ export class ShippingRatesRoute {
         })
 
         app.route('/api/shippingRates/:id').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 ShippingRate.findByIdAndUpdate(req.params.id, req.body, (err, shippingRate) => {
@@ -51,7 +51,7 @@ export class ShippingRatesRoute {
         })
 
         app.route('/api/shippingRates/:id').delete(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 ShippingRate.findByIdAndRemove(req.params.id, req.body, (err, shippingRate) => {

@@ -2,8 +2,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { AppRoutingModule } from './app-routing.module';
@@ -59,7 +58,7 @@ import { JwtInterceptor } from './utils/jwt-interceptor';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor() {
-    library.add(fas, far);
+  constructor(library: FaIconLibrary) {
+    library.addIconPacks(fas, far);
   }
 }

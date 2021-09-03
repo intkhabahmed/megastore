@@ -1,5 +1,7 @@
+import { Request } from "express";
+
 const jwt = require('jsonwebtoken');
-export const verifyToken = (req, res, next) => {
+export const verifyToken = (req: Request, res, next) => {
     if (!req.headers.authorization) {
         return res.status(401).send({ message: 'Unauthorized request' })
     }
@@ -11,7 +13,7 @@ export const verifyToken = (req, res, next) => {
     if (!payload) {
         return res.status(401).send({ message: 'Unauthorized request' })
     }
-    req.userId = payload.subject
-    req.isAdmin = payload.isAdmin
+    req.params.userId = payload.subject
+    req.params.isAdmin = payload.isAdmin
     next()
 }

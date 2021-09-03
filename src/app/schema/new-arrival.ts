@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-const NewArrivalSchema: Schema = new Schema({
+const NewArrivalSchema: mongoose.Schema = new mongoose.Schema({
     imageUrl: { type: String, required: true },
     name: { type: String }
 })

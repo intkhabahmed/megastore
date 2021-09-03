@@ -27,11 +27,11 @@
                     <label for="color">Color:&nbsp;</label>
                     <select name="color" class="form-control"
                         (change)="colorOptionChanged($event.srcElement.value, product)">
-                        <option value="">Select Color</option>
+                        <option value="" *ngIf="!isEditing">Select Color</option>
                         <option [value]="color" *ngFor="let color of product.colors; index as i"
                             [ngClass]="{'text-danger': utility.checkForOutOfStock(product, i)}"
                             [disabled]="utility.checkForOutOfStock(product, i)"
-                            [selected]="isEditing && utility.orderSummary.cartItems.get(itemId)?.product.selectedIndex === i || cp.selectedIndex === i">
+                            [selected]="isEditing && utility.orderSummary.cartItems.get(cartItem.id)?.product.selectedIndex === i || cartItem.product.selectedIndex === i">
                             {{color}}</option>
                     </select>
                 </div>
@@ -39,50 +39,59 @@
                     <label for="size">Size:&nbsp;</label>
                     <select name="size" class="form-control"
                         (change)="sizeValueChanged($event.srcElement.value, product)">
-                        <option value="" *ngIf="cp.selectedIndex === -1">Select Size</option>
-                        <option [value]="size" *ngFor="let size of product.size[cp.selectedIndex];index as i"
-                            [ngClass]="{'text-danger': product.quantity[cp.selectedIndex][i] == 0}"
-                            [disabled]="product.quantity[cp.selectedIndex][i] == 0"
-                            [selected]="(isEditing && utility.orderSummary.cartItems.get(itemId)?.product.subIndex === i) || cp.subIndex === i">
+                        <option value="" *ngIf="cartItem.product.selectedIndex === -1">Select Size</option>
+                        <option [value]="size" *ngFor="let size of product.size[cartItem.product.selectedIndex];index as i"
+                            [ngClass]="{'text-danger': product.quantity[cartItem.product.selectedIndex][i] == 0}"
+                            [disabled]="product.quantity[cartItem.product.selectedIndex][i] == 0"
+                            [selected]="(isEditing && utility.orderSummary.cartItems.get(cartItem.id)?.product.subIndex === i) || cartItem.product.subIndex === i">
                             {{size}}
                         </option>
                     </select>
                 </div>
             </div>
-            <div class="form-group" *ngIf="utility.orderSummary.cartItems.has(itemId)">
+            <p *ngIf="colorValueChanged && cartItem.product.subIndex != -1" class="content-text">Price per unit:
+                <b>Rs. {{product.price[cartItem.product.selectedIndex][cartItem.product.subIndex]}}</b>
+            </p>
+            <p *ngIf="colorValueChanged && cartItem.product.subIndex != -1" class="content-text">Net Weight per unit:
+                <b>{{utility.getFormattedWeight(product.weight[cartItem.product.selectedIndex][cartItem.product.subIndex])}}</b>
+            </p>
+            <div class="form-group" *ngIf="colorValueChanged && cartItem.product.subIndex != -1">
                 <span>QTY: </span>
                 <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity accent-color"
-                    (click)="utility.decreaseProductQuantity(utility.orderSummary.cartItems.get(itemId))">
-                </fa-icon> <span class="disabled-box">{{utility.orderSummary.cartItems.get(itemId).noOfItems}}</span>
+                    (click)="decreaseQuantity()">
+                </fa-icon> <span class="disabled-box">{{cartItem.noOfItems}}</span>
                 <fa-icon [icon]="['fas', 'plus']" class="increase_quantity accent-color"
-                    (click)="utility.increaseProductQuantity(utility.orderSummary.cartItems.get(itemId))">
+                    (click)="increaseQuantity()">
                 </fa-icon>
             </div>
-            <p *ngIf="colorValueChanged && cp.subIndex != -1" class="content-text">Price -
-                <b>Rs. {{product.price[cp.selectedIndex][cp.subIndex]}}</b></p>
-            <p *ngIf="colorValueChanged && cp.subIndex != -1" class="content-text">Net Weight -
-                <b>{{utility.getFormattedWeight(product.weight[cp.selectedIndex][cp.subIndex])}}</b></p>
-            <p class="text-danger" *ngIf="!(cp.subIndex !== -1 && cp.selectedIndex !== -1)">
+            <p *ngIf="colorValueChanged && cartItem.product.subIndex != -1" class="content-text">Item Price:
+                <b class="accent-color"> Rs. {{cartItem.itemsCost}}</b>
+            </p>
+            <p *ngIf="colorValueChanged && cartItem.product.subIndex != -1" class="content-text">Item Net Weight:
+                <b class="accent-color"> {{utility.getFormattedWeight(cartItem.itemsWeight)}}</b>
+            </p>
+            <p class="text-danger" *ngIf="!(cartItem.product.subIndex !== -1 && cartItem.product.selectedIndex !== -1)">
                 You
                 need to
                 select size and color before adding the item to cart</p>
             <app-alert></app-alert>
-            <button class="btn btn-pink" (click)="itemId = utility.addProductToCart(cp)"
-                *ngIf="!utility.orderSummary.cartItems.has(itemId)"
-                [disabled]="!(cp.subIndex !== -1 && cp.selectedIndex !== -1)" title="First select size and color">Add
+            <div class="form-group" *ngIf="colorValueChanged && cartItem.product.subIndex != -1">
+                <textarea class="form-control no-resize" name="sellerMessage" rows="3" placeholder="Message for seller (optional)"
+                    (change)="messageEntered($event.srcElement.value)"
+                    [value]="isEditing ? utility.orderSummary.cartItems.get(cartItem.id)?.product.message : ''"></textarea>
+            </div>
+            <button class="btn btn-pink" (click)="addToCart()"
+                *ngIf="!isEditing"
+                [disabled]="!(cartItem.product.subIndex !== -1 && cartItem.product.selectedIndex !== -1)" title="First select size and color">Add
                 to
                 cart</button>
             <button class="btn btn-pink" (click)="redirectBack()"
-                *ngIf="(utility.orderSummary.cartItems.has(itemId) || (isEditing && utility.orderSummary.cartItems.has(itemId)))"
-                [disabled]="!(cp.subIndex !== -1 && cp.selectedIndex !== -1)"><span *ngIf="loading"
+                *ngIf="isEditing && utility.orderSummary.cartItems.has(cartItem.id)"
+                [disabled]="!(cartItem.product.subIndex !== -1 && cartItem.product.selectedIndex !== -1)"><span *ngIf="loading"
                     class="spinner-border spinner-border-sm mr-1"></span> Go To Cart</button>
-            <button class="btn btn-pink"
-                (click)="utility.removeItemFromCart(utility.orderSummary.cartItems.get(itemId));colorValueChanged=false;cp.selectedIndex=-1"
-                *ngIf="utility.orderSummary.cartItems.has(itemId)" title="First select size and color">Remove
-                from
-                cart</button>
-            <button class="btn btn-white" (click)="addToWishList(product._id)" [disabled]="loading"><span
-                    *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Add To Wishlist</button>
+            <button class="btn btn-white" (click)="addToWishList(product._id)" [disabled]="wishlistLoading"><span
+                    *ngIf="wishlistLoading" class="spinner-border spinner-border-sm mr-1"></span> Add To
+                Wishlist</button>
             <br><br>
             <h5 class="content-heading">Product Details</h5>
             <table class="table table-bordered overflow-scroll">

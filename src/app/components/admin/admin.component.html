@@ -287,7 +287,7 @@
                                 </td>
                                 <td><a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="delete(product._id, 'product')">Delete</a>
+                                        class="link" (click)="showConfirmation(product._id, 'product')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -317,7 +317,7 @@
                                 <td>{{product.quantity}} </td>
                                 <td><a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='product';populateEditForm(product)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="delete(product._id, 'product')">Delete</a>
+                                        class="link" (click)="showConfirmation(product._id, 'product')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -340,8 +340,8 @@
                                 <td>{{category.name}}</td>
                                 <td>{{category.subCategories}}</td>
                                 <td><a class="link"
-                                        (click)="isEditing=true;showOverlay=true;editing='category';populateEditForm(category)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link">Delete</a>
+                                        (click)="isEditing=true;showOverlay=true;editing='category';populateEditForm(category)">Edit</a>&nbsp;&nbsp;
+                                    <a class="link" (click)="showConfirmation(category._id, 'category')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -428,7 +428,7 @@
                                 <td>{{shippingRate.area}} </td>
                                 <td><a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='shippingRate';populateEditForm(shippingRate)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="delete(shippingRate._id, 'shippingRate')">Delete</a>
+                                        class="link" (click)="showConfirmation(shippingRate._id, 'shippingRate')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -454,7 +454,7 @@
                                 <td>{{grossWeight.toBeAdded}}</td>
                                 <td><a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='grossWeight';populateEditForm(grossWeight)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="delete(grossWeight._id, 'grossWeight')">Delete</a>
+                                        class="link" (click)="showConfirmation(grossWeight._id, 'grossWeight')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -530,7 +530,7 @@
                                 <td>
                                     <a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='banner';populateEditForm(banner)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="delete(banner._id, 'banner')">Delete</a>
+                                        class="link" (click)="showConfirmation(banner._id, 'banner')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -556,7 +556,7 @@
                                 <td>
                                     <a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='newArrival';populateEditForm(newArrival)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="delete(newArrival._id, 'newArrival')">Delete</a>
+                                        class="link" (click)="showConfirmation(newArrival._id, 'newArrival')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -1039,4 +1039,19 @@
             </div><!-- form-row -->
         </form>
     </div><!-- update new Arrival -->
+    <div *ngIf="editing == 'confirmation'">
+        <p class="font-weight-bold text-center">Delete confirmation</p>
+        <p class="text-center">Are you sure want to delete this?</p>
+        <div>
+            <button [disabled]="loading" class="btn btn-pink center w-25" (click)="delete()">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                Yes
+            </button>
+            <br>
+            <button [disabled]="loading" class="btn btn-white center w-25" (click)="cancel()">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                No
+            </button>            
+        </div>
+    </div>
 </div>

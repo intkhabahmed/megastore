@@ -13,22 +13,22 @@
           <a class="btn btn-pink nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" [attr.aria-expanded]="showDropdown || false" (mouseenter)="showDropdown=true"
             (click)="showDropdown=!showDropdown">
-            PRODUCTS <br>
+            CATEGORIES <br>
           </a>
           <fa-icon [icon]="['fas', 'chevron-down']" class="m-0"></fa-icon>
           <div class="dropdown-menu category-dropdown content-text-sm" [ngClass]="{'show': showDropdown || false}"
             (mouseleave)="showDropdown=false">
-            <p class="text-center">Categories</p>
+            <p class="text-center">Product Categories</p>
             <div class="dropdown-divider"></div>
             <ul class="list-unstyled">
               <li class="nav-item"><a class="dropdown-item text-center"
-                  (click)="openProductsWithQuery();showDropdown=false">All</a>
+                  (click)="openProductsWithQuery();showDropdown=false">Show All</a>
               </li>
             </ul>
-            <div class="float-left" *ngFor="let categories of categories$ | async">
+            <div class="float-left category-chunk" *ngFor="let categories of categories$ | async">
               <ul class="list-unstyled">
                 <li class="nav-item" *ngFor="let category of categories">
-                  <a class="dropdown-item text-center"
+                  <a class="dropdown-item"
                     (click)="openProductsWithQuery(category.name);showDropdown=false;collapseNavBar()">
                     {{category.name}} </a>
                 </li>

@@ -29,7 +29,7 @@ export class UsersRoute {
         })
 
         app.route('/api/users/all').get(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 User.find().populate('addresses').populate('messages')
@@ -63,7 +63,7 @@ export class UsersRoute {
         })
 
         app.route('/api/users/current').get(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            User.findById(req.userId).populate('addresses').populate('messages')
+            User.findById(req.params.userId).populate('addresses').populate('messages')
                 .populate('orders').populate('wishlist').exec((err, user) => {
                     if (err) { return next(err); }
                     res.json(user);
@@ -71,10 +71,10 @@ export class UsersRoute {
         });
 
         app.route('/api/users/current').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin && req.body.isAdmin) {
+            if (!req.params.isAdmin && req.body.isAdmin) {
                 res.status(401).send({ message: "Unauthorized action" })
             } else {
-                User.findByIdAndUpdate(req.userId, req.body).populate('addresses').populate('messages')
+                User.findByIdAndUpdate(req.params.userId, req.body).populate('addresses').populate('messages')
                     .populate('orders').populate('wishlist').exec((err, user) => {
                         if (err) { return next(err); }
                         res.json(user);
@@ -83,7 +83,7 @@ export class UsersRoute {
         });
 
         app.route('/api/users/current').delete(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            User.findByIdAndRemove(req.userId, req.body).populate('addresses').populate('messages')
+            User.findByIdAndRemove(req.params.userId, req.body).populate('addresses').populate('messages')
                 .populate('orders').populate('wishlist').exec((err, user) => {
                     if (err) { return next(err); }
                     res.json(user);
@@ -91,7 +91,7 @@ export class UsersRoute {
         });
 
         app.route('/api/users/changePassword').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            User.findById(req.userId).populate('addresses').populate('messages')
+            User.findById(req.params.userId).populate('addresses').populate('messages')
                 .populate('orders').populate('wishlist').select('+password').exec((err, user) => {
                     if (err) { return next(err); }
                     if (user.password !== req.body.oldPassword) {

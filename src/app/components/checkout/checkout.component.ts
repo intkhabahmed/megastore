@@ -29,7 +29,7 @@ export class CheckoutComponent implements OnInit {
   user$: Observable<User>
   id: any
   paymentGatewayUrl = paymentUrl
-  @ViewChild('form', null) form: ElementRef;
+  @ViewChild('form', {static: true}) form: ElementRef;
 
   encRequest: string;
   accessCode: string;
@@ -98,8 +98,8 @@ export class CheckoutComponent implements OnInit {
     this.user$.subscribe(user => {
       this.addressForm.patchValue({ user: user._id })
       if (!this.isEditing) {
-        this.api.insertAddress(this.addressForm.value).pipe().subscribe(
-          address => {
+        this.api.insertAddress(this.addressForm.value).pipe().subscribe({
+          next: (address) => {
             this.alertService.success("Address added", true)
             user.addresses.push(address._id)
             this.api.updateUser(user).subscribe(user => {
@@ -107,14 +107,16 @@ export class CheckoutComponent implements OnInit {
               this.loading = false
               this.submitted = false
               this.showAddressForm = false
+              this.addressForm.reset()
+              this.addressForm.patchValue({state: ""})
               this.cdr.detectChanges()
             })
           },
-          error => {
+          error: (error) => {
             this.alertService.error("Some error occurred while saving address", true)
             this.loading = false
           }
-        )
+        })
       } else {
         this.api.updateAddress(this.id, this.addressForm.value).pipe().subscribe(
           address => {
@@ -123,6 +125,9 @@ export class CheckoutComponent implements OnInit {
             this.loading = false
             this.submitted = false
             this.showAddressForm = false
+            this.isEditing = false
+            this.addressForm.reset()
+            this.addressForm.patchValue({state: ""})
             this.cdr.detectChanges()
           },
           error => {

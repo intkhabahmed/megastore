@@ -14,6 +14,7 @@ export class Product {
     size: string[][] = []
     selectedIndex: number
     subIndex: number
+    message: string
     createdAt: Date
     updatedAt: Date
 }

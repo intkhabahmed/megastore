@@ -5,7 +5,7 @@ import Order from '../src/app/schema/order'
 export class OrdersRoute {
     public orderRoute(app) {
         app.route('/api/orders/all').get(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Order.find().populate('user').populate('payment').exec((err, orders) => {
@@ -18,7 +18,7 @@ export class OrdersRoute {
         })
 
         app.route('/api/orders').post(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            req.body.user = req.userId
+            req.body.user = req.params.userId
             Order.create(req.body, (err, order) => {
                 if (err) {
                     return next(err)
@@ -35,7 +35,7 @@ export class OrdersRoute {
         })
 
         app.route('/api/orders/:id').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Order.findByIdAndUpdate(req.params.id, req.body).populate('user').populate('payment').exec((err, order) => {
@@ -46,7 +46,7 @@ export class OrdersRoute {
         })
 
         app.route('/api/orders/:id').delete(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Order.findByIdAndRemove(req.params.id, req.body).populate('user').populate('payment').exec((err, order) => {

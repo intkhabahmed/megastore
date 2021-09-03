@@ -28,7 +28,7 @@ export class PaymentsRoute {
             payment.trackingId = ccavJson.tracking_id
             payment.transDate = new Date(ccavJson.trans_date)
 
-            Payments.create(payment, (err, payment) => {
+            Payments.create(payment, (err, createdPayment) => {
                 if (err) {
                     return next(err)
                 }
@@ -48,7 +48,7 @@ export class PaymentsRoute {
         })
 
         app.route('/api/payments/all').get(verifyToken, (req: Request, res: Response, next: NextFunction) => {
-            if (!req.isAdmin) {
+            if (!req.params.isAdmin) {
                 res.status(401).send({ message: "Unauthorized request" })
             } else {
                 Payments.find((err, payments) => {

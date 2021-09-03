@@ -172,6 +172,9 @@ export class CartComponent implements OnInit {
   }
 
   goToCheckout() {
+    if (this.utility.orderSummary.shippingCost == 0) {
+      return;
+    }
     this.router.navigate(['/checkout'], { replaceUrl: true })
   }
 }

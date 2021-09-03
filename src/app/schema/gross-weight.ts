@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+import * as mongoose from 'mongoose';
 
-const GrossWeightSchema: Schema = new Schema({
+const GrossWeightSchema: mongoose.Schema = new mongoose.Schema({
     minWeight: { type: Number, required: true },
     maxWeight: { type: Number, required: true },
     toBeAdded: { type: Number, required: true },

@@ -1,6 +1,6 @@
-import mongoose, { Schema } from 'mongoose'
+import * as mongoose from 'mongoose'
 
-const BannerSchema: Schema = new Schema({
+const BannerSchema: mongoose.Schema = new mongoose.Schema({
     imageUrl: { type: String, required: true },
     title: { type: String },
     subTitle: { type: String },

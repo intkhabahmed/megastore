@@ -72,7 +72,7 @@ export class CheckoutComponent implements OnInit {
     this.utility.order.orderNo = (`${Math.random().toString(36).substring(3, 6)}-${Math.random().toString(36).substring(7, 15)}-${Math.random().toString(36).substring(9, 17)}`).toLocaleUpperCase()
     this.dataService.changeOrder(this.utility.order)
     this.user$.subscribe(user => {
-      var addressParams = `billing_name=${address.firstName} ${address.lastName}&billing_address=${address.address}&billing_city=${address.city}&billing_state=${address.state}&billing_zip=${address.postalCode}&billing_country=India&billing_tel=${address.mobile}&billing_email=${address.user.email}`
+      var addressParams = `billing_name=${address.firstName} ${address.lastName}&billing_address=${address.address}&billing_city=${address.city}&billing_state=${address.state}&billing_zip=${address.postalCode}&billing_country=India&billing_tel=${address.mobile}&billing_email=${user.email}`
       var reqBody = {
         unencReq: `merchant_id=${ccMerchantId}&currency=INR&order_id=${this.utility.order.orderNo}&amount=${this.utility.orderSummary.grandTotal}&redirect_url=${redirectUrl}&cancel_url=${redirectUrl}&language=EN&customer_identifier=${user._id}&${addressParams}`
       }

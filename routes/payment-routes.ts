@@ -32,10 +32,10 @@ export class PaymentsRoute {
                 if (err) {
                     return next(err)
                 }
-                if (payment.orderStatus === 'Failure') {
-                    res.redirect('https://www.craftmegastore.in/order-status?status=0')
-                } else if (payment.orderStatus === 'Success') {
+                if (payment.orderStatus === 'Success') {
                     res.redirect('https://www.craftmegastore.in/order-status?status=1')
+                } else {
+                    res.redirect('https://www.craftmegastore.in/order-status?status=0')
                 }
             })
         })

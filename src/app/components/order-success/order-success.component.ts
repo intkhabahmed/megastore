@@ -31,7 +31,11 @@ export class OrderSuccessComponent implements OnInit {
         })
         if (this.isSuccess == 1) {
           this.utility.orderSummary.cartItems.forEach(item => {
-            item.product.quantity[item.product.selectedIndex][item.product.subIndex] -= item.noOfItems
+            item.product.quantity[item.product.selectedIndex][item.product.subIndex] -= this.utility.convertToRequiredUnit({
+              quantity: item.noOfItems,
+              sourceUnit: item.product.selectedUnit,
+              bunchPerPack: item.product.bunchInfo?.bunchPerPacket
+            })
             this.api.updateProduct(item.product._id, item.product).subscribe(() => { })
           })
         }

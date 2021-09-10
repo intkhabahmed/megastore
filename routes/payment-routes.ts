@@ -7,7 +7,7 @@ import Payments from './../src/app/schema/payment';
 
 export class PaymentsRoute {
     public paymentRoute(app) {
-        app.route('/api/ccavRequestHandler').post((req: Request, res: Response, next: NextFunction) => {
+        app.route('/api/ccavRequestHandler').post((req: Request, res: Response, _next: NextFunction) => {
             var encRequest = encrypt(req.body.unencReq, ccWorkingKey);
             res.send({ encRequest })
         })
@@ -28,7 +28,7 @@ export class PaymentsRoute {
             payment.trackingId = ccavJson.tracking_id
             payment.transDate = new Date(ccavJson.trans_date)
 
-            Payments.create(payment, (err, createdPayment) => {
+            Payments.create(payment, (err, _createdPayment) => {
                 if (err) {
                     return next(err)
                 }

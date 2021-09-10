@@ -7,7 +7,7 @@ import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
 import { AuthenticationService } from './../../services/authentication.service';
 import { PdfGeneratorService } from './../../services/pdf-generator.service';
-import { ShippingMethod } from './../../utils/enums';
+import { OrderStatus, ShippingMethod } from './../../utils/enums';
 import { JsonUtils } from './../../utils/json-utils';
 import { Utility } from './../../utils/utils';
 
@@ -29,6 +29,7 @@ export class ProfileComponent implements OnInit {
   phoneForm: FormGroup
   passwordForm: FormGroup
   messageForm: FormGroup
+  orderStatus = OrderStatus
   constructor(private fb: FormBuilder, private api: ApiService, private authService: AuthenticationService,
     private alertService: AlertService, public utility: Utility, public jsonUtils: JsonUtils, public pdf: PdfGeneratorService) { }
 
@@ -100,11 +101,13 @@ export class ProfileComponent implements OnInit {
           address => {
             this.alertService.success("Address added", true)
             user.addresses.push(address._id)
-            this.api.updateUser(user).subscribe(user => {
-              this.user$ = this.api.getUserById()
-              this.loading = false
-              this.submitted = false
-              this.cancel()
+            this.api.updateUser(user).subscribe(_user => {
+              setTimeout(() => {
+                this.user$ = this.api.getUserById()
+                this.loading = false
+                this.submitted = false
+                this.cancel()
+              }, 500)
             })
           },
           error => {
@@ -116,10 +119,12 @@ export class ProfileComponent implements OnInit {
         this.api.updateAddress(this.id, this.addressForm.value).pipe().subscribe(
           address => {
             this.alertService.success("Address updated", true)
-            this.user$ = this.api.getUserById()
-            this.loading = false
-            this.submitted = false
-            this.cancel()
+            setTimeout(() => {
+              this.user$ = this.api.getUserById()
+              this.loading = false
+              this.submitted = false
+              this.cancel()
+            }, 500)
           },
           error => {
             this.alertService.error("Some error occurred while saving address", true)
@@ -143,11 +148,13 @@ export class ProfileComponent implements OnInit {
         this.user$.subscribe(user => {
           user.mobile = this.phoneForm.value.mobile
           this.api.updateUser(user).subscribe(user => {
-            this.user$ = this.api.getUserById()
-            this.submitted = false
-            this.loading = false
             this.alertService.success("Updated phone number")
-            this.cancel()
+            setTimeout(() => {
+              this.user$ = this.api.getUserById()
+              this.submitted = false
+              this.loading = false
+              this.cancel()
+            }, 500)
           })
         },
           error => {
@@ -161,10 +168,12 @@ export class ProfileComponent implements OnInit {
           return
         }
         this.api.changePassword(this.passwordForm.value).subscribe(user => {
-          this.submitted = false
-          this.loading = false
           this.alertService.success("Updated Password")
-          this.cancel()
+          setTimeout(() => {
+            this.submitted = false
+            this.loading = false
+            this.cancel()
+          }, 500)
         },
           error => {
             this.loading = false
@@ -184,10 +193,13 @@ export class ProfileComponent implements OnInit {
           this.api.insertMessage(message).subscribe(message => {
             user.messages.push(message._id)
             this.api.updateUser(user).subscribe(user => {
-              this.user$ = this.api.getUserById()
-              this.loading = false
-              this.submitted = false
-              this.cancel()
+              this.alertService.success("Message sent")
+              setTimeout(() => {
+                this.user$ = this.api.getUserById()
+                this.loading = false
+                this.submitted = false
+                this.cancel()
+              }, 500)
             })
           },
             error => {
@@ -204,12 +216,14 @@ export class ProfileComponent implements OnInit {
       case 'address':
         this.api.deleteAddress(id).pipe().subscribe(
           address => {
-            this.alertService.success("Address Deleted", true)
             this.user$.subscribe(user => {
               user.addresses = user.addresses.filter(id => id != address._id)
               this.api.updateUser(user).subscribe(
                 user => {
-                  this.user$ = this.api.getUserById()
+                  this.alertService.success("Address Deleted", true)
+                  setTimeout(() => {
+                    this.user$ = this.api.getUserById()
+                  }, 500)
                 }
               )
             })
@@ -225,9 +239,11 @@ export class ProfileComponent implements OnInit {
           user.wishlist = user.wishlist.filter(product => product._id != id)
           this.api.updateUser(user).subscribe(
             user => {
-              this.loading = false
-              this.user$ = this.api.getUserById()
               this.alertService.success("Removed item from wishlist")
+              setTimeout(() => {
+                this.loading = false
+                this.user$ = this.api.getUserById()
+              }, 500)
             },
             error => {
               this.loading = false
@@ -247,9 +263,11 @@ export class ProfileComponent implements OnInit {
           })
           this.api.updateUser(user).subscribe(
             user => {
-              this.loading = false
-              this.user$ = this.api.getUserById()
               this.alertService.success("Message Deleted")
+              setTimeout(() => {
+                this.loading = false
+                this.user$ = this.api.getUserById()
+              }, 500)
             },
             error => {
               this.loading = false
@@ -286,5 +304,4 @@ export class ProfileComponent implements OnInit {
     this.submitted = false
     this.initForm()
   }
-
 }

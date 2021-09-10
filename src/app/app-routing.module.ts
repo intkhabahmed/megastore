@@ -13,6 +13,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { SearchComponent } from './components/search/search.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AuthGuard } from './utils/auth.guard';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { CreateNewPasswordComponent } from './components/create-new-password/create-new-password.component';
 
 
 const routes: Routes = [
@@ -70,6 +72,14 @@ const routes: Routes = [
   {
     path: "about",
     component: AboutComponent
+  },
+  {
+    path: "forgot-password",
+    component: ForgotPasswordComponent
+  },
+  {
+    path: "passwordReset",
+    component: CreateNewPasswordComponent
   }
 ];
 

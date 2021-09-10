@@ -104,7 +104,7 @@
                                         (click)="saveAndEditAddress()">
                                         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                                         {{isEditing ? 'Update' : 'Save &amp;
-                                            Continue'}}
+                                        Continue'}}
                                     </button>
                                     <button [disabled]="loading" class="btn btn-pink buy-btn float-right"
                                         (click)="cancel()"> Cancel </button>
@@ -183,20 +183,23 @@
                     <p class="item-sub-heading">Product code - {{item.product.productCode}}</p>
                     <table class="table order-table">
                         <tr>
-                            <td><b>QTY: </b> {{item.noOfItems}}
-                            </td>
-                            <td class="text-right">
+                            <td><b>QTY: </b> {{item.noOfItems}} {{utility.formatUnit(item.product.selectedUnit, item.noOfItems)}}</td>
+                            <td class="text-right" *ngIf="item.product.unitType !== 1">
                                 <b>Weight: </b> {{utility.getFormattedWeight(item.itemsWeight)}}
                             </td>
                         </tr>
                         <tr>
                             <td><b>Color: </b> {{item.product.colors[item.product.selectedIndex]}}</td>
-                            <td class="text-right"><b>Subtotal: </b> Rs. {{item.itemsCost}}</td>
+                            <td class="text-right"><b>Subtotal: </b> Rs.
+                                <span *ngIf="item.itemsCost > item.discountedCost"><s>{{item.itemsCost}}</s></span>&nbsp;
+                                <span>{{item.discountedCost ? item.discountedCost :
+                                    item.itemsCost}}</span>
+                            </td>
                         </tr>
                         <tr>
-                            <td><b>Size: </b>{{item.product.size[item.product.selectedIndex]}}</td>
+                            <td><b>Size: </b>{{item.product.size[item.product.selectedIndex][item.product.subIndex]}}</td>
                         </tr>
-                        <tr>
+                        <tr *ngIf="item.product.message !== ''">
                             <td><b>Message: </b> {{item.product.message}}</td>
                         </tr>
                     </table>

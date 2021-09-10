@@ -8,7 +8,7 @@ import { first } from 'rxjs/operators';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
 
@@ -56,16 +56,20 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.authenticationService.login(this.f.email.value, this.f.password.value)
       .pipe(first())
-      .subscribe(
-        data => {
+      .subscribe({
+        next: (_data) => {
           this.submitted = false
-          this.router.navigate([this.returnUrl], { replaceUrl: true });
+          this.alertService.success('Login successful', true);
+          setTimeout(() => {
+            this.router.navigate([this.returnUrl], { replaceUrl: true });
+          }, 1500);
         },
-        error => {
-          this.alertService.error(error);
+        error: (e) => {
           this.submitted = false
           this.loading = false;
-        });
+          this.alertService.error(e, true);
+        }
+      });
   }
 
 }

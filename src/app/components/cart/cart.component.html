@@ -2,7 +2,7 @@
     <h3 class="order-title">Order Summary</h3>
     <app-alert class="alert-window"></app-alert>
     <div class="cart-items-container">
-        <div class="row cart-item" *ngFor="let item of utility.orderSummary.cartItems.values()">
+        <div class="row cart-item" *ngFor="let item of utility.orderSummary.cartItems.values();index as i">
             <div class="col-sm-4">
                 <div class="card-img-top">
                     <img [src]="item.product.imageUrl[0]" class="img img-responsive center" height="250" alt="...">
@@ -22,31 +22,45 @@
                     </tr>
                     <tr>
                         <td>Cost per unit:
-                            <b>Rs. {{item.product.price[item.product.selectedIndex][item.product.subIndex]}}</b>
+                            <b>Rs. {{utility.getPriceForUnit(
+                                item.product.selectedUnit,
+                                1,
+                                item.product.price[item.product.selectedIndex][item.product.subIndex],
+                                item.product.bunchInfo?.price
+                                )}}</b>
                         </td>
-                        <td>
+                        <td *ngIf="item.product.unitType !== 1">
                             Weight per unit:
-                            <b>{{utility.getFormattedWeight(item.product.weight[item.product.selectedIndex][item.product.subIndex])}}</b>
+                            <b>{{utility.getFormattedWeight(utility.getWeightForUnit(1, item.product))}}</b>
                         </td>
                     </tr>
                     <tr>
-                        <td><b>QTY: </b>
+                        <td class="form-row m-0"><b>QTY: </b>
                             <fa-icon [icon]="['fas', 'minus']" class="decrease_quantity accent-color"
                                 (click)="utility.decreaseProductQuantity(item)">
-                            </fa-icon> <span class="disabled-box">{{item.noOfItems}}</span>
+                            </fa-icon>
+                            <input type="text" [name]="'quantity'+i" class="disabled-box v-center text-center"
+                                [style.width.ch]="(item.noOfItems + '').length + 3" [value]="item.noOfItems"
+                                (change)="validChange$.next({'index': i, 'value': utility.changeInItem($event.srcElement.value, 'quantity', item)})">
                             <fa-icon [icon]="['fas', 'plus']" class="increase_quantity accent-color"
                                 (click)="utility.increaseProductQuantity(item)">
                             </fa-icon>
+                            <span class="accent-color">{{utility.formatUnit(item.product.selectedUnit,
+                                item.noOfItems)}}</span>
                         </td>
 
                     </tr>
                     <tr>
                         <td><b>Item cost: </b>
-                            <span class="accent-color">Rs. {{utility.orderSummary.cartItems.get(item.id).itemsCost}}</span>
+                            <span class="accent-color" *ngIf="item.itemsCost > item.discountedCost"> <s>Rs.
+                                    {{item.itemsCost}}</s></span>&nbsp;
+                            <span class="accent-color"> Rs. {{item.discountedCost ? item.discountedCost :
+                                item.itemsCost}}</span>
                         </td>
                         <td>
                             <b>Item Weight: </b>
-                            <span class="accent-color">{{utility.getFormattedWeight(utility.orderSummary.cartItems.get(item.id).itemsWeight)}}</span>
+                            <span
+                                class="accent-color">{{utility.getFormattedWeight(utility.orderSummary.cartItems.get(item.id).itemsWeight)}}</span>
                         </td>
                     </tr>
                     <tr *ngIf="item.product.message !== ''">

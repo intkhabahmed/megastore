@@ -35,6 +35,8 @@ export class ProductsRoute {
         app.route('/api/:id').put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
             delete req.body.selectedIndex
             delete req.body.subIndex
+            delete req.body.selectedUnit
+            delete req.body.message
             Product.findByIdAndUpdate(req.params.id, req.body, (err, product) => {
                 if (err) { return next(err); }
                 res.json(product);

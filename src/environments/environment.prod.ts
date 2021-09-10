@@ -3,3 +3,4 @@ export const environment = {
 };
 
 export const apiUrl = "/api"
+export const clientUrl = "http://www.craftmegastore.in"

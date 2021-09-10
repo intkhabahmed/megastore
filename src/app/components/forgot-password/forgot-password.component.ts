@@ -1,27 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { AlertService } from 'src/app/services/alert.service';
+import { ApiService } from 'src/app/services/api.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { ApiService } from './../../services/api.service';
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  selector: 'app-forgot-password',
+  templateUrl: './forgot-password.component.html',
+  styleUrls: ['./forgot-password.component.css']
 })
-export class SignupComponent implements OnInit {
-  registerForm: FormGroup;
+export class ForgotPasswordComponent implements OnInit {
+
+  forgotPasswordForm: FormGroup;
   loading = false;
   submitted = false;
 
   constructor(
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router,
+    private apiService: ApiService,
     private authenticationService: AuthenticationService,
-    private alertService: AlertService,
-    private apiService: ApiService
+    private alertService: AlertService
   ) { }
 
   ngOnInit() {
@@ -29,16 +31,14 @@ export class SignupComponent implements OnInit {
     if (this.authenticationService.token) {
       this.router.navigate(['/']);
     }
-    this.registerForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: '',
+
+    this.forgotPasswordForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern('^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$')]],
-      password: ['', [Validators.required, Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%\^&\*]).{8,}$")]]
     });
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.registerForm.controls; }
+  get f() { return this.forgotPasswordForm.controls; }
 
   onSubmit() {
     this.submitted = true;
@@ -47,24 +47,25 @@ export class SignupComponent implements OnInit {
     this.alertService.clear();
 
     // stop here if form is invalid
-    if (this.registerForm.invalid) {
+    if (this.forgotPasswordForm.invalid) {
       return;
     }
 
     this.loading = true;
-    this.apiService.register(this.registerForm.value)
+    this.apiService.resetPassword(this.f.email.value)
       .pipe(first())
       .subscribe(
         data => {
-          debugger
-          this.alertService.success('Registration successful', true);
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 1500);
+          this.submitted = false
+          this.loading = false
+          this.forgotPasswordForm.reset()
+          this.alertService.success('Please check your email for reset link', true);
         },
         error => {
           this.alertService.error(error);
+          this.submitted = false
           this.loading = false;
         });
   }
+
 }

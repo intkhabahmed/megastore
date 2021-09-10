@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ShippingRate } from 'src/app/models/shipping-rate';
 import { CartItem } from './../../models/cart-item';
 import { AlertService } from './../../services/alert.service';
@@ -25,6 +25,7 @@ export class CartComponent implements OnInit {
   deliveryMethodSelected = false
   shippingRates$: Observable<ShippingRate[]>
   loading = false
+  validChange$: Subject<any> = new Subject()
 
   ngOnInit() {
     this.utility.orderSummary.grandTotal = this.utility.orderSummary.shippingCost == 0 ? this.utility.orderSummary.totalProductCost :
@@ -43,6 +44,11 @@ export class CartComponent implements OnInit {
         })
       })
     }
+    this.validChange$.subscribe(v => {
+      if (v.value === false) {
+        $('input[name="quantity' + v.index + '"]').val([...this.utility.orderSummary.cartItems.values()][v.index].noOfItems)
+      }
+    })
   }
 
   changeDeliveryMethod(deliveryMethod) {
@@ -85,31 +91,31 @@ export class CartComponent implements OnInit {
         shippingMethod: this.utility.orderSummary.shippingMethod, minWeight: { $lte: this.utility.orderSummary.productGrossWeight },
         maxWeight: { $gte: this.utility.orderSummary.productGrossWeight }, minDistance: distance[0], maxDistance: distance[1], isLocal: false
       } : {
-          shippingMethod: this.utility.orderSummary.shippingMethod, minWeight: { $lte: this.utility.orderSummary.productGrossWeight },
-          maxWeight: { $gte: this.utility.orderSummary.productGrossWeight }, isLocal: true
-        }).subscribe(
-          shippingRate => {
-            this.utility.orderSummary.shippingCost = shippingRate.rate
-            this.utility.orderSummary.grandTotal = this.utility.orderSummary.totalProductCost + this.utility.orderSummary.shippingCost
-            this.dataService.changeOrderDetails(this.utility.orderSummary)
-            this.loading = false
-            this.cdr.detectChanges()
-          },
-          err => {
-            this.utility.orderSummary.shippingCost = 0
-            this.utility.orderSummary.grandTotal = this.utility.orderSummary.totalProductCost + this.utility.orderSummary.shippingCost
-            this.loading = false
-            this.cdr.detectChanges()
-          }
-        )
+        shippingMethod: this.utility.orderSummary.shippingMethod, minWeight: { $lte: this.utility.orderSummary.productGrossWeight },
+        maxWeight: { $gte: this.utility.orderSummary.productGrossWeight }, isLocal: true
+      }).subscribe(
+        shippingRate => {
+          this.utility.orderSummary.shippingCost = shippingRate.rate
+          this.utility.orderSummary.grandTotal = this.utility.orderSummary.totalProductCost + this.utility.orderSummary.shippingCost
+          this.dataService.changeOrderDetails(this.utility.orderSummary)
+          this.loading = false
+          this.cdr.detectChanges()
+        },
+        err => {
+          this.utility.orderSummary.shippingCost = 0
+          this.utility.orderSummary.grandTotal = this.utility.orderSummary.totalProductCost + this.utility.orderSummary.shippingCost
+          this.loading = false
+          this.cdr.detectChanges()
+        }
+      )
     } else if (this.utility.orderSummary.shippingMethod === this.shippingMethod.PROFESSIONAL ||
       this.utility.orderSummary.shippingMethod === this.shippingMethod.SHREE_MAHAVIR) {
       var query = value === 'true' ? {
         shippingMethod: this.utility.orderSummary.shippingMethod, isLocal: value
       } : {
-          shippingMethod: this.utility.orderSummary.shippingMethod, minWeight: { $lte: this.utility.orderSummary.productGrossWeight },
-          maxWeight: { $gte: this.utility.orderSummary.productGrossWeight }, isLocal: value
-        }
+        shippingMethod: this.utility.orderSummary.shippingMethod, minWeight: { $lte: this.utility.orderSummary.productGrossWeight },
+        maxWeight: { $gte: this.utility.orderSummary.productGrossWeight }, isLocal: value
+      }
       this.api.calculateShippingCharge(query).subscribe(
         shippingRate => {
           if (value === 'true') {

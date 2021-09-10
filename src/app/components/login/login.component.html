@@ -12,6 +12,7 @@
                                 [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                             <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                                 <div *ngIf="f.email.errors.required">Email is required</div>
+                                <div *ngIf="f.email.errors.pattern">Email must be a valid email address</div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -29,7 +30,7 @@
                             </button>
                         </div>
                     </form>
-                    <p class="content-text"><a routerLink="" class="link">Forgot Password?</a></p>
+                    <p class="content-text"><a routerLink="/forgot-password" class="link">Forgot Password?</a></p>
                     <p class="content-text">Not a member yet? Click <a routerLink="/signup" class="link">here</a> to
                         signup</p>
                 </div>

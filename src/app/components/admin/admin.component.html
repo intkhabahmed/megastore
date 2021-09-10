@@ -1,7 +1,7 @@
 <div class="container-fluid admin-container">
     <div class="row">
         <div class="col-lg-2 col-md-2 col-sm-12">
-            <div class="left-nav">
+            <div class="left-nav overflow-scroll">
                 <button class="btn"
                     [ngClass]="{'btn-pink': currentTab === adminTab.NEW_PRODUCT_UPLOAD, 'btn-gray': currentTab !== adminTab.NEW_PRODUCT_UPLOAD}"
                     (click)="showTab(adminTab.NEW_PRODUCT_UPLOAD)">New
@@ -52,7 +52,7 @@
                     <h4>Add New Product</h4>
                     <form class="add-product-form" [formGroup]="productForm" (ngSubmit)="addOrUpdateProduct()">
                         <div class="form-row">
-                            <div class="form-group col-md-4 col-lg-2 no-padding">
+                            <div class="form-group col-md-4 col-lg-3 no-padding">
                                 <select formControlName="category" class="form-control"
                                     [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
                                     (change)="loadSubCategories($event.srcElement.value)">
@@ -75,11 +75,53 @@
                                     <div *ngIf="f.subCategory.errors.required">Sub Category is required</div>
                                 </div>
                             </div>
+                            <div class="form-group col-md-3  col-lg-2">
+                                <select formControlName="unitType" class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.unitType.errors }"
+                                    (change)="loadUnits($event.srcElement.value)">
+                                    <option value="">Select Unit Type</option>
+                                    <option [value]="unitType.PACKET">Packet</option>
+                                    <option [value]="unitType.WEIGHT">Weight</option>
+                                    <option [value]="unitType.LENGTH">Length</option>
+                                    <option [value]="unitType.PIECE">Piece</option>
+                                </select>
+                                <div *ngIf="submitted && f.unitType.errors" class="invalid-feedback">
+                                    <div *ngIf="f.unitType.errors.required">Unit type is required</div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <select class="form-control" formControlName="productStatus">
                                     <option value="false">Inactive</option>
                                     <option value="true">Active</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-row" formGroupName="bunchInfo"
+                            *ngIf="selectedUnitType === unitType.PACKET">
+                            <div class="form-group col-md-3">
+                                <input type="text" formControlName="bunchPerPacket" class="form-control"
+                                    placeholder="Bunch per packet"
+                                    [ngClass]="{ 'is-invalid': submitted && f.bunchInfo.get('bunchPerPacket').errors }" />
+                                <div *ngIf="submitted && f.bunchInfo.get('bunchPerPacket').errors"
+                                    class="invalid-feedback">
+                                    <div *ngIf="f.description.errors.required">BunchPerPacket is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <input type="text" formControlName="weight" class="form-control"
+                                    placeholder="Bunch weight"
+                                    [ngClass]="{ 'is-invalid': submitted && f.bunchInfo.get('weight').errors }" />
+                                <div *ngIf="submitted && f.bunchInfo.get('weight').errors" class="invalid-feedback">
+                                    <div *ngIf="f.description.errors.required">Bunch weight is required</div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <input type="text" formControlName="price" class="form-control"
+                                    placeholder="Bunch price"
+                                    [ngClass]="{ 'is-invalid': submitted && f.bunchInfo.get('price').errors }" />
+                                <div *ngIf="submitted && f.bunchInfo.get('price').errors" class="invalid-feedback">
+                                    <div *ngIf="f.description.errors.required">Bunch price is required</div>
+                                </div>
                             </div>
                         </div>
                         <table class="table table-bordered">
@@ -149,6 +191,137 @@
                                 </td>
                             </tr>
                         </table>
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th class="text-center" colspan="4">Price Batches <fa-icon [icon]="['fas', 'plus']"
+                                        class="accent-bg round-btn"
+                                        (click)="addField('priceBatches', {isNotDeep: true})">
+                                    </fa-icon>
+                                </th>
+                            </tr>
+                            <tr *ngIf="formArray('priceBatches', {isNotDeep: true}).controls.length === 0">
+                                <td class="text-center">No Batches added</td>
+                            </tr>
+                            <tr formArrayName="priceBatches"
+                                *ngFor="let batch of formArray('priceBatches', {isNotDeep: true}).controls;index as i">
+                                <td [formGroupName]="i">
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <select formControlName="unit" id="{{'unit'+ i}}"
+                                                class="form-control col-md-10"
+                                                [ngClass]="{ 'is-invalid': submitted && batch.get('unit').errors }">
+                                                <option value="">Select Unit</option>
+                                                <option [value]="unit" *ngFor="let unit of units$ | async">{{unit}}
+                                                </option>
+                                            </select>
+                                            <a (click)="removeField('priceBatches', {isNotDeep: true, index: i});"
+                                                class="col-md-1 v-center">
+                                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                                            </a>
+                                            <div *ngIf="submitted && batch.get('unit').errors" class="invalid-feedback">
+                                                <div *ngIf="batch.get('unit').errors.required">Unit is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td [formGroupName]="i">
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <input type="text" formControlName="minQuantity" id="{{'minQuantity'+ i}}"
+                                                class="form-control col-md-10"
+                                                [ngClass]="{ 'is-invalid': submitted && batch.get('minQuantity').errors }"
+                                                placeholder="Enter min quantity" />
+                                            <a (click)="removeField('priceBatches', {isNotDeep: true, index: i});"
+                                                class="col-md-1 v-center">
+                                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                                            </a>
+                                            <div *ngIf="submitted && batch.get('minQuantity').errors"
+                                                class="invalid-feedback">
+                                                <div *ngIf="batch.get('minQuantity').errors.required">Min quantity is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td [formGroupName]="i">
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <input type="text" formControlName="maxQuantity" id="{{'maxQuantity'+ i}}"
+                                                class="form-control col-md-10" placeholder="Enter max quantity" />
+                                            <a (click)="removeField('priceBatches', {isNotDeep: true, index: i});"
+                                                class="col-md-1 v-center">
+                                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td [formGroupName]="i">
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <input type="text" formControlName="discountPercentage"
+                                                id="{{'discountPercentage'+ i}}" class="form-control col-md-10"
+                                                [ngClass]="{ 'is-invalid': submitted && batch.get('discountPercentage').errors }"
+                                                placeholder="Enter discount percentage" />
+                                            <a (click)="removeField('priceBatches', {isNotDeep: true, index: i});"
+                                                class="col-md-1 v-center">
+                                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                                            </a>
+                                            <div *ngIf="submitted && batch.get('discountPercentage').errors"
+                                                class="invalid-feedback">
+                                                <div *ngIf="batch.get('discountPercentage').errors.required">Discount
+                                                    percentage is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-bordered">
+                            <tr class="table-primary">
+                                <th class="text-center" colspan="2">Long Description <fa-icon [icon]="['fas', 'plus']"
+                                        class="accent-bg round-btn"
+                                        (click)="addField('longDescription', {isNotDeep: true})">
+                                    </fa-icon>
+                                </th>
+                            </tr>
+                            <tr formArrayName="longDescription"
+                                *ngFor="let desc of formArray('longDescription', {isNotDeep: true}).controls;index as i">
+                                <td [formGroupName]="i">
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <input type="text" formControlName="title" id="{{'title'+ i}}"
+                                                class="form-control col-md-10"
+                                                [ngClass]="{ 'is-invalid': submitted && desc.get('title').errors }"
+                                                placeholder="Enter title" />
+                                            <a (click)="removeField('longDescription', {isNotDeep: true, index: i});"
+                                                class="col-md-1 v-center" *ngIf="i != 0">
+                                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                                            </a>
+                                            <div *ngIf="submitted && desc.get('title').errors" class="invalid-feedback">
+                                                <div *ngIf="desc.get('title').errors.required">Title is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td [formGroupName]="i">
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <input type="text" formControlName="value" id="{{'value'+ i}}"
+                                                class="form-control col-md-10"
+                                                [ngClass]="{ 'is-invalid': submitted && desc.get('value').errors }"
+                                                placeholder="Enter value" />
+                                            <a (click)="removeField('longDescription', {isNotDeep: true, index: i})"
+                                                class="col-md-1 v-center" *ngIf="i != 0">
+                                                <fa-icon [icon]="['fas','times']"></fa-icon>
+                                            </a>
+                                            <div *ngIf="submitted && desc.get('value').errors" class="invalid-feedback">
+                                                <div *ngIf="desc.get('value').errors.required">Value is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                         <div formArrayName="properties"
                             *ngFor="let property of formArray('properties', {isNotDeep: true}).controls;index as i">
                             <table class="table table-bordered">
@@ -160,11 +333,14 @@
                                             (click)="addField('price', {index: i})">
                                         </fa-icon>
                                     </th>
-                                    <th>Net Weights (Gm) <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                    <th *ngIf="selectedUnitType !== unitType.WEIGHT">Net Weights (Gm) <fa-icon
+                                            [icon]="['fas', 'plus']" class="accent-bg round-btn"
                                             (click)="addField('weight', {index: i})">
                                         </fa-icon>
                                     </th>
-                                    <th>Quantities <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                    <th>Quantities {{selectedUnitType !== -1 ? '(in ' +
+                                        utility.getUnits(selectedUnitType)[0] + ')' : ''}} <fa-icon
+                                            [icon]="['fas', 'plus']" class="accent-bg round-btn"
                                             (click)="addField('quantity', {index: i})">
                                         </fa-icon>
                                     </th>
@@ -202,7 +378,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td *ngIf="selectedUnitType !== unitType.WEIGHT">
                                         <div class="form-group" formArrayName="weight"
                                             *ngFor="let weight of formArray('weight', {index: i}).controls; index as j">
                                             <div class="form-row"><input type="text" [formControlName]="j"
@@ -276,7 +452,7 @@
                                 <td>
                                     <p *ngFor="let price of product.price">{{price}}</p>
                                 </td>
-                                <td>
+                                <td *ngIf="selectedUnitType !== unitType.WEIGHT">
                                     <p *ngFor="let weight of product.weight">{{weight}}</p>
                                 </td>
                                 <td>
@@ -428,7 +604,8 @@
                                 <td>{{shippingRate.area}} </td>
                                 <td><a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='shippingRate';populateEditForm(shippingRate)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="showConfirmation(shippingRate._id, 'shippingRate')">Delete</a>
+                                        class="link"
+                                        (click)="showConfirmation(shippingRate._id, 'shippingRate')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -454,7 +631,8 @@
                                 <td>{{grossWeight.toBeAdded}}</td>
                                 <td><a class="link"
                                         (click)="isEditing=true;showOverlay=true;editing='grossWeight';populateEditForm(grossWeight)">Edit</a>&nbsp;&nbsp;<a
-                                        class="link" (click)="showConfirmation(grossWeight._id, 'grossWeight')">Delete</a>
+                                        class="link"
+                                        (click)="showConfirmation(grossWeight._id, 'grossWeight')">Delete</a>
                                 </td>
                             </tr>
                         </table>
@@ -607,8 +785,8 @@
                 </div>
             </div><!-- form-row -->
             <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="imageUrl">Image Url</label>
+                <div class="form-group col-md-5">
+                    <label for="imageUrl">Image Url</label>&nbsp;
                     <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
                         (click)="addField('imageUrl', {isNotDeep: true})">
                     </fa-icon>
@@ -626,7 +804,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-2">
                     <label for="productCode">Product Code</label>
                     <input type="text" formControlName="productCode" class="form-control"
                         [ngClass]="{ 'is-invalid': submitted && f.productCode.errors }" />
@@ -634,17 +812,186 @@
                         <div *ngIf="f.productCode.errors.required">Product code is required</div>
                     </div>
                 </div>
-            </div><!-- form-row -->
-            <div class="form-group">
-                <label for="description">Product Description</label>
-                <textarea formControlName="description" class="form-control no-resize"
-                    [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
-                <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
-                    <div *ngIf="f.description.errors.required">Description is required</div>
+                <div class="form-group col-md-2">
+                    <label for="productStatus">Status</label>
+                    <select class="form-control" formControlName="productStatus">
+                        <option value="false">Inactive</option>
+                        <option value="true">Active</option>
+                    </select>
                 </div>
-            </div>
+            </div><!-- form-row -->
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
+                    <label for="productStatus">Unit Type</label>
+                    <select formControlName="unitType" class="form-control"
+                        [ngClass]="{ 'is-invalid': submitted && f.unitType.errors }"
+                        (change)="loadUnits($event.srcElement.value)">
+                        <option value="">Select Unit Type</option>
+                        <option [value]="unitType.PACKET">Packet</option>
+                        <option [value]="unitType.WEIGHT">Weight</option>
+                        <option [value]="unitType.LENGTH">Length</option>
+                        <option [value]="unitType.PIECE">Piece</option>
+                    </select>
+                    <div *ngIf="submitted && f.unitType.errors" class="invalid-feedback">
+                        <div *ngIf="f.unitType.errors.required">Unit type is required</div>
+                    </div>
+                    <br>
+                    <div class="form-group" formGroupName="bunchInfo" *ngIf="selectedUnitType === unitType.PACKET">
+                        <label for="weight">Bunch per Packet</label>
+                        <input type="text" formControlName="bunchPerPacket" class="form-control"
+                            placeholder="Enter no of bunch per packet"
+                            [ngClass]="{ 'is-invalid': submitted && f.bunchInfo.get('bunchPerPacket').errors }" />
+                        <div *ngIf="submitted && f.bunchInfo.get('bunchPerPacket').errors" class="invalid-feedback">
+                            <div *ngIf="f.description.errors.required">BunchPerPacket is required</div>
+                        </div>
+                        <br>
+                        <label for="weight">Bunch Weight</label>
+                        <input type="text" formControlName="weight" class="form-control"
+                            placeholder="Enter weight of one bunch"
+                            [ngClass]="{ 'is-invalid': submitted && f.bunchInfo.get('weight').errors }" />
+                        <div *ngIf="submitted && f.bunchInfo.get('weight').errors" class="invalid-feedback">
+                            <div *ngIf="f.description.errors.required">Bunch weight is required</div>
+                        </div>
+                        <br>
+                        <label for="price">Bunch Price</label>
+                        <input type="text" formControlName="price" class="form-control"
+                            placeholder="Enter price of one bunch"
+                            [ngClass]="{ 'is-invalid': submitted && f.bunchInfo.get('price').errors }" />
+                        <div *ngIf="submitted && f.bunchInfo.get('price').errors" class="invalid-feedback">
+                            <div *ngIf="f.description.errors.required">Bunch price is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-9">
+                    <label for="description">Product Short Description</label>
+                    <textarea formControlName="description" class="form-control no-resize"
+                        [ngClass]="{ 'is-invalid': submitted && f.description.errors }"></textarea>
+                    <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                        <div *ngIf="f.description.errors.required">Description is required</div>
+                    </div>
+                </div>
+            </div><!-- form-row -->
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="longDescription">Long Description</label>&nbsp;
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                        (click)="addField('longDescription', {isNotDeep: true})">
+                    </fa-icon>
+                    <div class="form-row" formArrayName="longDescription"
+                        *ngFor="let desc of formArray('longDescription', {isNotDeep: true}).controls;index as i">
+                        <div class="form-group col-md-6" [formGroupName]="i">
+                            <label for="title">Title</label>
+                            <div class="form-row">
+                                <input type="text" formControlName="title" id="{{'title'+ i}}"
+                                    class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && desc.get('title').errors }"
+                                    placeholder="Enter title" />
+                                <a (click)="removeField('longDescription', {isNotDeep: true, index: i});"
+                                    class="col-md-1 v-center" *ngIf="i != 0">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && desc.get('title').errors" class="invalid-feedback">
+                                    <div *ngIf="desc.get('title').errors.required">Title is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6" [formGroupName]="i">
+                            <label for="value">Value</label>
+                            <div class="form-row">
+                                <input type="text" formControlName="value" id="{{'value'+ i}}"
+                                    class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && desc.get('value').errors }"
+                                    placeholder="Enter value" />
+                                <a (click)="removeField('longDescription', {isNotDeep: true, index: i})"
+                                    class="col-md-1 v-center" *ngIf="i != 0">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && desc.get('value').errors" class="invalid-feedback">
+                                    <div *ngIf="desc.get('value').errors.required">Value is required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- form-row = longDescription -->
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="priceBatches">Price Batches</label>&nbsp;
+                    <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                        (click)="addField('priceBatches', {isNotDeep: true})">
+                    </fa-icon>
+                    <div class="form-group" *ngIf="formArray('priceBatches', {isNotDeep: true}).controls.length === 0">
+                        <p class="text-center">No Batches added</p>
+                    </div>
+                    <div class="form-row" formArrayName="priceBatches"
+                        *ngFor="let batch of formArray('priceBatches', {isNotDeep: true}).controls;index as i">
+                        <div class="form-group col-md-3" [formGroupName]="i">
+                            <label for="unit">Unit</label>
+                            <div class="form-row">
+                                <select formControlName="unit" id="{{'unit'+ i}}" class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && batch.get('unit').errors }">
+                                    <option value="">Select Unit</option>
+                                    <option [value]="unit" *ngFor="let unit of units$ | async">{{unit}}</option>
+                                </select>
+                                <a (click)="removeField('priceBatches', {isNotDeep: true, index: i});"
+                                    class="col-md-1 v-center">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && batch.get('unit').errors" class="invalid-feedback">
+                                    <div *ngIf="batch.get('unit').errors.required">Unit is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3" [formGroupName]="i">
+                            <label for="minQuantity">Min Quantity</label>
+                            <div class="form-row">
+                                <input type="text" formControlName="minQuantity" id="{{'minQuantity'+ i}}"
+                                    class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && batch.get('minQuantity').errors }"
+                                    placeholder="Enter min quantity" />
+                                <a (click)="removeField('priceBatches', {isNotDeep: true, index: i});"
+                                    class="col-md-1 v-center">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && batch.get('minQuantity').errors" class="invalid-feedback">
+                                    <div *ngIf="batch.get('minQuantity').errors.required">Min quantity is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3" [formGroupName]="i">
+                            <label for="maxQuantity">Max Quantity</label>
+                            <div class="form-row">
+                                <input type="text" formControlName="maxQuantity" id="{{'maxQuantity'+ i}}"
+                                    class="form-control col-md-10" placeholder="Enter max quantity" />
+                                <a (click)="removeField('priceBatches', {isNotDeep: true, index: i});"
+                                    class="col-md-1 v-center">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3" [formGroupName]="i">
+                            <label for="discountPercentage">Discount Percentage</label>
+                            <div class="form-row">
+                                <input type="text" formControlName="discountPercentage" id="{{'discountPercentage'+ i}}"
+                                    class="form-control col-md-10"
+                                    [ngClass]="{ 'is-invalid': submitted && batch.get('discountPercentage').errors }"
+                                    placeholder="Enter discount percentage" />
+                                <a (click)="removeField('priceBatches', {isNotDeep: true, index: i});"
+                                    class="col-md-1 v-center">
+                                    <fa-icon [icon]="['fas','times']"></fa-icon>
+                                </a>
+                                <div *ngIf="submitted && batch.get('discountPercentage').errors"
+                                    class="invalid-feedback">
+                                    <div *ngIf="batch.get('discountPercentage').errors.required">Discount percentage is
+                                        required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- form-row = priceBatches -->
+            <div class="form-row">
+                <div class="form-group col-md-3">
                     <label for="colors">Colors</label>&nbsp;
                     <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
                         (click)="addField('colors', {isNotDeep: true});addField('properties',{})">
@@ -662,100 +1009,97 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="productStatus">Status</label>
-                    <select class="form-control" formControlName="productStatus">
-                        <option value="false">Inactive</option>
-                        <option value="true">Active</option>
-                    </select>
-                </div>
-            </div><!-- form-row -->
-            <div class="form-group" formArrayName="properties"
-                *ngFor="let property of formArray('properties', {isNotDeep: true}).controls;index as i">
-                <div class="form-row" [formGroupName]="i">
-                    <div class="form-group col-md-3">
-                        <label for="size">Sizes</label>&nbsp;
-                        <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                            (click)="addField('size', {index: i})"></fa-icon>
-                        <div class="form-group" formArrayName="size"
-                            *ngFor="let size of formArray('size', {index: i}).controls; index as j">
-                            <div class="form-row"><input type="text" [formControlName]="j"
-                                    class="form-control col-md-10"
-                                    [ngClass]="{ 'is-invalid': submitted && size.errors }" />
-                                <a (click)="removeField('size', {index: i, index1: j})" class="col-md-1 v-center"
-                                    *ngIf="j != 0">
-                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                </a>
-                                <div *ngIf="submitted && size.errors" class="invalid-feedback">
-                                    <div *ngIf="size.errors.required">Size is required</div>
-                                </div>
-                            </div>
-                        </div><!-- formArrayName = size -->
-                    </div><!-- form-group -->
-                    <div class="form-group col-md-3">
-                        <label for="price">Price</label>&nbsp;
-                        <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                            (click)="addField('price', {index: i})">
-                        </fa-icon>
-                        <div class="form-group" formArrayName="price"
-                            *ngFor="let price of formArray('price', {index: i}).controls; index as j">
-                            <div class="form-row"><input type="text" [formControlName]="j"
-                                    class="form-control col-md-10"
-                                    [ngClass]="{ 'is-invalid': submitted && price.errors }" />
-                                <a (click)="removeField('price', {index: i, index1: j})" class="col-md-1 v-center"
-                                    *ngIf="j != 0">
-                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                </a>
-                                <div *ngIf="submitted && price.errors" class="invalid-feedback">
-                                    <div *ngIf="price.errors.required">Price is required</div>
-                                </div>
-                            </div>
-                        </div><!-- formArrayName = price -->
-                    </div><!-- form-group -->
-                    <div class="form-group col-md-3">
-                        <label for="weight">Weight</label>&nbsp;
-                        <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                            (click)="addField('weight', {index: i})">
-                        </fa-icon>
-                        <div class="form-group" formArrayName="weight"
-                            *ngFor="let weight of formArray('weight', {index: i}).controls; index as j">
-                            <div class="form-row"><input type="text" [formControlName]="j"
-                                    class="form-control col-md-10"
-                                    [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
-                                <a (click)="removeField('weight', {index: i, index1: j})" class="col-md-1 v-center"
-                                    *ngIf="j != 0">
-                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                </a>
-                                <div *ngIf="submitted && weight.errors" class="invalid-feedback">
-                                    <div *ngIf="weight.errors.required">Weight is required</div>
-                                </div>
-                            </div>
-                        </div><!-- formArrayName = weight -->
-                    </div><!-- form-group -->
-                    <div class="form-group col-md-3">
-                        <label for="quantity">Quantity</label>&nbsp;
-                        <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
-                            (click)="addField('quantity', {index: i})">
-                        </fa-icon>
-                        <div class="form-group" formArrayName="quantity"
-                            *ngFor="let quantity of formArray('quantity', {index: i}).controls; index as j">
-                            <div class="form-row"><input type="text" [formControlName]="j"
-                                    class="form-control col-md-10"
-                                    [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
-                                <a (click)="removeField('quantity', {index: i, index1: j})" class="col-md-1 v-center"
-                                    *ngIf="j != 0">
-                                    <fa-icon [icon]="['fas','times']"></fa-icon>
-                                </a>
-                                <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
-                                    <div *ngIf="quantity.errors.required">Quantity is required
+                </div><!-- form-group = colors -->
+                <div class="col-md-9">
+                    <div class="form-group" formArrayName="properties"
+                        *ngFor="let property of formArray('properties', {isNotDeep: true}).controls;index as i">
+                        <div class="form-row" [formGroupName]="i">
+                            <div class="form-group col-md-3">
+                                <label for="size">Sizes</label>&nbsp;
+                                <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                    (click)="addField('size', {index: i})"></fa-icon>
+                                <div class="form-group" formArrayName="size"
+                                    *ngFor="let size of formArray('size', {index: i}).controls; index as j">
+                                    <div class="form-row"><input type="text" [formControlName]="j"
+                                            class="form-control col-md-10"
+                                            [ngClass]="{ 'is-invalid': submitted && size.errors }" />
+                                        <a (click)="removeField('size', {index: i, index1: j})"
+                                            class="col-md-1 v-center" *ngIf="j != 0">
+                                            <fa-icon [icon]="['fas','times']"></fa-icon>
+                                        </a>
+                                        <div *ngIf="submitted && size.errors" class="invalid-feedback">
+                                            <div *ngIf="size.errors.required">Size is required</div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div><!-- formArrayName = quantity -->
-                    </div><!-- form-group -->
-                </div><!-- formGroup -->
-            </div><!-- formArray = properties -->
+                                </div><!-- formArrayName = size -->
+                            </div><!-- form-group -->
+                            <div class="form-group col-md-3">
+                                <label for="price">Price</label>&nbsp;
+                                <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                    (click)="addField('price', {index: i})">
+                                </fa-icon>
+                                <div class="form-group" formArrayName="price"
+                                    *ngFor="let price of formArray('price', {index: i}).controls; index as j">
+                                    <div class="form-row"><input type="text" [formControlName]="j"
+                                            class="form-control col-md-10"
+                                            [ngClass]="{ 'is-invalid': submitted && price.errors }" />
+                                        <a (click)="removeField('price', {index: i, index1: j})"
+                                            class="col-md-1 v-center" *ngIf="j != 0">
+                                            <fa-icon [icon]="['fas','times']"></fa-icon>
+                                        </a>
+                                        <div *ngIf="submitted && price.errors" class="invalid-feedback">
+                                            <div *ngIf="price.errors.required">Price is required</div>
+                                        </div>
+                                    </div>
+                                </div><!-- formArrayName = price -->
+                            </div><!-- form-group -->
+                            <div class="form-group col-md-3" *ngIf="selectedUnitType !== unitType.WEIGHT">
+                                <label for="weight">Weight</label>&nbsp;
+                                <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                    (click)="addField('weight', {index: i})">
+                                </fa-icon>
+                                <div class="form-group" formArrayName="weight"
+                                    *ngFor="let weight of formArray('weight', {index: i}).controls; index as j">
+                                    <div class="form-row"><input type="text" [formControlName]="j"
+                                            class="form-control col-md-10"
+                                            [ngClass]="{ 'is-invalid': submitted && weight.errors }" />
+                                        <a (click)="removeField('weight', {index: i, index1: j})"
+                                            class="col-md-1 v-center" *ngIf="j != 0">
+                                            <fa-icon [icon]="['fas','times']"></fa-icon>
+                                        </a>
+                                        <div *ngIf="submitted && weight.errors" class="invalid-feedback">
+                                            <div *ngIf="weight.errors.required">Weight is required</div>
+                                        </div>
+                                    </div>
+                                </div><!-- formArrayName = weight -->
+                            </div><!-- form-group -->
+                            <div class="form-group col-md-3">
+                                <label for="quantity">Quantity</label>&nbsp;
+                                <fa-icon [icon]="['fas', 'plus']" class="accent-bg round-btn"
+                                    (click)="addField('quantity', {index: i})">
+                                </fa-icon>
+                                <div class="form-group" formArrayName="quantity"
+                                    *ngFor="let quantity of formArray('quantity', {index: i}).controls; index as j">
+                                    <div class="form-row"><input type="text" [formControlName]="j"
+                                            class="form-control col-md-10"
+                                            [ngClass]="{ 'is-invalid': submitted && quantity.errors }" />
+                                        <a (click)="removeField('quantity', {index: i, index1: j})"
+                                            class="col-md-1 v-center" *ngIf="j != 0">
+                                            <fa-icon [icon]="['fas','times']"></fa-icon>
+                                        </a>
+                                        <div *ngIf="submitted && quantity.errors" class="invalid-feedback">
+                                            <div *ngIf="quantity.errors.required">Quantity is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- formArrayName = quantity -->
+                            </div><!-- form-group -->
+                        </div><!-- formGroup -->
+                        <hr>
+                    </div><!-- formArray = properties -->
+                </div><!-- col-md-9 properties -->
+            </div><!-- form-row -->
+
             <div class="form-group">
                 <button [disabled]="loading" class="btn btn-pink">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
@@ -938,7 +1282,16 @@
     <div *ngIf="editing == 'order'">
         <form class="add-product-form" [formGroup]="orderForm" (ngSubmit)="updateOrder()">
             <div class="form-row">
-                <div class="form-group col-md-6 offset-md-3">
+                <div class="form-group col-md-6">
+                    <label for="trackingNo">Order Status</label>
+                    <select formControlName="orderStatus" class="form-control">
+                        <option [value]="orderStatus.PROCESSING">Processing</option>
+                        <option [value]="orderStatus.SHIPPED">Shipped</option>
+                        <option [value]="orderStatus.DELIVERED">Delivered</option>
+                        <option [value]="orderStatus.FAILED">Failed</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
                     <label for="trackingNo">Tracking No.</label>
                     <input type="text" formControlName="trackingNo" class="form-control"
                         [ngClass]="{ 'is-invalid': submitted && f.trackingNo.errors }" />
@@ -1051,7 +1404,7 @@
             <button [disabled]="loading" class="btn btn-white center w-25" (click)="cancel()">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 No
-            </button>            
+            </button>
         </div>
     </div>
 </div>

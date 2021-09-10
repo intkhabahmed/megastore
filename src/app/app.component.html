@@ -48,11 +48,11 @@
       <div class="nav-right-container">
         <div class="nav-top">
           <a routerLink="" class="nav-right-btn" id="cart-btn" (mouseenter)="homeIcon = 'homeicon_hover.png'"
-            (mouseleave)="homeIcon='homeicon.png'" (click)="collapseNavBar()">
+            (mouseleave)="homeIcon='homeicon.png'" (click)="collapseNavBar()" title="Home">
             <img [src]="'/assets/images/' + homeIcon" width="37" height="37" alt="">
           </a>
           &nbsp;
-          <a routerLink="cart" class="nav-right-btn" id="cart-btn"
+          <a routerLink="cart" class="nav-right-btn" id="cart-btn" title="Cart"
             (mouseenter)="shoppingIcon = 'shoppingicon_hover.png'" (mouseleave)="shoppingIcon='shoppingicon.png'"
             (click)="collapseNavBar()">
             <img [src]="'/assets/images/' + shoppingIcon" width="37" height="37" alt="">

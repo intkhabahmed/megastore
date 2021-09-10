@@ -26,3 +26,10 @@ export enum OrderStatus {
     DELIVERED,
     FAILED,
 }
+
+export enum UnitType {
+    PACKET,
+    WEIGHT,
+    LENGTH,
+    PIECE,
+}

@@ -228,13 +228,14 @@
                         No Orders!!</p>
                     <div class="row" *ngFor="let order of user.orders;index as i">
                         <div class="col-sm-9">
-                            <p class="content-text mb-0"><b>Order#</b> {{order.orderNo}}</p>
-                            <p class="content-text mb-0"><b>Order Placed on</b>
+                            <p class="content-text mb-0"><b>Order No: </b> {{order.orderNo}}</p>
+                            <p class="content-text mb-0"><b>Order Placed on: </b>
                                 {{order.orderDate | date:'dd MMM yyyy hh:mm a'}}</p>
-                            <p class="content-text mb-0"><b>Courier Type:
-                                </b>{{courierType[jsonUtils.parseJson(order.orderSummary).shippingMethod]}}</p>
-                            <p class="content-text"><b>Tracking No</b>: {{order.trackingNo || 'Processing order'}}
+                            <p class="content-text mb-0"><b>Courier Type: </b>
+                                {{courierType[jsonUtils.parseJson(order.orderSummary).shippingMethod]}}</p>
+                            <p class="content-text" *ngIf="order.trackingNo"><b>Tracking No: </b>{{order.trackingNo}}
                             </p>
+                            <p class="content-text"><b>Order status: </b>{{orderStatus[order.orderStatus]}}</p>
                         </div>
                         <div class="col-sm-3">
                             <a class="link" (click)="pdf.printPdf(order)" class="text-center">

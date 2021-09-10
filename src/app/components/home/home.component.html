@@ -28,7 +28,7 @@
                         </div>
                         <div class="card-body">
                             <h4 class="card-title content-heading max-lines">{{product.name}}</h4>
-                            <p class="content-text">Product code - {{product.productCode}}</p>
+                            <p class="content-text max-lines">{{product.description}}</p>
                             <p class="content-text">Avialable from Rs. {{utility.getMinPrice(product.price)}}</p>
                             <p class="content-text text-danger font-weight-bold"
                                 *ngIf="utility.checkForOutOfStock(product)">Out of

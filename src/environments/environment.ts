@@ -7,6 +7,7 @@ export const environment = {
 };
 
 export const apiUrl = "/api"
+export const clientUrl = "http://localhost:4200"
 
 /*
  * For easier debugging in development mode, you can import the following file

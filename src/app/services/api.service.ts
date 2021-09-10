@@ -72,6 +72,14 @@ export class ApiService {
     return this.http.put<User>(`${apiUrl}/users/changePassword`, body, httpOptions)
   }
 
+  resetPassword(email: string): Observable<User> {
+    return this.http.post<User>(`${apiUrl}/users/resetPassword`, { email }, httpOptions)
+  }
+
+  createNewPassword(body: any): Observable<User> {
+    return this.http.put<User>(`${apiUrl}/users/createNewPassword`, body, httpOptions)
+  }
+
   // Shipping Rate methods
 
   getShippingRates(type: any): Observable<ShippingRate[]> {

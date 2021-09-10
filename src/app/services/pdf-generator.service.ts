@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as pdfMake from 'pdfmake/build/pdfmake.js';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
+import { CartItem } from '../models/cart-item';
 import { Order } from '../models/order';
 import { OrderSummary } from '../models/order-summary';
 import { JsonUtils } from '../utils/json-utils';
+import { Utility } from '../utils/utils';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
@@ -11,7 +13,10 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class PdfGeneratorService {
 
-  constructor(private jsonUtils: JsonUtils) {
+  constructor(
+    private jsonUtils: JsonUtils,
+    private utility: Utility
+  ) {
   }
 
   header = [
@@ -73,15 +78,11 @@ export class PdfGeneratorService {
           }
         ],
         {
-          text: item.noOfItems,
+          text: `${item.noOfItems} ${this.utility.formatUnit(item.product.selectedUnit, item.noOfItems)}`,
           style: 'itemNumber'
         },
         {
-          text: `Rs ${item.product.price[item.product.selectedIndex][item.product.subIndex]}`,
-          style: 'itemNumber'
-        },
-        {
-          text: '0%',
+          text: `Rs ${item.product.selectedUnit === 'Bunch' ? item.product.bunchInfo?.price : item.product.price[item.product.selectedIndex][item.product.subIndex]}`,
           style: 'itemNumber'
         },
         {
@@ -89,13 +90,21 @@ export class PdfGeneratorService {
           style: 'itemNumber'
         },
         {
-          text: `Rs ${item.itemsCost}`,
+          text: `${this.discount(item)}%`,
+          style: 'itemNumber'
+        },
+        {
+          text: `Rs ${item.discountedCost}`,
           style: 'itemTotal'
         }
       ])
       index++
     })
     return dataRows
+  }
+
+  discount(item: CartItem): number {
+    return (item.itemsCost - item.discountedCost) / item.itemsCost * 100
   }
 
   printPdf(order: Order) {
@@ -243,7 +252,7 @@ export class PdfGeneratorService {
               style: 'invoiceBillingAddress'
             },
             {
-              text: `${order.address.address}, \n${order.address.city}, ${order.address.state} - ${order.address.postalCode} \nMobile: ${order.address.mobile} \nE-Mail: ${order.user.email}`,
+              text: `${order.address.address}, \n${order.address.city}, ${order.address.state}, India - ${order.address.postalCode} \nMobile: ${order.address.mobile} \nE-Mail: ${order.user.email}`,
               style: 'invoiceBillingAddress'
             },
           ]

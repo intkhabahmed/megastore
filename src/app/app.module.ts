@@ -12,6 +12,8 @@ import { AdminComponent } from './components/admin/admin.component';
 import { AlertComponent } from './components/alert/alert.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { CreateNewPasswordComponent } from './components/create-new-password/create-new-password.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
@@ -39,7 +41,9 @@ import { JwtInterceptor } from './utils/jwt-interceptor';
     AdminComponent,
     OrderSuccessComponent,
     SearchComponent,
-    AboutComponent
+    AboutComponent,
+    ForgotPasswordComponent,
+    CreateNewPasswordComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

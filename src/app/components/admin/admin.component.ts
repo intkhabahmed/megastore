@@ -6,12 +6,13 @@ import { GrossWeight } from 'src/app/models/gross-weight';
 import { Message } from 'src/app/models/message';
 import { Order } from 'src/app/models/order';
 import { ShippingRate } from 'src/app/models/shipping-rate';
+import { Utility } from 'src/app/utils/utils';
 import { Product } from './../../models/product';
 import { User } from './../../models/user';
 import { AlertService } from './../../services/alert.service';
 import { ApiService } from './../../services/api.service';
 import { PdfGeneratorService } from './../../services/pdf-generator.service';
-import { AdminTab, OrderStatus, ShippingMethod } from './../../utils/enums';
+import { AdminTab, OrderStatus, ShippingMethod, UnitType } from './../../utils/enums';
 import { JsonUtils } from './../../utils/json-utils';
 
 @Component({
@@ -24,6 +25,7 @@ export class AdminComponent implements OnInit {
   currentTab: AdminTab
   courierType = ShippingMethod
   orderStatus = OrderStatus
+  unitType = UnitType
   row: number
   isEditing = false
   products$: Observable<Product[]>
@@ -51,9 +53,18 @@ export class AdminComponent implements OnInit {
   newArrivals$: Observable<any[]>;
   subCategories$: Observable<any[]>;
   deleteType: string
+  units$: Observable<string[]>
+  selectedUnitType: number = -1
 
-  constructor(private api: ApiService, private fb: FormBuilder, private alertService: AlertService, private jsonUtils: JsonUtils,
-    public pdf: PdfGeneratorService, private router: Router) {
+  constructor(
+    private api: ApiService,
+    private fb: FormBuilder,
+    private alertService: AlertService,
+    private jsonUtils: JsonUtils,
+    public pdf: PdfGeneratorService,
+    private router: Router,
+    public utility: Utility
+  ) {
     api.getUserById().subscribe(user => {
       if (!user.isAdmin) {
         router.navigate(['/'])
@@ -85,17 +96,26 @@ export class AdminComponent implements OnInit {
     this.productForm = this.fb.group({
       category: ['', Validators.required],
       subCategory: [''],
+      unitType: ['', Validators.required],
       imageUrl: this.fb.array([]),
       name: ['', Validators.required],
       productCode: ['', Validators.required],
       description: ['', Validators.required],
+      longDescription: this.fb.array([]),
       colors: this.fb.array([]),
+      priceBatches: this.fb.array([]),
+      bunchInfo: this.fb.group({
+        bunchPerPacket: ['', Validators.required],
+        weight: ['', Validators.required],
+        price: ['', Validators.required],
+      }),
       properties: this.fb.array([this.addProperty(true)]),
       productStatus: [true]
     })
 
     this.addField('colors', { isNotDeep: true })
     this.addField('imageUrl', { isNotDeep: true })
+    this.addField('longDescription', { isNotDeep: true })
 
     this.grossWeightForm = this.fb.group({
       minWeight: ['', Validators.required],
@@ -122,7 +142,8 @@ export class AdminComponent implements OnInit {
     })
 
     this.orderForm = this.fb.group({
-      trackingNo: ['', Validators.required]
+      trackingNo: ['', Validators.required],
+      orderStatus: ['', Validators.required],
     })
 
     this.messageForm = this.fb.group({
@@ -171,6 +192,7 @@ export class AdminComponent implements OnInit {
 
   showTab(selectedTab) {
     this.alertService.clear()
+    this.selectedUnitType = -1
     switch (selectedTab) {
       case this.adminTab.NEW_PRODUCT_UPLOAD:
         if (!this.isEditing) {
@@ -234,7 +256,6 @@ export class AdminComponent implements OnInit {
   addOrUpdateProduct() {
     this.alertService.clear()
     this.submitted = true
-
     if (this.productForm.invalid) {
       this.loading = false
       return
@@ -242,14 +263,22 @@ export class AdminComponent implements OnInit {
     this.loading = true
     this.productForm.addControl('size', this.fb.array([]))
     this.productForm.addControl('price', this.fb.array([]))
-    this.productForm.addControl('weight', this.fb.array([]))
+    if (this.selectedUnitType !== this.unitType.WEIGHT) {
+      this.productForm.addControl('weight', this.fb.array([]))
+    }
+    if (this.formArray('priceBatches', { isNotDeep: true }).length == 0) {
+      this.f.priceBatches.disable()
+    }
     this.productForm.addControl('quantity', this.fb.array([]))
     this.formArray('properties', { isNotDeep: true }).controls.forEach((property, i) => {
       this.formArray('size', { isNotDeep: true }).push(this.fb.control(this.formArray('size', { index: i }).value, Validators.required));
       this.formArray('price', { isNotDeep: true }).push(this.fb.control(this.formArray('price', { index: i }).value, Validators.required));
-      this.formArray('weight', { isNotDeep: true }).push(this.fb.control(this.formArray('weight', { index: i }).value, Validators.required));
+      if (this.selectedUnitType !== this.unitType.WEIGHT) {
+        this.formArray('weight', { isNotDeep: true }).push(this.fb.control(this.formArray('weight', { index: i }).value, Validators.required));
+      }
       this.formArray('quantity', { isNotDeep: true }).push(this.fb.control(this.formArray('quantity', { index: i }).value, Validators.required));
     })
+
     this.formArray('properties', { isNotDeep: true }).disable()
     if (!this.isEditing) {
       this.api.addProduct(this.productForm.value).pipe().subscribe(
@@ -605,18 +634,31 @@ export class AdminComponent implements OnInit {
     this.id = value._id
     if (this.editing == "product") {
       this.loadSubCategories(value.category)
+      this.loadUnits(value.unitType)
+      this.selectedUnitType = value.unitType
       this.productForm.patchValue(value)
       this.formArray('properties', { isNotDeep: true }).clear()
       this.formArray('colors', { isNotDeep: true }).clear()
       this.formArray('imageUrl', { isNotDeep: true }).clear()
+
+      if (value.longDescription.length > 0) {
+        this.formArray('longDescription', { isNotDeep: true }).clear()
+      }
+      if (value.priceBatches.length > 0) {
+        this.formArray('priceBatches', { isNotDeep: true }).clear()
+      }
       value.colors.map(color => this.formArray('colors', { isNotDeep: true }).push(this.fb.control(color, Validators.required)))
       value.imageUrl.map(image => this.formArray('imageUrl', { isNotDeep: true }).push(this.fb.control(image, Validators.required)))
+      value.longDescription.map(desc => this.formArray('longDescription', { isNotDeep: true }).push(this.addLongDescRow(desc)))
+      value.priceBatches.map(batch => this.formArray('priceBatches', { isNotDeep: true }).push(this.addPriceBatch(batch)))
 
       value.colors.forEach((color, i) => {
         this.formArray('properties', { isNotDeep: true }).push(this.addProperty(false))
         value.size[i].forEach(size => this.formArray('size', { index: i }).push(this.fb.control(size, Validators.required)))
         value.price[i].forEach(price => this.formArray('price', { index: i }).push(this.fb.control(price, Validators.required)))
-        value.weight[i].forEach(weight => this.formArray('weight', { index: i }).push(this.fb.control(weight, Validators.required)))
+        if (this.selectedUnitType !== this.unitType.WEIGHT) {
+          value.weight[i].forEach(weight => this.formArray('weight', { index: i }).push(this.fb.control(weight, Validators.required)))
+        }
         value.quantity[i].forEach(quantity => this.formArray('quantity', { index: i }).push(this.fb.control(quantity, Validators.required)))
       });
     } else if (this.editing == "grossWeight") {
@@ -659,6 +701,14 @@ export class AdminComponent implements OnInit {
       this.formArray(fieldName, { isNotDeep: true }).push(this.addProperty(true))
       return
     }
+    if (fieldName === 'longDescription') {
+      this.formArray(fieldName, { isNotDeep: true }).push(this.addLongDescRow())
+      return
+    }
+    if (fieldName === 'priceBatches') {
+      this.formArray(fieldName, { isNotDeep: true }).push(this.addPriceBatch())
+      return
+    }
     this.formArray(fieldName, { isNotDeep, index }).push(this.fb.control('', Validators.required))
   }
 
@@ -675,19 +725,35 @@ export class AdminComponent implements OnInit {
   }
 
   addProperty(withInit): FormGroup {
-    if (withInit) {
+    if (this.selectedUnitType === this.unitType.WEIGHT) {
       return this.fb.group({
-        size: this.fb.array([this.fb.control('', Validators.required)]),
-        price: this.fb.array([this.fb.control('', Validators.required)]),
-        weight: this.fb.array([this.fb.control('', Validators.required)]),
-        quantity: this.fb.array([this.fb.control('', Validators.required)])
+        size: this.fb.array(withInit ? [this.fb.control('', Validators.required)] : []),
+        price: this.fb.array(withInit ? [this.fb.control('', Validators.required)] : []),
+        quantity: this.fb.array(withInit ? [this.fb.control('', Validators.required)] : [])
       })
     }
     return this.fb.group({
-      size: this.fb.array([]),
-      price: this.fb.array([]),
-      weight: this.fb.array([]),
-      quantity: this.fb.array([])
+      size: this.fb.array(withInit ? [this.fb.control('', Validators.required)] : []),
+      price: this.fb.array(withInit ? [this.fb.control('', Validators.required)] : []),
+      weight: this.fb.array(withInit ? [this.fb.control('', Validators.required)] : []),
+      quantity: this.fb.array(withInit ? [this.fb.control('', Validators.required)] : [])
+    })
+  }
+
+  addLongDescRow(defValue?): FormGroup {
+    return this.fb.group({
+      title: this.fb.control(defValue ? defValue.title : '', Validators.required),
+      value: this.fb.control(defValue ? defValue.value : '', Validators.required)
+    })
+  }
+
+  addPriceBatch(defValue?): FormGroup {
+    this.f.priceBatches.enable()
+    return this.fb.group({
+      unit: [defValue ? defValue.unit : '', Validators.required],
+      minQuantity: [defValue ? defValue.minQuantity : '', Validators.required],
+      maxQuantity: [defValue ? defValue.maxQuantity : ''],
+      discountPercentage: [defValue ? defValue.discountPercentage : '', Validators.required],
     })
   }
 
@@ -697,13 +763,32 @@ export class AdminComponent implements OnInit {
 
   loadSubCategories(value) {
     this.categories$.subscribe(categories => {
-      categories.forEach(category => {
+      for (let category of categories) {
         if (category.name === value) {
           this.subCategories$ = of(category.subCategories)
-          return;
+          break
         }
-      })
+      }
     })
+  }
+
+  loadUnits(value) {
+    this.selectedUnitType = Number(value === '' ? -1 : value)
+    this.units$ = of(this.utility.getUnits(this.selectedUnitType))
+    if (this.selectedUnitType !== this.unitType.PACKET) {
+      this.f.bunchInfo.disable()
+    } else {
+      this.f.bunchInfo.enable()
+    }
+    if (this.selectedUnitType === this.unitType.WEIGHT) {
+      this.formArray('properties', { isNotDeep: true }).controls.forEach((_property, i) => {
+        this.formArray('weight', { index: i }).disable()
+      })
+    } else {
+      this.formArray('properties', { isNotDeep: true }).controls.forEach((_property, i) => {
+        this.formArray('weight', { index: i }).enable()
+      })
+    }
   }
 
 }
